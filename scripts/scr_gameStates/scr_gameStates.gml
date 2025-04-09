@@ -25,41 +25,6 @@ function gameEnd(showPotential = false)
 	}
 }
 
-function levelStart()
-{
-	for(var yy = 0; yy < global.height; yy++)
-	{
-		for(var xx = 0; xx < global.width; xx++)
-		{
-			var tile = ds_grid_get(grid, xx, yy);
-			
-			if (animcurve_get_point(ac_start, 0, acTimer - ((xx / global.width) + (yy / global.height))) > 0.5)
-			{
-				tile.flash += 0.08;
-			}
-		}
-	}
-	
-	acTimer += 0.01;
-	
-	if (acTimer >= 3)
-	{
-		acTimer = 0;
-		
-		for(var yy = 0; yy < global.height; yy++)
-		{
-			for(var xx = 0; xx < global.width; xx++)
-			{
-				var tile = ds_grid_get(grid, xx, yy);
-				
-				tile.flash = 0;
-			}
-		}
-		
-		gameState = normal;
-	}
-}
-
 //---
 
 function normalDraw()
@@ -97,9 +62,25 @@ function endScreenTransitionDraw()
 
 function gameEndDraw()
 {
+	if (mouse_check_button_pressed(mb_left))
+	{
+		lastMousePositionPressed = buildingRotation;
+	}
+	
+	if (mouse_check_button(mb_left))
+	{
+		buildingFingerRotation = mouse_x - lastMousePositionPressed;
+		buildingRotationSpeed = 0;
+		//buildingRotation = 0;
+	}
+	else 
+	{
+		buildingRotationSpeed = lerp(buildingRotationSpeed, 1, 0.01);
+	}
+	
 	if (mouse_check_button_released(mb_left))
 	{
-		buildingRotationSpeed = mouse_x - lastMousePosition;
+		buildingRotationSpeed = lastMousePosition - mouse_x;
 	}
 	
 	lastMousePosition = mouse_x;
@@ -109,8 +90,6 @@ function gameEndDraw()
 	{
 		buildingRotation = 0;
 	}
-	
-	buildingRotationSpeed = lerp(buildingRotationSpeed, 1, 0.01);
 	
 	drawEndScreen();
 }
@@ -135,7 +114,7 @@ function drawEndScreen()
 	var centerX = shiftH + buildingSizeWidth/2;
 	var centerY = shiftV + buildingSizeHeight/2;
 	
-	matrix_set(matrix_world, matrix_build(centerX, centerY, 0, buildingTilt, 180 + buildingRotation, 0, buildingScale, buildingScale, buildingScale));
+	matrix_set(matrix_world, matrix_build(centerX, centerY, 0, buildingTilt, 180 + buildingRotation + buildingFingerRotation, 0, buildingScale, buildingScale, buildingScale));
 	vertex_submit(front, pr_trianglelist, surfaceTexture);
 	matrix_set(matrix_world, matrix_build_identity());
 	

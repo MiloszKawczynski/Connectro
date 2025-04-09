@@ -29,13 +29,13 @@ if (drawSurface)
 
 	if (!surface_exists(blockSurface))
 	{
-		blockSurface = surface_create(33 * 5, 33);
+		blockSurface = surface_create(39 * 5, 39);
 	}
 	
 	surface_set_target(blockSurface);
 	draw_clear_alpha(c_white, 0);
 	
-	draw_surface_stretched(muralSurface, 132, 0, 33, 33);
+	draw_surface_stretched(muralSurface, 159, 3, 33, 33);
 	draw_sprite(s_block, 0, 0, 0);
 	surface_reset_target();
 	

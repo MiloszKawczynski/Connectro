@@ -417,22 +417,27 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			{
 				isRevealed = true; 
 				
-				ds_grid_get(o_connectro.grid, wrapAroundGrid(xx + 1, yy)._x, yy).flash = 2;
-				ds_grid_get(o_connectro.grid, wrapAroundGrid(xx - 1, yy)._x, yy).flash = 2;
-				ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy + 1)._y).flash = 2;
-				ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy - 1)._y).flash = 2;
+				flashTimer = 0;
 				
-				ds_grid_get(o_connectro.grid, wrapAroundGrid(xx + 2, yy)._x, yy).flash = 1;
-				ds_grid_get(o_connectro.grid, wrapAroundGrid(xx - 2, yy)._x, yy).flash = 1;
-				ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy + 2)._y).flash = 1;
-				ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy - 2)._y).flash = 1;
+				if (abs(xStep) == abs(yStep))
+				{
+					array_push(flashNext, { _x: -1, _y: 0, _power: 2});
+					array_push(flashNext, { _x: 1, _y: 0, _power: 2});
+					array_push(flashNext, { _x: 0, _y: -1, _power: 2});
+					array_push(flashNext, { _x: 0, _y: 1, _power: 2});
+				}
+				else 
+				{
+					array_push(flashNext, { _x: yStep, _y: xStep, _power: 2});
+					array_push(flashNext, { _x: -yStep, _y: -xStep, _power: 2});
+				}
 			}
 		}
 		
 		if (isDiamond)
 		{
-			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, showPotential, false);
-			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, showPotential, false);
+			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, showPotential);
+			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, showPotential);
 		}
 	}
 }
@@ -477,14 +482,16 @@ function revealDot(xx, yy, _color, showPotential)
 		{
 			isRevealed = true; 
 			
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx + 1, yy)._x, yy).flash = 1;
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx - 1, yy)._x, yy).flash = 1;
-			ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy + 1)._y).flash = 1;
-			ds_grid_get(o_connectro.grid, xx, wrapAroundGrid(xx, yy - 1)._y).flash = 1;
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx + 1, yy)._x, wrapAroundGrid(xx, yy + 1)._y).flash = 1;
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx + 1, yy)._x, wrapAroundGrid(xx, yy - 1)._y).flash = 1;
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx - 1, yy)._x, wrapAroundGrid(xx, yy + 1)._y).flash = 1;
-			ds_grid_get(o_connectro.grid, wrapAroundGrid(xx - 1, yy)._x, wrapAroundGrid(xx, yy - 1)._y).flash = 1;
+			flashTimer = 0;
+			array_push(flashNext, { _x: 0, _y: 1, _power: 2});
+			array_push(flashNext, { _x: 0, _y: -1, _power: 2});
+			array_push(flashNext, { _x: 1, _y: 0, _power: 2});
+			array_push(flashNext, { _x: -1, _y: 0, _power: 2});
+			
+			array_push(flashNext, { _x: 1, _y: 1, _power: 2});
+			array_push(flashNext, { _x: -1, _y: 1, _power: 2});
+			array_push(flashNext, { _x: -1, _y: -1, _power: 2});
+			array_push(flashNext, { _x: 1, _y: -1, _power: 2});
 		}
 	}
 }

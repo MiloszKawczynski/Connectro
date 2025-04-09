@@ -33,6 +33,8 @@ function Tile(_type) constructor
 	potential = 0;
 	isTargeted = false;
 	flash = 0;
+	flashTimer = -1;
+	flashNext = array_create(0);
 	
 	switch(type)
 	{
@@ -104,14 +106,45 @@ function Tile(_type) constructor
 			}
 		}
 		
-		if (flash > 0)
+		if (flashTimer >= 0)
+		{
+			flash = animcurve_get_point(ac_start, 0, flashTimer);
+			flashTimer += 0.01;
+			
+			if (flashTimer >= 0.1)
+			{
+				for(var i = 0; i < array_length(flashNext); i++)
+				{
+					var wrappedFlash = wrapAroundGrid(xx + flashNext[i]._x, yy + flashNext[i]._y);
+					if (flashNext[i]._power == 1)
+					{
+						break;
+					}
+					
+					with(ds_grid_get(o_connectro.grid, wrappedFlash._x, wrappedFlash._y))
+					{
+						array_push(flashNext, { _x: other.flashNext[i]._x, _y: other.flashNext[i]._y, _power: other.flashNext[i]._power - 1});
+						flash = 0;
+						flashTimer = 0;
+					}
+				}
+				
+				array_delete(flashNext, 0, array_length(flashNext));
+			}
+			
+			if (flashTimer >= 1)
+			{
+				flashTimer = -1;
+				flash = 0;
+			}
+		}
+		
+		if (flash > 0 and !isRevealed)
 		{
 			draw_set_color(color);
 			draw_set_alpha(flash);	
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
-			
-			flash -= 0.04;
 		}
 	}
 	
@@ -244,14 +277,65 @@ function populateGrid()
 		while(arr[i] == TilesTypes.block)
 		{
 			i++;
-			show_debug_message(arr[i]);
 		}
 		
 		ds_grid_add(grid, floor(global.width / 2), floor(global.height / 2), new Tile(arr[i]));
 	}
+	
 	tile = ds_grid_get(grid, floor(global.width / 2), floor(global.height / 2));
 	tile.isRevealed = true;
 	tile.isAvailable = true;
+	
+	enum IntroTypes 
+	{
+		horizontalLines,
+		verticalLines,
+	}
+	
+	var introType = choose(IntroTypes.horizontalLines, IntroTypes.verticalLines)
+	
+	switch(introType)
+	{
+		case(IntroTypes.horizontalLines):
+		{
+			for(var i = 0; i < global.height; i++)
+			{
+				if (i mod 2 == 0)
+				{
+					tile = ds_grid_get(grid, 0, i);
+					tile.flashTimer = 0;
+					array_push(tile.flashNext, { _x: 1, _y: 0, _power: global.width});
+				}
+				else 
+				{
+					tile = ds_grid_get(grid, global.width - 1, i);
+					tile.flashTimer = 0;
+					array_push(tile.flashNext, { _x: -1, _y: 0, _power: global.width});
+				}
+			}
+			break;
+		}
+		
+		case(IntroTypes.verticalLines):
+		{
+			for(var i = 0; i < global.width; i++)
+			{
+				if (i mod 2 == 0)
+				{
+					tile = ds_grid_get(grid, i, 0);
+					tile.flashTimer = 0;
+					array_push(tile.flashNext, { _x: 0, _y: 1, _power: global.height});
+				}
+				else 
+				{
+					tile = ds_grid_get(grid, i, global.height - 1);
+					tile.flashTimer = 0;
+					array_push(tile.flashNext, { _x: 0, _y: -1, _power: global.height});
+				}
+			}
+			break;
+		}
+	}
 }
 
 function generateGame()
