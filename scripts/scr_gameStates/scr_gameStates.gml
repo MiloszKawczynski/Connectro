@@ -64,14 +64,14 @@ function gameEndDraw()
 {
 	if (mouse_check_button_pressed(mb_left))
 	{
-		lastMousePositionPressed = buildingRotation;
+		lastMousePositionPressed = mouse_x - (buildingRotation + buildingFingerRotation);
 	}
 	
 	if (mouse_check_button(mb_left))
 	{
 		buildingFingerRotation = mouse_x - lastMousePositionPressed;
 		buildingRotationSpeed = 0;
-		//buildingRotation = 0;
+		buildingRotation = 0;
 	}
 	else 
 	{
@@ -80,16 +80,16 @@ function gameEndDraw()
 	
 	if (mouse_check_button_released(mb_left))
 	{
-		buildingRotationSpeed = lastMousePosition - mouse_x;
+		buildingRotationSpeed += mouse_x - lastMousePosition;
 	}
-	
-	lastMousePosition = mouse_x;
 	
 	buildingRotation += buildingRotationSpeed;
 	if (buildingRotation >= 360) 
 	{
 		buildingRotation = 0;
 	}
+	
+	lastMousePosition = lerp(lastMousePosition, mouse_x, 0.5);
 	
 	drawEndScreen();
 }
