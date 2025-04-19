@@ -143,6 +143,7 @@ function Tile(_type) constructor
 		{
 			draw_set_color(color);
 			draw_set_alpha(flash);	
+			draw_sprite(s_icon, type, xx * global.cellSize, yy * global.cellSize); 
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
 		}
