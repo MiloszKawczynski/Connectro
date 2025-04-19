@@ -175,6 +175,7 @@
     {"id":{"name":"s_block","path":"sprites/s_block/s_block.yy",},},
     {"id":{"name":"s_icon","path":"sprites/s_icon/s_icon.yy",},},
     {"id":{"name":"s_target","path":"sprites/s_target/s_target.yy",},},
+    {"id":{"name":"s_value","path":"sprites/s_value/s_value.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
