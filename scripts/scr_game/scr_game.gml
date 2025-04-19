@@ -417,20 +417,20 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			{
 				isRevealed = true; 
 				
-				flashTimer = 0;
+				//flashTimer = 0;
 				
-				if (abs(xStep) == abs(yStep))
-				{
-					array_push(flashNext, { _x: -1, _y: 0, _power: 2});
-					array_push(flashNext, { _x: 1, _y: 0, _power: 2});
-					array_push(flashNext, { _x: 0, _y: -1, _power: 2});
-					array_push(flashNext, { _x: 0, _y: 1, _power: 2});
-				}
-				else 
-				{
-					array_push(flashNext, { _x: yStep, _y: xStep, _power: 2});
-					array_push(flashNext, { _x: -yStep, _y: -xStep, _power: 2});
-				}
+				//if (abs(xStep) == abs(yStep))
+				//{
+					//array_push(flashNext, { _x: -1, _y: 0, _power: 2});
+					//array_push(flashNext, { _x: 1, _y: 0, _power: 2});
+					//array_push(flashNext, { _x: 0, _y: -1, _power: 2});
+					//array_push(flashNext, { _x: 0, _y: 1, _power: 2});
+				//}
+				//else 
+				//{
+					//array_push(flashNext, { _x: yStep, _y: xStep, _power: 2});
+					//array_push(flashNext, { _x: -yStep, _y: -xStep, _power: 2});
+				//}
 			}
 		}
 		
@@ -482,16 +482,16 @@ function revealDot(xx, yy, _color, showPotential)
 		{
 			isRevealed = true; 
 			
-			flashTimer = 0;
-			array_push(flashNext, { _x: 0, _y: 1, _power: 2});
-			array_push(flashNext, { _x: 0, _y: -1, _power: 2});
-			array_push(flashNext, { _x: 1, _y: 0, _power: 2});
-			array_push(flashNext, { _x: -1, _y: 0, _power: 2});
-			
-			array_push(flashNext, { _x: 1, _y: 1, _power: 2});
-			array_push(flashNext, { _x: -1, _y: 1, _power: 2});
-			array_push(flashNext, { _x: -1, _y: -1, _power: 2});
-			array_push(flashNext, { _x: 1, _y: -1, _power: 2});
+			//flashTimer = 0;
+			//array_push(flashNext, { _x: 0, _y: 1, _power: 2});
+			//array_push(flashNext, { _x: 0, _y: -1, _power: 2});
+			//array_push(flashNext, { _x: 1, _y: 0, _power: 2});
+			//array_push(flashNext, { _x: -1, _y: 0, _power: 2});
+			//
+			//array_push(flashNext, { _x: 1, _y: 1, _power: 2});
+			//array_push(flashNext, { _x: -1, _y: 1, _power: 2});
+			//array_push(flashNext, { _x: -1, _y: -1, _power: 2});
+			//array_push(flashNext, { _x: 1, _y: -1, _power: 2});
 		}
 	}
 }
