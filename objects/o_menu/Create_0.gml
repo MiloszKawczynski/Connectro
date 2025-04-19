@@ -15,6 +15,8 @@ global.plusRatio = 2;
 global.blockRatio = 1;
 global.targetRatio = 1;
 
+global.seed = 0;
+
 calculateAllRatio();
 
 with(ui)
@@ -109,6 +111,14 @@ with(ui)
 		}
 	}
 	
+	var onTypeSeed = function(_value)
+	{
+		if (_value != "")
+		{
+			global.seed = real(_value);
+		}
+	}
+	
 	widthInput = new InputText(onTypeWidth, 3, "11");
 	widthInput.setSpriteSheet(ats_input);
 	widthInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
@@ -159,12 +169,19 @@ with(ui)
 	targetRatio.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	targetRatioText = new Text(string("Target ratio: {0}%", global.targetRatio / global.allRatio * 100), f_base);
 	
+	seedInput = new InputText(onTypeSeed, 10, string(global.seed));
+	seedInput.setSpriteSheet(ats_input);
+	seedInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+	seedInput.setScale(2, 1);
+	
 	var goNextFunction = function()
 	{
 		with(o_menu)
 		{
 			room_set_width(r_game, global.width * global.cellSize);
 			room_set_height(r_game, global.height * global.cellSize);
+			
+			random_set_seed(global.seed);
 			
 			alarm[0] = 1;
 		}
@@ -193,6 +210,7 @@ with(ui)
 	mainLayer.addComponent(2.5, 4.5, blockRatioText);	
 	mainLayer.addComponent(1.5, 5, targetRatio);
 	mainLayer.addComponent(2.5, 5, targetRatioText);	
+	mainLayer.addComponent(1.5, 5.5, seedInput);	
 	mainLayer.addComponent(2, 6, goButton);
 	
 	pushLayer(mainLayer);

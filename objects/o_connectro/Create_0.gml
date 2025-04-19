@@ -1,3 +1,8 @@
+if (global.seed == 0)
+{
+	randomize();
+}
+
 generateGame();
 
 hoveredX = 0;

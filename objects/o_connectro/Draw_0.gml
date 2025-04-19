@@ -44,3 +44,8 @@ if (drawSurface)
 }
 
 drawState();
+
+if (mouse_check_button_pressed(mb_right))
+{
+	clipboard_set_text(random_get_seed());
+}

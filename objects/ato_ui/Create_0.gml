@@ -1,5 +1,3 @@
-randomize();
-
 function UI() constructor
 {	
 	//Fields
