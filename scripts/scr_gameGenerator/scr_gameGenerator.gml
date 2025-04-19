@@ -162,7 +162,7 @@ function Tile(_type) constructor
 		{
 			draw_set_color(c_red);
 			draw_sprite(s_icon, type, xx * global.cellSize, yy * global.cellSize); 
-			draw_text(xx * global.cellSize + global.cellSize / 2 - 5, yy * global.cellSize + global.cellSize / 2, value);
+			draw_sprite(s_value, value, xx * global.cellSize, yy * global.cellSize);
 			
 			draw_set_color(color);
 			draw_set_alpha(0.25);	
@@ -181,6 +181,7 @@ function Tile(_type) constructor
 			{
 				draw_sprite(s_arrowStreight, lineDirection, xx * global.cellSize, yy * global.cellSize);
 			}
+			draw_sprite(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize);
 			draw_set_alpha(0.25 + power(sin(current_time / 500), 2) * 0.25);
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
