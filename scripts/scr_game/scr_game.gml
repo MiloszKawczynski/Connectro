@@ -132,26 +132,38 @@ function normalTileEffect(showPotential = false)
 				
 				with(ds_grid_get(grid, rightDown._x, hoveredY))
 				{
-					lineDirection = 0;
-					sourceTile = tile;
+					if (type != TilesTypes.block)
+					{
+						lineDirection = 0;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, hoveredX, rightDown._y))
 				{
-					lineDirection = 1;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 1;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, leftUp._x, hoveredY))
 				{
-					lineDirection = 2;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 2;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, hoveredX, leftUp._y))
 				{
-					lineDirection = 3;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 3;
+						sourceTile = tile;
+					}
 				}
 				
 				gameState = mustPickDirection;
@@ -170,30 +182,42 @@ function normalTileEffect(showPotential = false)
 				
 				with(ds_grid_get(grid, rightDown._x, rightDown._y))
 				{
-					lineDirection = 0;
-					isLineDiag = true;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 0;
+						isLineDiag = true;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, leftUp._x, rightDown._y))
 				{
-					lineDirection = 1;
-					isLineDiag = true;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 1;
+						isLineDiag = true;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, leftUp._x, leftUp._y))
 				{
-					lineDirection = 2;
-					isLineDiag = true;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 2;
+						isLineDiag = true;
+						sourceTile = tile;
+					}
 				}
 				
 				with(ds_grid_get(grid, rightDown._x, leftUp._y))
 				{
-					lineDirection = 3;
-					isLineDiag = true;
-					sourceTile = tile;
+					if (type != TilesTypes.block) 
+					{
+						lineDirection = 3;
+						isLineDiag = true;
+						sourceTile = tile;
+					}
 				}
 				
 				gameState = mustPickDirection;
