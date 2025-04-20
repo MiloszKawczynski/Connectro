@@ -342,7 +342,7 @@ function populateGrid()
 
 function toMapKey(tileCoords)
 {
-    return string(tileCoords.x) + "_" + string(tileCoords.y);
+	return string(tileCoords.x) + "_" + string(tileCoords.y);
 }
 
 function arrayUniqueStructByKey(arr)
@@ -374,6 +374,116 @@ function printStackAndClear(stack)
 }
 
 function checkSolvability()
+{
+	var aStar = true;
+	
+	if (aStar)
+	{
+		runAStar();
+	}
+	else
+	{
+		runDFS();
+	}
+}
+
+function runAStar()
+{
+	var tilesToRevealCount = global.width * global.height;
+	var startingTile = getStartingTile();
+	
+	var revealedTiles = ds_map_create();
+	ds_map_add(revealedTiles, toMapKey(startingTile), false);
+	
+	for (var column = 0; column < global.height; column++)
+	{
+		for (var row = 0; row < global.width; row++)
+		{
+			var tile = ds_grid_get(grid, row, column);
+			if (tile.type == TilesTypes.block)
+			{
+				ds_map_add(revealedTiles, toMapKey({x: row, y: column}), false);
+			}
+		}
+	}
+
+	var queue = [];
+	array_push(queue, {
+		tileCoord: startingTile,
+		availableTiles: [startingTile],
+		revealedTiles: revealedTiles,
+		g: 0,
+		priority: 0,
+		path: [startingTile]
+	});
+
+	while (array_length(queue) > 0)
+	{
+		array_sort(queue, function(a, b) {
+			return a.priority - b.priority;
+		});
+
+		var state = queue[0];
+		array_delete(queue, 0, 1);
+
+		var revealedCount = ds_map_size(state.revealedTiles);
+		if (revealedCount == tilesToRevealCount)
+		{
+			show_debug_message("SOLUTION FOUND:");
+			for (var i = 0; i < array_length(state.path); i++) {
+				var step = state.path[i];
+				show_debug_message("  " + string(step.x) + "," + string(step.y));
+			}
+			ds_map_destroy(state.revealedTiles);
+			return;
+		}
+
+		var len = array_length(state.availableTiles);
+		for (var i = 0; i < len; i++)
+		{
+			var currentCoord = state.availableTiles[i];
+			var tile = ds_grid_get(grid, currentCoord.x, currentCoord.y);
+
+			var newRevealed = ds_map_create();
+			ds_map_copy(newRevealed, state.revealedTiles);
+
+			var newAvailable = getRevealedTiles(tile, currentCoord, newRevealed);
+
+			var nextAvailable = [];
+			array_copy(nextAvailable, 0, state.availableTiles, 0, array_length(state.availableTiles));
+			array_delete(nextAvailable, i, 1);
+			var lenOld = array_length(nextAvailable);
+			var lenNew = array_length(newAvailable);
+			array_copy(nextAvailable, lenOld, newAvailable, 0, lenNew);
+
+			nextAvailable = arrayUniqueStructByKey(nextAvailable);
+			var actualNewAvailableCount = array_length(nextAvailable) - lenOld;
+
+			var nextPath = [];
+			array_copy(nextPath, 0, state.path, 0, array_length(state.path));
+			array_push(nextPath, currentCoord);
+
+			var g = state.g + 1;
+			var h = (tilesToRevealCount - ds_map_size(newRevealed));
+			var priority = g + h;
+
+			array_push(queue, {
+				tileCoord: currentCoord,
+				availableTiles: nextAvailable,
+				revealedTiles: newRevealed,
+				g: g,
+				priority: priority,
+				path: nextPath
+			});
+		}
+
+		ds_map_destroy(state.revealedTiles);
+	}
+
+	show_debug_message("No solution found.");
+}
+
+function runDFS()
 {
 	var tilesToRevealCount = global.width * global.height;
 	var revealedTiles = ds_map_create();
