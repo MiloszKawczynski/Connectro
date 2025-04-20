@@ -340,9 +340,431 @@ function populateGrid()
 	}
 }
 
+function toMapKey(tileCoords)
+{
+    return string(tileCoords.x) + "_" + string(tileCoords.y);
+}
+
+function arrayUniqueStructByKey(arr)
+{
+	var seen = ds_map_create();
+	var result = [];
+
+	for (var i = 0; i < array_length(arr); i++) {
+		var key = toMapKey(arr[i]);
+		if (!ds_map_exists(seen, key)) {
+			ds_map_add(seen, key, true);
+			array_push(result, arr[i]);
+		}
+	}
+
+	ds_map_destroy(seen);
+	return result;
+}
+
+function printStackAndClear(stack)
+{
+	show_debug_message("STACK (top to bottom):");
+
+	while (!ds_stack_empty(stack))
+	{
+		var val = ds_stack_pop(stack);
+		show_debug_message("  " + string(val));
+	}
+}
+
+function checkSolvability()
+{
+	var tilesToRevealCount = global.width * global.height;
+	var revealedTiles = ds_map_create();
+	ds_map_add(revealedTiles, toMapKey(getStartingTile()), false);
+	
+	var solution = ds_stack_create();
+	
+	for (var column = 0; column < global.height; column++)
+	{
+		for (var row = 0; row < global.width; row++)
+		{
+			var tile = ds_grid_get(grid, row, column);
+			
+			if (tile.type == TilesTypes.block)
+			{
+				ds_map_add(revealedTiles, toMapKey({x: row, y: column}), false);
+			}
+		}
+	}
+	
+	var found = checkTileRecursive([getStartingTile()], revealedTiles, tilesToRevealCount, solution);
+	
+	show_debug_message(found);
+	
+	printStackAndClear(solution);
+	
+	ds_stack_destroy(solution);
+	
+	ds_map_destroy(revealedTiles);
+}
+
+function checkTileRecursive(availableTiles, revealedTiles, tilesToRevealCount, solution)
+{
+	// Check every available tile.
+	var availableTilesLength = array_length(availableTiles);
+	for (var i = 0; i < availableTilesLength; i++)
+	{
+		// Get current tile.
+		var tile = ds_grid_get(grid, availableTiles[i].x, availableTiles[i].y);
+		var tileCoords = {x: availableTiles[i].x, y: availableTiles[i].y};
+		
+		// Get which tiles current tile reveals (through newRevealedTiles passed by reference)
+		// and which tiles current tile activates (through the returned newAvailableTiles array).
+		var newRevealedTiles = ds_map_create();
+		ds_map_copy(newRevealedTiles, revealedTiles);
+		var newAvailableTiles = getRevealedTiles(tile, tileCoords, newRevealedTiles);
+		
+		ds_stack_push(solution, tileCoords);
+		
+		// Check for success.
+		var revealedTilesCount = ds_map_size(newRevealedTiles);
+		if (tilesToRevealCount == revealedTilesCount)
+		{
+			return true;
+		}
+		
+		var nextAvailableTiles = [];
+		var len = array_length(availableTiles);
+		array_copy(nextAvailableTiles, 0, availableTiles, 0, len);
+		
+		array_delete(nextAvailableTiles, i, 1);
+		
+		var newAvailableTilesLen = array_length(newAvailableTiles);
+		array_copy(nextAvailableTiles, len - 1, newAvailableTiles, 0, newAvailableTilesLen);
+		
+		nextAvailableTiles = arrayUniqueStructByKey(nextAvailableTiles);
+		
+		if (!areAllReachableNaive(nextAvailableTiles, newRevealedTiles))
+		{
+			ds_map_destroy(newRevealedTiles);
+			ds_stack_pop(solution);
+			continue;
+		}
+
+		if (checkTileRecursive(nextAvailableTiles, newRevealedTiles, tilesToRevealCount, solution))
+		{
+			ds_map_destroy(newRevealedTiles);
+			return true;
+		}
+		
+		ds_stack_pop(solution);
+		
+		ds_map_destroy(newRevealedTiles);
+		show_debug_message("test {0}", revealedTilesCount);
+	}
+
+	return false;
+}
+
+function isReachableWith(tileToReachCoord, tileToUseCoord)
+{
+	var tile = ds_grid_get(grid, tileToUseCoord.x, tileToUseCoord.y);
+	var revealedTiles = ds_map_create();
+	
+	getRevealedTiles(tile, tileToUseCoord, revealedTiles);
+	
+	var revealed = ds_map_exists(revealedTiles, toMapKey(tileToReachCoord));
+	
+	ds_map_destroy(revealedTiles);
+	
+	return revealed;
+}
+
+function areAllReachableNaive(availableTiles, revealedTiles)
+{
+	// Get all unreached tiles.
+	var unreachedTiles = [];
+	for (var column = 0; column < global.height; column++)
+	{
+		for (var row = 0; row < global.width; row++)
+		{
+			var tileCoord = {x: row, y: column};
+			if (!ds_map_exists(revealedTiles, toMapKey(tileCoord)))
+			{
+				array_push(unreachedTiles, tileCoord);
+			}
+		}
+	}
+	
+	var unreachedTilesLen = array_length(unreachedTiles);
+	
+	for (var column = 0; column < global.height; column++)
+	{
+		for (var row = 0; row < global.width; row++)
+		{
+			var tileCoord = {x: row, y: column};
+			// Check if it is already revealed.
+			if (ds_map_exists(revealedTiles, toMapKey(tileCoord)))
+			{
+				continue;
+			}
+			
+			// Check if is reachable with any available tiles.
+			var len = array_length(availableTiles);
+			var isReachable = false;
+			for (var i = 0; i < len; i++)
+			{
+				if (isReachableWith(tileCoord, availableTiles[i]))
+				{
+					isReachable = true;
+					break;
+				}
+			}
+			
+			if (isReachable)
+			{
+				continue;
+			}
+			
+			// Check if it is reachable with any unreached tiles.
+			for (var i = 0; i < unreachedTilesLen; i++)
+			{
+				if (isReachableWith(tileCoord, unreachedTiles[i]))
+				{
+					isReachable = true;
+					break;
+				}
+			}
+			
+			if (!isReachable)
+			{
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
+function getStartingTile()
+{
+	 return {x : floor(global.width / 2), y: floor(global.height / 2)};
+}
+
+function getRevealedTiles(tile, tileCoords, revealedTiles)
+{
+	var newRevealedTiles = [];
+	
+	switch(tile.type)
+	{
+		case(TilesTypes.plus):
+		{
+			var arr1 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y);
+			var arr2 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y);
+			var arr3 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y + tile.value);
+			var arr4 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y - tile.value);
+			newRevealedTiles = array_concat(arr1, arr2, arr3, arr4);
+			
+			break;
+		}
+		case(TilesTypes.cross):
+		{
+			var arr1 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y + tile.value);
+			var arr2 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y + tile.value);
+			var arr3 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y - tile.value);
+			var arr4 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y - tile.value);
+			newRevealedTiles = array_concat(arr1, arr2, arr3, arr4);
+			
+			break;
+		}
+		case(TilesTypes.diamond):
+		{
+			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y, true);
+			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y, true);
+			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y + tile.value, true);
+			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y - tile.value, true);
+
+			break;
+		}
+		case(TilesTypes.line):
+		{
+			break;
+			var rightDown = wrapAroundGrid(tileCoords.x + 1, tileCoords.y + 1);
+			var leftUp = wrapAroundGrid(tileCoords.x - 1, tileCoords.y - 1);
+
+			with(ds_grid_get(grid, rightDown._x, tileCoords.y))
+			{
+				lineDirection = 0;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, tileCoords.x, rightDown._y))
+			{
+				lineDirection = 1;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, leftUp._x, tileCoords.y))
+			{
+				lineDirection = 2;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, tileCoords.x, leftUp._y))
+			{
+				lineDirection = 3;
+				sourceTile = tile;
+			}
+				
+			gameState = mustPickDirection;
+			tile.isAvailable = true;
+			break;
+		}
+		case(TilesTypes.lineDiag):
+		{
+			break;
+			
+			var rightDown = wrapAroundGrid(tileCoords.x + 1, tileCoords.y + 1);
+			var leftUp = wrapAroundGrid(tileCoords.x - 1, tileCoords.y - 1);
+				
+			with(ds_grid_get(grid, rightDown._x, rightDown._y))
+			{
+				lineDirection = 0;
+				isLineDiag = true;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, leftUp._x, rightDown._y))
+			{
+				lineDirection = 1;
+				isLineDiag = true;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, leftUp._x, leftUp._y))
+			{
+				lineDirection = 2;
+				isLineDiag = true;
+				sourceTile = tile;
+			}
+				
+			with(ds_grid_get(grid, rightDown._x, leftUp._y))
+			{
+				lineDirection = 3;
+				isLineDiag = true;
+				sourceTile = tile;
+			}
+				
+			gameState = mustPickDirection;
+			tile.isAvailable = true;
+			break;
+		}
+		case(TilesTypes.target):
+		{
+			break;
+			
+			for(var yy = 0; yy < global.height; yy++)
+			{
+				for(var xx = 0; xx < global.width; xx++)
+				{
+					with(ds_grid_get(grid, xx, yy))
+					{
+						if (!isRevealed)
+						{
+							isTargeted = true;
+							sourceTile = tile;
+						}
+					}
+				}
+			}
+				
+			tile.isAvailable = true;
+			gameState = mustPickTarget;
+			break;
+		}
+	}
+	
+	return newRevealedTiles;
+}
+
+function getRevealedLine(revealedTiles, x1, y1, x2, y2, isDiamond = false)
+{
+	var newAvailableTiles = [];
+	
+	var length = point_distance(x1, y1, x2, y2);
+	
+	if (frac(length) != 0)
+	{
+		length /= sqrt(2);
+	}
+	
+	var xStep = sign(x2 - x1);
+	var yStep = sign(y2 - y1);
+	
+	var xx = x1;
+	var yy = y1;
+	
+	var wrapped = wrapAroundGrid(x2, y2);
+	var wrappedX2 = wrapped._x;
+	var wrappedY2 = wrapped._y;
+	
+	for (var i = 0; i < length; i ++) 
+	{
+		xx += xStep;
+		yy += yStep;
+		
+		var position = wrapAroundGrid(xx, yy);
+		
+		xx = position._x;
+		yy = position._y;
+		
+		with (ds_grid_get(grid, xx, yy))
+		{
+			if (type == TilesTypes.block)
+			{
+				// Return empty array
+				return newAvailableTiles;
+			}
+			
+			if (xx = wrappedX2 and yy = wrappedY2)
+			{
+				if (!ds_map_exists(revealedTiles, toMapKey({x: xx, y: yy})))
+				{
+					array_push(newAvailableTiles, {x: xx, y: yy});
+				}
+			}
+			
+			ds_map_add(revealedTiles, toMapKey({x: xx, y: yy}), false);
+		}
+		
+		if (isDiamond)
+		{
+			var newTiles = [];
+			newTiles = getRevealedLine(revealedTiles, xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1));
+			var newTilesCount = array_length(newTiles);
+			
+			for (var k = 0; k < newTilesCount; k++)
+			{
+				array_push(newAvailableTiles, newTiles[k]);
+			}
+			
+			newTiles = getRevealedLine(revealedTiles, xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1));
+			newTilesCount = array_length(newTiles);
+			
+			for (var k = 0; k < newTilesCount; k++)
+			{
+				if (!ds_map_exists(revealedTiles, toMapKey(newTiles[k])))
+				{
+					array_push(newAvailableTiles, newTiles[k]);
+				}
+			}
+		}
+	}
+	
+	return newAvailableTiles;
+}
+
 function generateGame()
 {
 	windowSetup();
 	defineTiles();
 	populateGrid();
+	checkSolvability();
 }
