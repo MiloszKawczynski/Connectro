@@ -342,7 +342,7 @@ function populateGrid()
 
 function toMapKey(tileCoords)
 {
-	return string(tileCoords.x) + "_" + string(tileCoords.y);
+	return global.mapKeys[tileCoords.x][tileCoords.y];
 }
 
 function arrayUniqueStructByKey(arr)
@@ -377,6 +377,36 @@ function checkSolvability()
 {
 	var aStar = true;
 	
+	global.mapKeys = [
+		["0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6", "0_7", "0_8", "0_9", "0_10", "0_11"],
+		["1_0", "1_1", "1_2", "1_3", "1_4", "1_5", "1_6", "1_7", "1_8", "1_9", "1_10", "1_11"],
+		["2_0", "2_1", "2_2", "2_3", "2_4", "2_5", "2_6", "2_7", "2_8", "2_9", "2_10", "2_11"],
+		["3_0", "3_1", "3_2", "3_3", "3_4", "3_5", "3_6", "3_7", "3_8", "3_9", "3_10", "3_11"],
+		["4_0", "4_1", "4_2", "4_3", "4_4", "4_5", "4_6", "4_7", "4_8", "4_9", "4_10", "4_11"],
+		["5_0", "5_1", "5_2", "5_3", "5_4", "5_5", "5_6", "5_7", "5_8", "5_9", "5_10", "5_11"],
+		["6_0", "6_1", "6_2", "6_3", "6_4", "6_5", "6_6", "6_7", "6_8", "6_9", "6_10", "6_11"],
+		["7_0", "7_1", "7_2", "7_3", "7_4", "7_5", "7_6", "7_7", "7_8", "7_9", "7_10", "7_11"],
+		["8_0", "8_1", "8_2", "8_3", "8_4", "8_5", "8_6", "8_7", "8_8", "8_9", "8_10", "8_11"],
+		["9_0", "9_1", "9_2", "9_3", "9_4", "9_5", "9_6", "9_7", "9_8", "9_9", "9_10", "9_11"],
+		["10_0", "10_1", "10_2", "10_3", "10_4", "10_5", "10_6", "10_7", "10_8", "10_9", "10_10", "10_11"],
+		["11_0", "11_1", "11_2", "11_3", "11_4", "11_5", "11_6", "11_7", "11_8", "11_9", "11_10", "11_11"]
+	];
+	
+	global.mapObjects = [
+		[{x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}, {x: 0, y: 3}, {x: 0, y: 4}, {x: 0, y: 5}, {x: 0, y: 6}, {x: 0, y: 7}, {x: 0, y: 8}, {x: 0, y: 9}, {x: 0, y: 10}, {x: 0, y: 11}],
+		[{x: 1, y: 0}, {x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 1, y: 6}, {x: 1, y: 7}, {x: 1, y: 8}, {x: 1, y: 9}, {x: 1, y: 10}, {x: 1, y: 11}],
+		[{x: 2, y: 0}, {x: 2, y: 1}, {x: 2, y: 2}, {x: 2, y: 3}, {x: 2, y: 4}, {x: 2, y: 5}, {x: 2, y: 6}, {x: 2, y: 7}, {x: 2, y: 8}, {x: 2, y: 9}, {x: 2, y: 10}, {x: 2, y: 11}],
+		[{x: 3, y: 0}, {x: 3, y: 1}, {x: 3, y: 2}, {x: 3, y: 3}, {x: 3, y: 4}, {x: 3, y: 5}, {x: 3, y: 6}, {x: 3, y: 7}, {x: 3, y: 8}, {x: 3, y: 9}, {x: 3, y: 10}, {x: 3, y: 11}],
+		[{x: 4, y: 0}, {x: 4, y: 1}, {x: 4, y: 2}, {x: 4, y: 3}, {x: 4, y: 4}, {x: 4, y: 5}, {x: 4, y: 6}, {x: 4, y: 7}, {x: 4, y: 8}, {x: 4, y: 9}, {x: 4, y: 10}, {x: 4, y: 11}],
+		[{x: 5, y: 0}, {x: 5, y: 1}, {x: 5, y: 2}, {x: 5, y: 3}, {x: 5, y: 4}, {x: 5, y: 5}, {x: 5, y: 6}, {x: 5, y: 7}, {x: 5, y: 8}, {x: 5, y: 9}, {x: 5, y: 10}, {x: 5, y: 11}],
+		[{x: 6, y: 0}, {x: 6, y: 1}, {x: 6, y: 2}, {x: 6, y: 3}, {x: 6, y: 4}, {x: 6, y: 5}, {x: 6, y: 6}, {x: 6, y: 7}, {x: 6, y: 8}, {x: 6, y: 9}, {x: 6, y: 10}, {x: 6, y: 11}],
+		[{x: 7, y: 0}, {x: 7, y: 1}, {x: 7, y: 2}, {x: 7, y: 3}, {x: 7, y: 4}, {x: 7, y: 5}, {x: 7, y: 6}, {x: 7, y: 7}, {x: 7, y: 8}, {x: 7, y: 9}, {x: 7, y: 10}, {x: 7, y: 11}],
+		[{x: 8, y: 0}, {x: 8, y: 1}, {x: 8, y: 2}, {x: 8, y: 3}, {x: 8, y: 4}, {x: 8, y: 5}, {x: 8, y: 6}, {x: 8, y: 7}, {x: 8, y: 8}, {x: 8, y: 9}, {x: 8, y: 10}, {x: 8, y: 11}],
+		[{x: 9, y: 0}, {x: 9, y: 1}, {x: 9, y: 2}, {x: 9, y: 3}, {x: 9, y: 4}, {x: 9, y: 5}, {x: 9, y: 6}, {x: 9, y: 7}, {x: 9, y: 8}, {x: 9, y: 9}, {x: 9, y: 10}, {x: 9, y: 11}],
+		[{x: 10, y: 0}, {x: 10, y: 1}, {x: 10, y: 2}, {x: 10, y: 3}, {x: 10, y: 4}, {x: 10, y: 5}, {x: 10, y: 6}, {x: 10, y: 7}, {x: 10, y: 8}, {x: 10, y: 9}, {x: 10, y: 10}, {x: 10, y: 11}],
+		[{x: 11, y: 0}, {x: 11, y: 1}, {x: 11, y: 2}, {x: 11, y: 3}, {x: 11, y: 4}, {x: 11, y: 5}, {x: 11, y: 6}, {x: 11, y: 7}, {x: 11, y: 8}, {x: 11, y: 9}, {x: 11, y: 10}, {x: 11, y: 11}]
+	];
+	
 	if (aStar)
 	{
 		runAStar();
@@ -391,10 +421,10 @@ function runAStar()
 {
 	var tilesToRevealCount = global.width * global.height;
 	var startingTile = getStartingTile();
-	
+
 	var revealedTiles = ds_map_create();
 	ds_map_add(revealedTiles, toMapKey(startingTile), false);
-	
+
 	for (var column = 0; column < global.height; column++)
 	{
 		for (var row = 0; row < global.width; row++)
@@ -402,29 +432,24 @@ function runAStar()
 			var tile = ds_grid_get(grid, row, column);
 			if (tile.type == TilesTypes.block)
 			{
-				ds_map_add(revealedTiles, toMapKey({x: row, y: column}), false);
+				ds_map_add(revealedTiles, toMapKey(global.mapObjects[row][column]), false);
 			}
 		}
 	}
 
-	var queue = [];
-	array_push(queue, {
+	var queue = ds_priority_create();
+	var initialState = {
 		tileCoord: startingTile,
 		availableTiles: [startingTile],
 		revealedTiles: revealedTiles,
 		g: 0,
-		priority: 0,
 		path: [startingTile]
-	});
+	};
+	ds_priority_add(queue, initialState, 0);
 
-	while (array_length(queue) > 0)
+	while (!ds_priority_empty(queue))
 	{
-		array_sort(queue, function(a, b) {
-			return a.priority - b.priority;
-		});
-
-		var state = queue[0];
-		array_delete(queue, 0, 1);
+		var state = ds_priority_delete_min(queue);
 
 		var revealedCount = ds_map_size(state.revealedTiles);
 		if (revealedCount == tilesToRevealCount)
@@ -435,6 +460,7 @@ function runAStar()
 				show_debug_message("  " + string(step.x) + "," + string(step.y));
 			}
 			ds_map_destroy(state.revealedTiles);
+			ds_priority_destroy(queue);
 			return;
 		}
 
@@ -457,29 +483,30 @@ function runAStar()
 			array_copy(nextAvailable, lenOld, newAvailable, 0, lenNew);
 
 			nextAvailable = arrayUniqueStructByKey(nextAvailable);
-			var actualNewAvailableCount = array_length(nextAvailable) - lenOld;
+			
+			var actuallyNew = lenOld - array_length(nextAvailable);
 
 			var nextPath = [];
 			array_copy(nextPath, 0, state.path, 0, array_length(state.path));
 			array_push(nextPath, currentCoord);
 
 			var g = state.g + 1;
-			var h = (tilesToRevealCount - ds_map_size(newRevealed));
+			var h = (tilesToRevealCount - ds_map_size(newRevealed)) - actuallyNew;
 			var priority = g + h;
 
-			array_push(queue, {
+			ds_priority_add(queue, {
 				tileCoord: currentCoord,
 				availableTiles: nextAvailable,
 				revealedTiles: newRevealed,
 				g: g,
-				priority: priority,
 				path: nextPath
-			});
+			}, priority);
 		}
 
 		ds_map_destroy(state.revealedTiles);
 	}
 
+	ds_priority_destroy(queue);
 	show_debug_message("No solution found.");
 }
 
@@ -499,7 +526,7 @@ function runDFS()
 			
 			if (tile.type == TilesTypes.block)
 			{
-				ds_map_add(revealedTiles, toMapKey({x: row, y: column}), false);
+				ds_map_add(revealedTiles, toMapKey(global.mapObjects[row][column]), false);
 			}
 		}
 	}
@@ -523,7 +550,7 @@ function checkTileRecursive(availableTiles, revealedTiles, tilesToRevealCount, s
 	{
 		// Get current tile.
 		var tile = ds_grid_get(grid, availableTiles[i].x, availableTiles[i].y);
-		var tileCoords = {x: availableTiles[i].x, y: availableTiles[i].y};
+		var tileCoords = global.mapObjects[availableTiles[i].x][availableTiles[i].y];
 		
 		// Get which tiles current tile reveals (through newRevealedTiles passed by reference)
 		// and which tiles current tile activates (through the returned newAvailableTiles array).
@@ -595,7 +622,7 @@ function areAllReachableNaive(availableTiles, revealedTiles)
 	{
 		for (var row = 0; row < global.width; row++)
 		{
-			var tileCoord = {x: row, y: column};
+			var tileCoord = global.mapObjects[row][column];
 			if (!ds_map_exists(revealedTiles, toMapKey(tileCoord)))
 			{
 				array_push(unreachedTiles, tileCoord);
@@ -609,7 +636,7 @@ function areAllReachableNaive(availableTiles, revealedTiles)
 	{
 		for (var row = 0; row < global.width; row++)
 		{
-			var tileCoord = {x: row, y: column};
+			var tileCoord = global.mapObjects[row][column];
 			// Check if it is already revealed.
 			if (ds_map_exists(revealedTiles, toMapKey(tileCoord)))
 			{
@@ -829,19 +856,20 @@ function getRevealedLine(revealedTiles, x1, y1, x2, y2, isDiamond = false)
 		{
 			if (type == TilesTypes.block)
 			{
-				// Return empty array
 				return newAvailableTiles;
 			}
 			
+			var mapKey = toMapKey(global.mapObjects[xx][yy]);
+			
 			if (xx = wrappedX2 and yy = wrappedY2)
 			{
-				if (!ds_map_exists(revealedTiles, toMapKey({x: xx, y: yy})))
+				if (!ds_map_exists(revealedTiles, mapKey))
 				{
-					array_push(newAvailableTiles, {x: xx, y: yy});
+					array_push(newAvailableTiles, global.mapObjects[xx][yy]);
 				}
 			}
 			
-			ds_map_add(revealedTiles, toMapKey({x: xx, y: yy}), false);
+			ds_map_add(revealedTiles, mapKey, false);
 		}
 		
 		if (isDiamond)
