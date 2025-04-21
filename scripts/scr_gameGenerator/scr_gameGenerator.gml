@@ -487,6 +487,11 @@ function runAStar()
 			nextAvailable = arrayUniqueStructByKey(nextAvailable);
 			
 			var actuallyNew = lenOld - array_length(nextAvailable);
+			
+			if (actuallyNew == 0 and ds_map_size(newRevealed) == revealedCount)
+			{
+				continue;
+			}
 
 			var nextPath = [];
 			array_copy(nextPath, 0, state.path, 0, array_length(state.path));
