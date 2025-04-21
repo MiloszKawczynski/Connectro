@@ -498,7 +498,7 @@ function runAStar()
 			array_push(nextPath, currentCoord);
 
 			var g = state.g + 1;
-			var h = (tilesToRevealCount - ds_map_size(newRevealed)) - actuallyNew;
+			var h = tilesToRevealCount - ds_map_size(newRevealed);
 			var priority = g + h;
 
 			ds_priority_add(queue, {
