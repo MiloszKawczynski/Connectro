@@ -459,6 +459,8 @@ function runAStar()
 				var step = state.path[i];
 				show_debug_message("  " + string(step.x) + "," + string(step.y));
 			}
+			
+			show_debug_message(string("Number of moves {0}", array_length(state.path)));
 			ds_map_destroy(state.revealedTiles);
 			ds_priority_destroy(queue);
 			return;
