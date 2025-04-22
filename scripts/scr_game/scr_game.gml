@@ -127,10 +127,10 @@ function normalTileEffect(showPotential = false)
 					break;
 				}
 				
-				var rightDown = wrapAroundGrid(hoveredX + 1, hoveredY + 1);
-				var leftUp = wrapAroundGrid(hoveredX - 1, hoveredY - 1);
+				var rightDown = wrapAroundGrid(global.width, global.height, hoveredX + 1, hoveredY + 1);
+				var leftUp = wrapAroundGrid(global.width, global.height, hoveredX - 1, hoveredY - 1);
 				
-				with(ds_grid_get(grid, rightDown._x, hoveredY))
+				with(ds_grid_get(grid, rightDown.x, hoveredY))
 				{
 					if (type != TilesTypes.block)
 					{
@@ -139,7 +139,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, hoveredX, rightDown._y))
+				with(ds_grid_get(grid, hoveredX, rightDown.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -148,7 +148,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, leftUp._x, hoveredY))
+				with(ds_grid_get(grid, leftUp.x, hoveredY))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -157,7 +157,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, hoveredX, leftUp._y))
+				with(ds_grid_get(grid, hoveredX, leftUp.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -177,10 +177,10 @@ function normalTileEffect(showPotential = false)
 					break;
 				}
 				
-				var rightDown = wrapAroundGrid(hoveredX + 1, hoveredY + 1);
-				var leftUp = wrapAroundGrid(hoveredX - 1, hoveredY - 1);
+				var rightDown = wrapAroundGrid(global.width, global.height, hoveredX + 1, hoveredY + 1);
+				var leftUp = wrapAroundGrid(global.width, global.height, hoveredX - 1, hoveredY - 1);
 				
-				with(ds_grid_get(grid, rightDown._x, rightDown._y))
+				with(ds_grid_get(grid, rightDown.x, rightDown.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -190,7 +190,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, leftUp._x, rightDown._y))
+				with(ds_grid_get(grid, leftUp.x, rightDown.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -200,7 +200,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, leftUp._x, leftUp._y))
+				with(ds_grid_get(grid, leftUp.x, leftUp.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -210,7 +210,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, rightDown._x, leftUp._y))
+				with(ds_grid_get(grid, rightDown.x, leftUp.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -386,19 +386,19 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 	var xx = x1;
 	var yy = y1;
 	
-	var wrapped = wrapAroundGrid(x2, y2);
-	var wrappedX2 = wrapped._x;
-	var wrappedY2 = wrapped._y;
+	var wrapped = wrapAroundGrid(global.width, global.height, x2, y2);
+	var wrappedX2 = wrapped.x;
+	var wrappedY2 = wrapped.y;
 	
 	for(var i = 0; i < length; i ++) 
 	{
 		xx += xStep;
 		yy += yStep;
 		
-		position = wrapAroundGrid(xx, yy);
+		position = wrapAroundGrid(global.width, global.height, xx, yy);
 		
-		xx = position._x;
-		yy = position._y;
+		xx = position.x;
+		yy = position.y;
 		
 		with(ds_grid_get(grid, xx, yy))
 		{
@@ -520,30 +520,30 @@ function revealDot(xx, yy, _color, showPotential)
 	}
 }
 
-function wrapAroundGrid(xx, yy)
+function wrapAroundGrid(width, height, xx, yy)
 {
-	var xxMod = xx mod global.width;
-	var yyMod = yy mod global.height;
+	var xxMod = xx mod width;
+	var yyMod = yy mod height;
 	
-	if (xx > global.width - 1)
+	if (xx > width - 1)
 	{
 		xx = xxMod;
 	}
 	
 	if (xx < 0)
 	{
-		xx = global.width + xxMod;
+		xx = width + xxMod;
 	}
 	
-	if (yy > global.height - 1)
+	if (yy > height - 1)
 	{
 		yy = yyMod;
 	}
 	
 	if (yy < 0)
 	{
-		yy = global.height + yyMod;
+		yy = height + yyMod;
 	}
 	
-	return {_x: xx, _y: yy};
+	return global.mapObjects[xx][yy];
 }
