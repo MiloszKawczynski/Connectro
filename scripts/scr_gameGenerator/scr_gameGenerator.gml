@@ -417,30 +417,79 @@ function checkSolvability()
 	}
 }
 
+function getAvailableOrRevealedCount(array)
+{
+	var height = global.height;
+	var width = global.width;
+	var sum = 0;
+	for (var i = 0; i < height; i++)
+	{
+		for (var j = 0; j < width; j++)
+		{
+			if (array[i][j])
+			{
+				sum += 1;
+			}
+		}
+	}
+	
+	return sum;
+}
+
 function runAStar()
 {
-	var tilesToRevealCount = global.width * global.height;
+	var width = global.width;
+	var height = global.height;
+	var tilesToRevealCount = width * height;
+
 	var startingTile = getStartingTile();
+	
+	var revealedTiles = [
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+	];
+	
+	var availableTiles = [
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+		[false, false, false, false, false, false, false, false, false, false, false],
+	];
 
-	var revealedTiles = ds_map_create();
-	ds_map_add(revealedTiles, toMapKey(startingTile), false);
-
-	for (var column = 0; column < global.height; column++)
+	revealedTiles[startingTile.y][startingTile.x] = true;
+	availableTiles[startingTile.y][startingTile.x] = true;
+	
+	for (var column = 0; column < height; column++)
 	{
-		for (var row = 0; row < global.width; row++)
+		for (var row = 0; row < width; row++)
 		{
 			var tile = ds_grid_get(grid, row, column);
 			if (tile.type == TilesTypes.block)
 			{
-				ds_map_add(revealedTiles, toMapKey(global.mapObjects[row][column]), false);
+				revealedTiles[column][row] = true;
 			}
 		}
 	}
 
 	var queue = ds_priority_create();
 	var initialState = {
-		tileCoord: startingTile,
-		availableTiles: [startingTile],
+		availableTiles: availableTiles,
 		revealedTiles: revealedTiles,
 		g: 0,
 		path: [startingTile]
@@ -451,66 +500,63 @@ function runAStar()
 	{
 		var state = ds_priority_delete_min(queue);
 
-		var revealedCount = ds_map_size(state.revealedTiles);
+		var revealedCount = getAvailableOrRevealedCount(state.revealedTiles);
 		if (revealedCount == tilesToRevealCount)
 		{
 			show_debug_message("SOLUTION FOUND:");
-			for (var i = 0; i < array_length(state.path); i++) {
+			for (var i = 0; i < array_length(state.path); i++)
+			{
 				var step = state.path[i];
 				show_debug_message("  " + string(step.x) + "," + string(step.y));
 			}
 			
 			show_debug_message(string("Number of moves {0}", array_length(state.path)));
-			ds_map_destroy(state.revealedTiles);
 			ds_priority_destroy(queue);
 			return;
 		}
 
-		var len = array_length(state.availableTiles);
-		for (var i = 0; i < len; i++)
+		for (var i = 0; i < height; i++)
 		{
-			var currentCoord = state.availableTiles[i];
-			var tile = ds_grid_get(grid, currentCoord.x, currentCoord.y);
-
-			var newRevealed = ds_map_create();
-			ds_map_copy(newRevealed, state.revealedTiles);
-
-			var newAvailable = getRevealedTiles(tile, currentCoord, newRevealed);
-
-			var nextAvailable = [];
-			array_copy(nextAvailable, 0, state.availableTiles, 0, array_length(state.availableTiles));
-			array_delete(nextAvailable, i, 1);
-			var lenOld = array_length(nextAvailable);
-			var lenNew = array_length(newAvailable);
-			array_copy(nextAvailable, lenOld, newAvailable, 0, lenNew);
-
-			nextAvailable = arrayUniqueStructByKey(nextAvailable);
-			
-			var actuallyNew = lenOld - array_length(nextAvailable);
-			
-			if (actuallyNew == 0 and ds_map_size(newRevealed) == revealedCount)
+			for (var j = 0; j < width; j++)
 			{
-				continue;
+				if (!state.availableTiles[i][j])
+				{
+					continue;
+				}
+				
+				var tile = ds_grid_get(grid, j, i);
+
+				var newRevealed = variable_clone(state.revealedTiles, 2);
+				
+				var newAvailable = variable_clone(state.availableTiles, 2);
+
+				getRevealedTiles(tile, j, i, newAvailable, newRevealed);
+
+				newAvailable[i][j] = false;
+				
+				var newRevealedCount = getAvailableOrRevealedCount(newRevealed);
+
+				if (newRevealedCount == revealedCount)
+				{
+					continue;
+				}
+
+				var nextPath = [];
+				array_copy(nextPath, 0, state.path, 0, array_length(state.path));
+				array_push(nextPath, global.mapObjects[j][i]);
+
+				var g = state.g + 1;
+				var h = tilesToRevealCount - newRevealedCount;
+				var priority = g + h;
+
+				ds_priority_add(queue, {
+					availableTiles: newAvailable,
+					revealedTiles: newRevealed,
+					g: g,
+					path: nextPath
+				}, priority);
 			}
-
-			var nextPath = [];
-			array_copy(nextPath, 0, state.path, 0, array_length(state.path));
-			array_push(nextPath, currentCoord);
-
-			var g = state.g + 1;
-			var h = tilesToRevealCount - ds_map_size(newRevealed);
-			var priority = g + h;
-
-			ds_priority_add(queue, {
-				tileCoord: currentCoord,
-				availableTiles: nextAvailable,
-				revealedTiles: newRevealed,
-				g: g,
-				path: nextPath
-			}, priority);
 		}
-
-		ds_map_destroy(state.revealedTiles);
 	}
 
 	ds_priority_destroy(queue);
@@ -551,58 +597,58 @@ function runDFS()
 
 function checkTileRecursive(availableTiles, revealedTiles, tilesToRevealCount, solution)
 {
-	// Check every available tile.
-	var availableTilesLength = array_length(availableTiles);
-	for (var i = 0; i < availableTilesLength; i++)
-	{
-		// Get current tile.
-		var tile = ds_grid_get(grid, availableTiles[i].x, availableTiles[i].y);
-		var tileCoords = global.mapObjects[availableTiles[i].x][availableTiles[i].y];
+	//// Check every available tile.
+	//var availableTilesLength = array_length(availableTiles);
+	//for (var i = 0; i < availableTilesLength; i++)
+	//{
+	//	// Get current tile.
+	//	var tile = ds_grid_get(grid, availableTiles[i].x, availableTiles[i].y);
+	//	var tileCoords = global.mapObjects[availableTiles[i].x][availableTiles[i].y];
 		
-		// Get which tiles current tile reveals (through newRevealedTiles passed by reference)
-		// and which tiles current tile activates (through the returned newAvailableTiles array).
-		var newRevealedTiles = ds_map_create();
-		ds_map_copy(newRevealedTiles, revealedTiles);
-		var newAvailableTiles = getRevealedTiles(tile, tileCoords, newRevealedTiles);
+	//	// Get which tiles current tile reveals (through newRevealedTiles passed by reference)
+	//	// and which tiles current tile activates (through the returned newAvailableTiles array).
+	//	var newRevealedTiles = ds_map_create();
+	//	ds_map_copy(newRevealedTiles, revealedTiles);
+	//	var newAvailableTiles = getRevealedTiles(tile, tileCoords, newRevealedTiles);
 		
-		ds_stack_push(solution, tileCoords);
+	//	ds_stack_push(solution, tileCoords);
 		
-		// Check for success.
-		var revealedTilesCount = ds_map_size(newRevealedTiles);
-		if (tilesToRevealCount == revealedTilesCount)
-		{
-			return true;
-		}
+	//	// Check for success.
+	//	var revealedTilesCount = ds_map_size(newRevealedTiles);
+	//	if (tilesToRevealCount == revealedTilesCount)
+	//	{
+	//		return true;
+	//	}
 		
-		var nextAvailableTiles = [];
-		var len = array_length(availableTiles);
-		array_copy(nextAvailableTiles, 0, availableTiles, 0, len);
+	//	var nextAvailableTiles = [];
+	//	var len = array_length(availableTiles);
+	//	array_copy(nextAvailableTiles, 0, availableTiles, 0, len);
 		
-		array_delete(nextAvailableTiles, i, 1);
+	//	array_delete(nextAvailableTiles, i, 1);
 		
-		var newAvailableTilesLen = array_length(newAvailableTiles);
-		array_copy(nextAvailableTiles, len - 1, newAvailableTiles, 0, newAvailableTilesLen);
+	//	var newAvailableTilesLen = array_length(newAvailableTiles);
+	//	array_copy(nextAvailableTiles, len - 1, newAvailableTiles, 0, newAvailableTilesLen);
 		
-		nextAvailableTiles = arrayUniqueStructByKey(nextAvailableTiles);
+	//	nextAvailableTiles = arrayUniqueStructByKey(nextAvailableTiles);
 		
-		if (!areAllReachableNaive(nextAvailableTiles, newRevealedTiles))
-		{
-			ds_map_destroy(newRevealedTiles);
-			ds_stack_pop(solution);
-			continue;
-		}
+	//	if (!areAllReachableNaive(nextAvailableTiles, newRevealedTiles))
+	//	{
+	//		ds_map_destroy(newRevealedTiles);
+	//		ds_stack_pop(solution);
+	//		continue;
+	//	}
 
-		if (checkTileRecursive(nextAvailableTiles, newRevealedTiles, tilesToRevealCount, solution))
-		{
-			ds_map_destroy(newRevealedTiles);
-			return true;
-		}
+	//	if (checkTileRecursive(nextAvailableTiles, newRevealedTiles, tilesToRevealCount, solution))
+	//	{
+	//		ds_map_destroy(newRevealedTiles);
+	//		return true;
+	//	}
 		
-		ds_stack_pop(solution);
+	//	ds_stack_pop(solution);
 		
-		ds_map_destroy(newRevealedTiles);
-		show_debug_message("test {0}", revealedTilesCount);
-	}
+	//	ds_map_destroy(newRevealedTiles);
+	//	show_debug_message("test {0}", revealedTilesCount);
+	//}
 
 	return false;
 }
@@ -612,7 +658,7 @@ function isReachableWith(tileToReachCoord, tileToUseCoord)
 	var tile = ds_grid_get(grid, tileToUseCoord.x, tileToUseCoord.y);
 	var revealedTiles = ds_map_create();
 	
-	getRevealedTiles(tile, tileToUseCoord, revealedTiles);
+	//getRevealedTiles(tile, tileToUseCoord, revealedTiles);
 	
 	var revealed = ds_map_exists(revealedTiles, toMapKey(tileToReachCoord));
 	
@@ -692,66 +738,62 @@ function getStartingTile()
 	 return {x : floor(global.width / 2), y: floor(global.height / 2)};
 }
 
-function getRevealedTiles(tile, tileCoords, revealedTiles)
+function getRevealedTiles(tile, tileCoordX, tileCoordY, availableTiles, revealedTiles)
 {
-	var newRevealedTiles = [];
-	
 	switch(tile.type)
 	{
 		case(TilesTypes.plus):
 		{
-			var arr1 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y);
-			var arr2 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y);
-			var arr3 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y + tile.value);
-			var arr4 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y - tile.value);
-			newRevealedTiles = array_concat(arr1, arr2, arr3, arr4);
-			
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
+
 			break;
 		}
 		case(TilesTypes.cross):
 		{
-			var arr1 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y + tile.value);
-			var arr2 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y + tile.value);
-			var arr3 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y - tile.value);
-			var arr4 = getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y - tile.value);
-			newRevealedTiles = array_concat(arr1, arr2, arr3, arr4);
-			
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
+
 			break;
 		}
 		case(TilesTypes.diamond):
 		{
-			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x + tile.value, tileCoords.y, true);
-			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x - tile.value, tileCoords.y, true);
-			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y + tile.value, true);
-			getRevealedLine(revealedTiles, tileCoords.x, tileCoords.y, tileCoords.x, tileCoords.y - tile.value, true);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY, true);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY, true);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value, true);
+			getRevealedLine(availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value, true);
 
 			break;
 		}
 		case(TilesTypes.line):
 		{
 			break;
-			var rightDown = wrapAroundGrid(tileCoords.x + 1, tileCoords.y + 1);
-			var leftUp = wrapAroundGrid(tileCoords.x - 1, tileCoords.y - 1);
+			var rightDown = wrapAroundGrid(tileCoordX + 1, tileCoordY + 1);
+			var leftUp = wrapAroundGrid(tileCoordX - 1, tileCoordY - 1);
 
-			with(ds_grid_get(grid, rightDown._x, tileCoords.y))
+			with(ds_grid_get(grid, rightDown._x, tileCoordY))
 			{
 				lineDirection = 0;
 				sourceTile = tile;
 			}
 				
-			with(ds_grid_get(grid, tileCoords.x, rightDown._y))
+			with(ds_grid_get(grid, tileCoordX, rightDown._y))
 			{
 				lineDirection = 1;
 				sourceTile = tile;
 			}
 				
-			with(ds_grid_get(grid, leftUp._x, tileCoords.y))
+			with(ds_grid_get(grid, leftUp._x, tileCoordY))
 			{
 				lineDirection = 2;
 				sourceTile = tile;
 			}
 				
-			with(ds_grid_get(grid, tileCoords.x, leftUp._y))
+			with(ds_grid_get(grid, tileCoordX, leftUp._y))
 			{
 				lineDirection = 3;
 				sourceTile = tile;
@@ -765,8 +807,8 @@ function getRevealedTiles(tile, tileCoords, revealedTiles)
 		{
 			break;
 			
-			var rightDown = wrapAroundGrid(tileCoords.x + 1, tileCoords.y + 1);
-			var leftUp = wrapAroundGrid(tileCoords.x - 1, tileCoords.y - 1);
+			var rightDown = wrapAroundGrid(tileCoordX + 1, tileCoordY + 1);
+			var leftUp = wrapAroundGrid(tileCoordX - 1, tileCoordY - 1);
 				
 			with(ds_grid_get(grid, rightDown._x, rightDown._y))
 			{
@@ -824,14 +866,10 @@ function getRevealedTiles(tile, tileCoords, revealedTiles)
 			break;
 		}
 	}
-	
-	return newRevealedTiles;
 }
 
-function getRevealedLine(revealedTiles, x1, y1, x2, y2, isDiamond = false)
+function getRevealedLine(availableTiles, revealedTiles, x1, y1, x2, y2, isDiamond = false)
 {
-	var newAvailableTiles = [];
-	
 	var length = point_distance(x1, y1, x2, y2);
 	
 	if (frac(length) != 0)
@@ -863,47 +901,26 @@ function getRevealedLine(revealedTiles, x1, y1, x2, y2, isDiamond = false)
 		{
 			if (type == TilesTypes.block)
 			{
-				return newAvailableTiles;
+				return;
 			}
-			
-			var mapKey = toMapKey(global.mapObjects[xx][yy]);
 			
 			if (xx = wrappedX2 and yy = wrappedY2)
 			{
-				if (!ds_map_exists(revealedTiles, mapKey))
+				if (!revealedTiles[yy][xx])
 				{
-					array_push(newAvailableTiles, global.mapObjects[xx][yy]);
+					availableTiles[yy][xx] = true;
 				}
 			}
 			
-			ds_map_add(revealedTiles, mapKey, false);
+			revealedTiles[yy][xx] = true;
 		}
 		
 		if (isDiamond)
 		{
-			var newTiles = [];
-			newTiles = getRevealedLine(revealedTiles, xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1));
-			var newTilesCount = array_length(newTiles);
-			
-			for (var k = 0; k < newTilesCount; k++)
-			{
-				array_push(newAvailableTiles, newTiles[k]);
-			}
-			
-			newTiles = getRevealedLine(revealedTiles, xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1));
-			newTilesCount = array_length(newTiles);
-			
-			for (var k = 0; k < newTilesCount; k++)
-			{
-				if (!ds_map_exists(revealedTiles, toMapKey(newTiles[k])))
-				{
-					array_push(newAvailableTiles, newTiles[k]);
-				}
-			}
+			getRevealedLine(availableTiles, revealedTiles, xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1));
+			getRevealedLine(availableTiles, revealedTiles, xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1));
 		}
 	}
-	
-	return newAvailableTiles;
 }
 
 function generateGame()
