@@ -522,26 +522,25 @@ function revealDot(xx, yy, _color, showPotential)
 
 function wrapAroundGrid(width, height, xx, yy)
 {
-	var xxMod = xx mod width;
-	var yyMod = yy mod height;
-	
 	if (xx > width - 1)
 	{
+		var xxMod = xx mod width;
 		xx = xxMod;
 	}
-	
-	if (xx < 0)
+	else if (xx < 0)
 	{
+		var xxMod = xx mod width;
 		xx = width + xxMod;
 	}
 	
 	if (yy > height - 1)
 	{
+		var yyMod = yy mod height;
 		yy = yyMod;
 	}
-	
-	if (yy < 0)
+	else if (yy < 0)
 	{
+		var yyMod = yy mod height;
 		yy = height + yyMod;
 	}
 	
