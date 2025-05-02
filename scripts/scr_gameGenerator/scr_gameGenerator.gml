@@ -526,47 +526,57 @@ function runAStar()
 				}
 				
 				var tile = ds_grid_get(grid, j, i);
-
-				var newRevealed = [[],[],[],[],[],[],[],[],[],[],[]];
 				
-				for (var k = 0; k < height; k++)
+				var decisions = 1;
+				
+				if (tile.type == TilesTypes.line)
 				{
-					array_copy(newRevealed[k], 0, state.revealedTiles[k], 0, width);
+					decisions = 4;
 				}
 				
-				var newAvailable = [[],[],[],[],[],[],[],[],[],[],[]];
-				
-				for (var k = 0; k < height; k++)
+				for (var d = 0; d < decisions; d++)
 				{
-					array_copy(newAvailable[k], 0, state.availableTiles[k], 0, width);
-				}
-
-				getRevealedTiles(width, height, tile, j, i, newAvailable, newRevealed);
-
-				newAvailable[i][j] = false;
+					var newRevealed = [[],[],[],[],[],[],[],[],[],[],[]];
 				
-				var newRevealedCount = getAvailableOrRevealedCount(newRevealed);
+					for (var k = 0; k < height; k++)
+					{
+						array_copy(newRevealed[k], 0, state.revealedTiles[k], 0, width);
+					}
+				
+					var newAvailable = [[],[],[],[],[],[],[],[],[],[],[]];
+				
+					for (var k = 0; k < height; k++)
+					{
+						array_copy(newAvailable[k], 0, state.availableTiles[k], 0, width);
+					}
 
-				if (newRevealedCount == revealedCount)
-				{
-					continue;
+					getRevealedTiles(width, height, tile, j, i, newAvailable, newRevealed, d);
+
+					newAvailable[i][j] = false;
+				
+					var newRevealedCount = getAvailableOrRevealedCount(newRevealed);
+
+					if (newRevealedCount == revealedCount)
+					{
+						continue;
+					}
+
+					var nextPath = [];
+					array_copy(nextPath, 0, state.path, 0, array_length(state.path));
+					array_push(nextPath, global.mapObjects[j][i]);
+
+					var g = state.g + 1;
+					var h = tilesToRevealCount - newRevealedCount;
+					var priority = g + h;
+
+					ds_priority_add(queue, {
+						availableTiles: newAvailable,
+						revealedTiles: newRevealed,
+						revealedCount: newRevealedCount,
+						g: g,
+						path: nextPath
+					}, priority);
 				}
-
-				var nextPath = [];
-				array_copy(nextPath, 0, state.path, 0, array_length(state.path));
-				array_push(nextPath, global.mapObjects[j][i]);
-
-				var g = state.g + 1;
-				var h = tilesToRevealCount - newRevealedCount;
-				var priority = g + h;
-
-				ds_priority_add(queue, {
-					availableTiles: newAvailable,
-					revealedTiles: newRevealed,
-					revealedCount: newRevealedCount,
-					g: g,
-					path: nextPath
-				}, priority);
 			}
 		}
 	}
@@ -750,7 +760,7 @@ function getStartingTile()
 	 return {x : floor(global.width / 2), y: floor(global.height / 2)};
 }
 
-function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, availableTiles, revealedTiles)
+function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, availableTiles, revealedTiles, decision)
 {
 	switch(tile.type)
 	{
@@ -783,36 +793,33 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 		}
 		case(TilesTypes.line):
 		{
-			break;
 			var rightDown = wrapAroundGrid(width, height, tileCoordX + 1, tileCoordY + 1);
 			var leftUp = wrapAroundGrid(width, height, tileCoordX - 1, tileCoordY - 1);
 
-			with(ds_grid_get(grid, rightDown.x, tileCoordY))
+			switch (decision)
 			{
-				lineDirection = 0;
-				sourceTile = tile;
+				case (0):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
+					break;
+				}
+				case (1):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
+					break;
+				}
+				case (2):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
+					break;
+				}
+				case (3):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
+					break;
+				}
 			}
-				
-			with(ds_grid_get(grid, tileCoordX, rightDown.y))
-			{
-				lineDirection = 1;
-				sourceTile = tile;
-			}
-				
-			with(ds_grid_get(grid, leftUp.x, tileCoordY))
-			{
-				lineDirection = 2;
-				sourceTile = tile;
-			}
-				
-			with(ds_grid_get(grid, tileCoordX, leftUp.y))
-			{
-				lineDirection = 3;
-				sourceTile = tile;
-			}
-				
-			gameState = mustPickDirection;
-			tile.isAvailable = true;
+			
 			break;
 		}
 		case(TilesTypes.lineDiag):
