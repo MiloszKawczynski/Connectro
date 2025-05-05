@@ -529,7 +529,7 @@ function runAStar()
 				
 				var decisions = 1;
 				
-				if (tile.type == TilesTypes.line)
+				if (tile.type == TilesTypes.line or tile.type == TilesTypes.lineDiag)
 				{
 					decisions = 4;
 				}
@@ -793,9 +793,6 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 		}
 		case(TilesTypes.line):
 		{
-			var rightDown = wrapAroundGrid(width, height, tileCoordX + 1, tileCoordY + 1);
-			var leftUp = wrapAroundGrid(width, height, tileCoordX - 1, tileCoordY - 1);
-
 			switch (decision)
 			{
 				case (0):
@@ -824,41 +821,30 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 		}
 		case(TilesTypes.lineDiag):
 		{
-			break;
+			switch(decision)
+			{
+				case(0):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
+					break;
+				}
+				case(1):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
+					break;
+				}
+				case(2):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
+					break;
+				}
+				case(3):
+				{
+					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
+					break;
+				}
+			}
 			
-			var rightDown = wrapAroundGrid(width, height, tileCoordX + 1, tileCoordY + 1);
-			var leftUp = wrapAroundGrid(width, height, tileCoordX - 1, tileCoordY - 1);
-				
-			with(ds_grid_get(grid, rightDown.x, rightDown.y))
-			{
-				lineDirection = 0;
-				isLineDiag = true;
-				sourceTile = tile;
-			}
-				
-			with(ds_grid_get(grid, leftUp.x, rightDown.y))
-			{
-				lineDirection = 1;
-				isLineDiag = true;
-				sourceTile = tile;
-			}
-				
-			with(ds_grid_get(grid, leftUp.x, leftUp.y))
-			{
-				lineDirection = 2;
-				isLineDiag = true;
-				sourceTile = tile;
-			}
-				
-			with(ds_grid_get(grid, rightDown.x, leftUp.y))
-			{
-				lineDirection = 3;
-				isLineDiag = true;
-				sourceTile = tile;
-			}
-				
-			gameState = mustPickDirection;
-			tile.isAvailable = true;
 			break;
 		}
 		case(TilesTypes.target):
