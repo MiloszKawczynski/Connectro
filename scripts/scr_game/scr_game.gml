@@ -72,8 +72,6 @@ function normalTileEffect(showPotential = false)
 		{
 			tile.isRevealed = true;
 			tile.isAvailable = false;
-		
-			moves++;
 		}
 		
 		switch(tile.type)
@@ -88,6 +86,7 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
+					moves++;
 				}
 				
 				break;
@@ -102,6 +101,7 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
+					moves++;
 				}
 				
 				break;
@@ -116,6 +116,7 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl3, 0, false);
+					moves++;
 				}
 				
 				break;
