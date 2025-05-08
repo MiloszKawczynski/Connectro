@@ -939,4 +939,13 @@ function generateGame()
 	defineTiles();
 	populateGrid();
 	checkSolvability();
+function getSeed()
+{
+	var finalSeed = string("{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}", 
+	global.width, global.height,
+	global.crossRatio, global.diamondRatio, global.lineRatio, global.diagRatio, global.plusRatio, global.blockRatio, global.targetRatio,
+	random_get_seed()
+	);
+	clipboard_set_text(finalSeed);
+	return finalSeed;
 }
