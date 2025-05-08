@@ -512,6 +512,10 @@ function runAStar()
 				{
 					decisions = 4;
 				}
+				else if (tile.type == TilesTypes.target)
+				{
+					decisions = width * height;
+				}
 				
 				for (var d = 0; d < decisions; d++)
 				{
@@ -828,25 +832,15 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 		}
 		case(TilesTypes.target):
 		{
-			break;
+			var xx = decision % width;
+			var yy = decision / width;
 			
-			for(var yy = 0; yy < height; yy++)
+			if (!revealedTiles[yy][xx])
 			{
-				for(var xx = 0; xx < width; xx++)
-				{
-					with(ds_grid_get(grid, xx, yy))
-					{
-						if (!isRevealed)
-						{
-							isTargeted = true;
-							sourceTile = tile;
-						}
-					}
-				}
+				availableTiles[yy][xx] = true;
+				revealedTiles[yy][xx] = true;
 			}
-				
-			tile.isAvailable = true;
-			gameState = mustPickTarget;
+
 			break;
 		}
 	}
