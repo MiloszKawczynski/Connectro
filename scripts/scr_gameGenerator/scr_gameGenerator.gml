@@ -375,6 +375,8 @@ function printStackAndClear(stack)
 
 function checkSolvability()
 {
+	global.solutionFile = file_text_open_append("solutions.txt");
+	
 	var aStar = true;
 	global.solveTimeStart = get_timer();
 	
@@ -386,6 +388,9 @@ function checkSolvability()
 	{
 		runDFS();
 	}
+	
+	file_text_close(global.solutionFile);
+	
 	if (global.gamesToSolve > 0)
 	{
 		global.gamesToSolve--;
@@ -478,7 +483,10 @@ function runAStar()
 		var time = get_timer();
 		if ((time - global.solveTimeStart) > (maxSearchTime * 60000000))
 		{
-			show_debug_message(string("SEARCH FOR OVER {0} MINUTES", maxSearchTime));
+			var msg = string("SEARCH FOR OVER {0} MINUTES\n", maxSearchTime);
+			msg += "\n---\n";
+			file_text_write_string(global.solutionFile, msg);
+			show_debug_message(msg);
 			ds_priority_destroy(queue);
 			return;
 		}
@@ -488,14 +496,19 @@ function runAStar()
 		var revealedCount = state.revealedCount;
 		if (revealedCount == tilesToRevealCount)
 		{
-			show_debug_message("SOLUTION FOUND:");
+			var msg = "SOLUTION FOUND:\n";
+			msg += string("seed: {0}\n", getSeed());
 			for (var i = 0; i < array_length(state.path); i++)
 			{
 				var step = state.path[i];
-				show_debug_message("  " + string(step.x) + "," + string(step.y));
+				msg += "  " + string(step.x) + "," + string(step.y) + "\n";
 			}
 			
-			show_debug_message(string("Number of moves {0}", array_length(state.path)));
+			msg += string("Number of moves {0}\n", array_length(state.path));
+			msg += string("time: {0}\n", (get_timer() - global.solveTimeStart) / 60000000);
+			msg += "\n---\n";
+			file_text_write_string(global.solutionFile, msg);
+			show_debug_message(msg);
 			ds_priority_destroy(queue);
 			return;
 		}
@@ -570,7 +583,10 @@ function runAStar()
 	}
 
 	ds_priority_destroy(queue);
-	show_debug_message("No solution found.");
+	var msg = "No solution found.";
+	msg += "\n---\n";
+	file_text_write_string(global.solutionFile, msg);
+	show_debug_message(msg);
 }
 
 function runDFS()
