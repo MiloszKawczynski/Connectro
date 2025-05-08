@@ -393,7 +393,6 @@ function checkSolvability()
 	
 	if (global.gamesToSolve > 0)
 	{
-		global.gamesToSolve--;
 		room_restart();	
 	}
 }
@@ -510,6 +509,7 @@ function runAStar()
 			file_text_write_string(global.solutionFile, msg);
 			show_debug_message(msg);
 			ds_priority_destroy(queue);
+			global.gamesToSolve--;
 			return;
 		}
 
