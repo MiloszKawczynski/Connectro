@@ -17,6 +17,8 @@ global.targetRatio = 1;
 
 global.seed = 0;
 
+global.gamesToSolve = 0;
+
 calculateAllRatio();
 
 with(ui)
@@ -119,6 +121,14 @@ with(ui)
 		}
 	}
 	
+	var onTypeGamesToSolve = function(_value)
+	{
+		if (_value != "")
+		{
+			global.gamesToSolve = real(_value);
+		}
+	}
+	
 	widthInput = new InputText(onTypeWidth, 3, "11");
 	widthInput.setSpriteSheet(ats_input);
 	widthInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
@@ -174,6 +184,11 @@ with(ui)
 	seedInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	seedInput.setScale(2, 1);
 	
+	gameToSolveInput = new InputText(onTypeGamesToSolve, 2, string(global.gamesToSolve));
+	gameToSolveInput.setSpriteSheet(ats_input);
+	gameToSolveInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+	gameToSolveInput.setScale(2, 1);
+	
 	var goNextFunction = function()
 	{
 		with(o_menu)
@@ -211,6 +226,7 @@ with(ui)
 	mainLayer.addComponent(1.5, 5, targetRatio);
 	mainLayer.addComponent(2.5, 5, targetRatioText);	
 	mainLayer.addComponent(1.5, 5.5, seedInput);	
+	mainLayer.addComponent(1.5, 6, gameToSolveInput);	
 	mainLayer.addComponent(2, 6, goButton);
 	
 	pushLayer(mainLayer);

@@ -386,6 +386,11 @@ function checkSolvability()
 	{
 		runDFS();
 	}
+	if (global.gamesToSolve > 0)
+	{
+		global.gamesToSolve--;
+		room_restart();	
+	}
 }
 
 function getAvailableOrRevealedCount(array)
@@ -938,7 +943,17 @@ function generateGame()
 	windowSetup();
 	defineTiles();
 	populateGrid();
-	checkSolvability();
+	
+	if (global.gamesToSolve != 0)
+	{
+		checkSolvability();	
+	}
+	else 
+	{
+		game_end();
+	}
+}
+
 function getSeed()
 {
 	var finalSeed = string("{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}", 
