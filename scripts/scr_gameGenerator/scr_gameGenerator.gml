@@ -391,10 +391,7 @@ function checkSolvability()
 	
 	file_text_close(global.solutionFile);
 	
-	if (global.gamesToSolve > 0)
-	{
-		room_restart();	
-	}
+	room_restart();	
 }
 
 function getAvailableOrRevealedCount(array)
@@ -954,7 +951,7 @@ function generateGame()
 		[{x: 11, y: 0}, {x: 11, y: 1}, {x: 11, y: 2}, {x: 11, y: 3}, {x: 11, y: 4}, {x: 11, y: 5}, {x: 11, y: 6}, {x: 11, y: 7}, {x: 11, y: 8}, {x: 11, y: 9}, {x: 11, y: 10}, {x: 11, y: 11}]
 	];
 	
-	maxSearchTime = 1; // minutes
+	maxSearchTime = 0.06; // minutes
 	
 	windowSetup();
 	defineTiles();
