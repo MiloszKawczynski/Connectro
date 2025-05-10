@@ -25,5 +25,7 @@ buildingTilt = 0;
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
 
+longPress = 0;
+
 gameState = normal;
 drawState = normalDraw;

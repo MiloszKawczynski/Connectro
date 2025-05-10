@@ -13,7 +13,16 @@ for(var yy = 0; yy < global.height; yy++)
 	}
 }
 
-if (mouse_check_button_pressed(mb_left))
+if (mouse_check_button(mb_left))
+{
+	longPress++;
+}
+else 
+{
+	longPress = 0;
+}
+
+if (longPress > 5)
 {
 	gameState();
 
