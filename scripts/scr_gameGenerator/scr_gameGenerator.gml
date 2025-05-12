@@ -205,7 +205,7 @@ function Tile(_type) constructor
 	
 	static drawHover = function(xx, yy, hx, hy)
 	{
-		if (hx == xx and hy == yy)
+		if (hx == xx and hy == yy and isAvailable)
 		{
 			draw_set_color(c_white);
 			draw_set_alpha(0.25);

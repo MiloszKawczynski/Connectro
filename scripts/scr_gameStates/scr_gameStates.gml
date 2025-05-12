@@ -103,8 +103,8 @@ function normalDraw()
 			
 			tile.drawColor(xx, yy);
 			tile.drawButton(xx, yy);
-			tile.drawHover(xx, yy, hoveredX, hoveredY);
-			tile.drawPotential(xx, yy);
+            tile.drawHover(xx, yy, hoveredX, hoveredY);   
+            tile.drawPotential(xx, yy);
 		}
 	}
 	
