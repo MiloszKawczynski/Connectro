@@ -26,6 +26,8 @@ lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
 
 longPress = 0;
+doubleClick = 0;
+isScreenTouched = false;
 
 gameState = normal;
 drawState = normalDraw;

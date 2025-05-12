@@ -13,17 +13,15 @@ for(var yy = 0; yy < global.height; yy++)
 	}
 }
 
-if (mouse_check_button(mb_left))
+if (mouse_check_button_released(mb_left))
 {
-	longPress++;
-}
-else 
-{
-	longPress = 0;
+    isScreenTouched = false;
 }
 
-if (longPress > 5)
+if (mouse_check_button_pressed(mb_left))
 {
+    isScreenTouched = true;
+    
 	gameState();
 
 	if (isAllRevealed() and gameState == normal)
@@ -33,6 +31,20 @@ if (longPress > 5)
 		drawState = endScreenTransitionDraw;
 		audio_play_sound(sn_score, 0, true);
 	}
+}
+
+if (mouse_check_button(mb_left))
+{
+    //doubleClick = 10;
+	//longPress++;
+}
+else 
+{
+	//longPress = 0;
+    if (doubleClick > 0)
+    {
+        doubleClick--;
+    }
 }
 
 if (keyboard_check_pressed(ord("R")))
