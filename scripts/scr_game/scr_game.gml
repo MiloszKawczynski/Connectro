@@ -74,14 +74,20 @@ function normalTileEffect(showPotential = false)
             or tile.type == TilesTypes.cross
             or tile.type == TilesTypes.diamond)
             {
-                if (doubleClick <= 0)
+                if (longPress < 10)
                 {
-                    doubleClick = 10;
                     return;
                 }
-                
-                doubleClick = 0;
             }
+            else 
+            {
+            	if (!mouse_check_button_pressed(mb_left))
+                {
+                    return;
+                }
+            }
+            
+            longPress = -1;
             
 			tile.isRevealed = true;
 			tile.isAvailable = false;
@@ -275,6 +281,11 @@ function mustPickDirectionTileEffect(showPotential = false)
 	{
 		if (!showPotential)
 		{
+            if (!mouse_check_button_pressed(mb_left))
+            {
+                return;
+            }
+            
 			removeDirections();
 			return;
 		}
@@ -283,13 +294,12 @@ function mustPickDirectionTileEffect(showPotential = false)
 	{
 		if (!showPotential)
 		{
-            if (doubleClick <= 0)
+            if (longPress < 10)
             {
-                doubleClick = 10;
                 return;
             }
             
-            doubleClick = 0;
+            longPress = -1;
             
 			moves++;
 			audio_play_sound(sn_lvl1, 0, false);
@@ -367,6 +377,11 @@ function mustPickTargetTileEffect(showPotential = false)
 	{
 		if (!showPotential)
 		{
+            if (!mouse_check_button_pressed(mb_left))
+            {
+                return;
+            }
+            
 			removeTarget();
 			return;
 		}
@@ -375,11 +390,12 @@ function mustPickTargetTileEffect(showPotential = false)
 	{
 		if (!showPotential)
 		{
-            if (doubleClick <= 0)
+            if (longPress < 10)
             {
-                doubleClick = 10;
                 return;
             }
+            
+            longPress = -1;
             
 			moves++;
 			audio_play_sound(sn_lvl1, 0, false);
