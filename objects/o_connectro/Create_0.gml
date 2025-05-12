@@ -3,6 +3,8 @@ if (global.seed == 0)
 	randomize();
 }
 
+device_mouse_dbclick_enable(false);
+
 global.cellSize = room_width / global.width;
 gameOffset = (room_height - global.height * global.cellSize) / 2;
 
@@ -30,7 +32,8 @@ buildingTilt = 0;
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
 
-longPress = 0;
+gameState = normal;
+drawState = normalDraw;
 
 editorType = 0;
 editorValue = 1;
