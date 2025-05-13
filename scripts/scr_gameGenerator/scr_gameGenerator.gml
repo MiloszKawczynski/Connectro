@@ -470,7 +470,7 @@ function runAStar()
 		revealedTiles: revealedTiles,
 		revealedCount: 0,
 		g: 0,
-		path: [startingTile]
+		path: []
 	};
 	ds_priority_add(queue, initialState, 0);
 
