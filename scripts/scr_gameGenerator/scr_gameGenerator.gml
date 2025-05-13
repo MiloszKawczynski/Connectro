@@ -496,11 +496,17 @@ function runAStar()
 			msg += string("seed: {0}\n", getSeed());
 			for (var i = 0; i < array_length(state.path); i++)
 			{
+				if (state.path[i] == "Decision")
+				{
+					msg += "  Decision: ";
+					continue;
+				}
+				
 				var step = state.path[i];
 				msg += "  " + string(step.x) + "," + string(step.y) + "\n";
 			}
 			
-			msg += string("Number of moves {0}\n", array_length(state.path));
+			msg += string("Number of moves {0}\n", state.g);
 			msg += string("time: {0}\n", (get_timer() - global.solveTimeStart) / 60000000);
 			msg += "\n---\n";
 			file_text_write_string(global.solutionFile, msg);
@@ -548,7 +554,7 @@ function runAStar()
 						array_copy(newAvailable[k], 0, state.availableTiles[k], 0, width);
 					}
 
-					getRevealedTiles(width, height, tile, j, i, newAvailable, newRevealed, d);
+					var usedTile = getRevealedTiles(width, height, tile, j, i, newAvailable, newRevealed, d);
 
 					newAvailable[i][j] = false;
 				
@@ -562,6 +568,12 @@ function runAStar()
 					var nextPath = [];
 					array_copy(nextPath, 0, state.path, 0, array_length(state.path));
 					array_push(nextPath, global.mapObjects[j][i]);
+					
+					if (usedTile != undefined)
+					{
+						array_push(nextPath, global.decisionString);
+						array_push(nextPath, usedTile);
+					}
 
 					var g = state.g + 1;
 					var h = tilesToRevealCount - newRevealedCount;
@@ -761,8 +773,14 @@ function getStartingTile()
 	 return {x : floor(global.width / 2), y: floor(global.height / 2)};
 }
 
+function modulo(a, b)
+{
+    return ((a % b + b) % b);
+}
+
 function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, availableTiles, revealedTiles, decision)
 {
+	var usedTile = undefined;
 	switch(tile.type)
 	{
 		case(TilesTypes.plus):
@@ -799,21 +817,25 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 				case (0):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
+					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][tileCoordY];
 					break;
 				}
 				case (1):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
+					usedTile = global.mapObjects[tileCoordX][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case (2):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
+					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][tileCoordY];
 					break;
 				}
 				case (3):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
+					usedTile = global.mapObjects[tileCoordX][modulo(tileCoordY - 1, height)];
 					break;
 				}
 			}
@@ -827,21 +849,25 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 				case(0):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
+					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case(1):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
+					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case(2):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
+					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][modulo(tileCoordY - 1, height)];
 					break;
 				}
 				case(3):
 				{
 					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
+					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][modulo(tileCoordY - 1, height)];
 					break;
 				}
 			}
@@ -857,11 +883,14 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 			{
 				availableTiles[yy][xx] = true;
 				revealedTiles[yy][xx] = true;
+				usedTile = global.mapObjects[xx][yy];
 			}
 
 			break;
 		}
 	}
+	
+	return usedTile;
 }
 
 function getRevealedLine(width, height, availableTiles, revealedTiles, x1, y1, x2, y2, isDiamond = false)
@@ -921,6 +950,8 @@ function getRevealedLine(width, height, availableTiles, revealedTiles, x1, y1, x
 
 function generateGame()
 {
+	global.decisionString = "Decision";
+
 	global.mapKeys = [
 		["0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6", "0_7", "0_8", "0_9", "0_10", "0_11"],
 		["1_0", "1_1", "1_2", "1_3", "1_4", "1_5", "1_6", "1_7", "1_8", "1_9", "1_10", "1_11"],
