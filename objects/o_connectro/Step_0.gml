@@ -6,6 +6,17 @@ for(var yy = 0; yy < global.height; yy++)
 		{
 			if (mouse_y > yy * global.cellSize and mouse_y < yy * global.cellSize + global.cellSize)
 			{
+                if (gameState == mustPickDirection)
+                {
+                    var newHoverTile = ds_grid_get(grid, xx, yy);
+                    var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
+                    
+                    if (newHoverTile == hoverTile.sourceTile)
+                    {
+                        break;
+                    }
+                }
+                
 				hoveredX = xx;
 				hoveredY = yy;
 			}

@@ -141,11 +141,6 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.line):
 			{
-				if (showPotential)
-				{
-					break;
-				}
-				
 				var rightDown = wrapAroundGrid(hoveredX + 1, hoveredY + 1);
 				var leftUp = wrapAroundGrid(hoveredX - 1, hoveredY - 1);
 				
@@ -191,11 +186,6 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.lineDiag):
 			{
-				if (showPotential)
-				{
-					break;
-				}
-				
 				var rightDown = wrapAroundGrid(hoveredX + 1, hoveredY + 1);
 				var leftUp = wrapAroundGrid(hoveredX - 1, hoveredY - 1);
 				
@@ -245,11 +235,6 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.target):
 			{
-				if (showPotential)
-				{
-					break;
-				}
-				
 				for(var yy = 0; yy < global.height; yy++)
 				{
 					for(var xx = 0; xx < global.width; xx++)
