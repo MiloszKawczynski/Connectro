@@ -392,23 +392,31 @@ function checkSolvability()
 	room_restart();	
 }
 
-function getAvailableOrRevealedCount(array)
+function getAvailableOrRevealedCount(tileCount, buffer)
 {
-	var height = global.height;
-	var width = global.width;
+	buffer_seek(buffer, buffer_seek_start, 0);
 	var sum = 0;
-	for (var i = 0; i < height; i++)
+	for (var i = 0; i < tileCount; i++)
 	{
-		for (var j = 0; j < width; j++)
+		if (buffer_read(buffer, buffer_u8))
 		{
-			if (array[i][j])
-			{
-				sum += 1;
-			}
+			sum += 1;
 		}
 	}
 	
 	return sum;
+}
+
+function getLinearTileIndex(width, xx, yy)
+{
+	return yy * width + xx;
+}
+
+enum TileType
+{
+	Unrevealed = 0,
+	Revealed = 1,
+	Active = 2,
 }
 
 function runAStar()
@@ -419,36 +427,11 @@ function runAStar()
 
 	var startingTile = getStartingTile();
 	
-	var revealedTiles = [
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-	];
+	var gridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
+	buffer_fill(gridState, 0, buffer_u8, TileType.Unrevealed, tilesToRevealCount);
 	
-	var availableTiles = [
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-		[false, false, false, false, false, false, false, false, false, false, false],
-	];
-
-	revealedTiles[startingTile.y][startingTile.x] = true;
-	availableTiles[startingTile.y][startingTile.x] = true;
+	buffer_seek(gridState, buffer_seek_start, getLinearTileIndex(width, startingTile.x, startingTile.y));
+	buffer_write(gridState, buffer_u8, TileType.Active);
 	
 	for (var column = 0; column < height; column++)
 	{
@@ -457,15 +440,15 @@ function runAStar()
 			var tile = ds_grid_get(grid, row, column);
 			if (tile.type == TilesTypes.block)
 			{
-				revealedTiles[column][row] = true;
+				buffer_seek(gridState, buffer_seek_start, getLinearTileIndex(width, row, column));
+				buffer_write(gridState, buffer_u8, TileType.Revealed);
 			}
 		}
 	}
 
 	var queue = ds_priority_create();
 	var initialState = {
-		availableTiles: availableTiles,
-		revealedTiles: revealedTiles,
+		gridState: gridState,
 		revealedCount: 0,
 		g: 0,
 		path: []
@@ -481,6 +464,7 @@ function runAStar()
 			msg += "\n---\n";
 			file_text_write_string(global.solutionFile, msg);
 			show_debug_message(msg);
+			// TODO: Clear buffers
 			ds_priority_destroy(queue);
 			return;
 		}
@@ -509,21 +493,26 @@ function runAStar()
 			msg += "\n---\n";
 			file_text_write_string(global.solutionFile, msg);
 			show_debug_message(msg);
+			buffer_delete(state.gridState);
 			ds_priority_destroy(queue);
 			global.gamesToSolve--;
 			return;
 		}
 
-		for (var i = 0; i < height; i++)
+		for (var column = 0; column < height; column++)
 		{
-			for (var j = 0; j < width; j++)
+			for (var row = 0; row < width; row++)
 			{
-				if (!state.availableTiles[i][j])
+				var index = getLinearTileIndex(width, row, column);
+				
+				buffer_seek(state.gridState, buffer_seek_start, index);
+
+				if (buffer_read(state.gridState, buffer_u8) != TileType.Active)
 				{
 					continue;
 				}
 				
-				var tile = ds_grid_get(grid, j, i);
+				var tile = ds_grid_get(grid, row, column);
 				
 				var decisions = 1;
 				
@@ -533,30 +522,20 @@ function runAStar()
 				}
 				else if (tile.type == TilesTypes.target)
 				{
-					decisions = width * height;
+					decisions = tilesToRevealCount;
 				}
 				
 				for (var d = 0; d < decisions; d++)
 				{
-					var newRevealed = [[],[],[],[],[],[],[],[],[],[],[]];
-				
-					for (var k = 0; k < height; k++)
-					{
-						array_copy(newRevealed[k], 0, state.revealedTiles[k], 0, width);
-					}
-				
-					var newAvailable = [[],[],[],[],[],[],[],[],[],[],[]];
-				
-					for (var k = 0; k < height; k++)
-					{
-						array_copy(newAvailable[k], 0, state.availableTiles[k], 0, width);
-					}
+					var newGridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
+					buffer_copy(state.gridState, 0, tilesToRevealCount, newGridState, 0);
 
-					var usedTile = getRevealedTiles(width, height, tile, j, i, newAvailable, newRevealed, d);
+					var usedTile = getRevealedTiles(width, height, tile, row, column, newGridState, d);
 
-					newAvailable[i][j] = false;
-				
-					var newRevealedCount = getAvailableOrRevealedCount(newRevealed);
+					buffer_seek(newGridState, buffer_seek_start, index);
+					buffer_write(newGridState, buffer_u8, TileType.Revealed);
+					
+					var newRevealedCount = getAvailableOrRevealedCount(tilesToRevealCount, newGridState);
 
 					if (newRevealedCount == revealedCount)
 					{
@@ -565,7 +544,7 @@ function runAStar()
 
 					var nextPath = [];
 					array_copy(nextPath, 0, state.path, 0, array_length(state.path));
-					array_push(nextPath, global.mapObjects[j][i]);
+					array_push(nextPath, global.mapObjects[row][column]);
 					
 					if (usedTile != undefined)
 					{
@@ -578,8 +557,7 @@ function runAStar()
 					var priority = g + h;
 
 					ds_priority_add(queue, {
-						availableTiles: newAvailable,
-						revealedTiles: newRevealed,
+						gridState: newGridState,
 						revealedCount: newRevealedCount,
 						g: g,
 						path: nextPath
@@ -587,6 +565,8 @@ function runAStar()
 				}
 			}
 		}
+		
+		buffer_delete(state.gridState);
 	}
 
 	ds_priority_destroy(queue);
@@ -776,35 +756,35 @@ function modulo(a, b)
     return ((a % b + b) % b);
 }
 
-function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, availableTiles, revealedTiles, decision)
+function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, gridState, decision)
 {
 	var usedTile = undefined;
 	switch(tile.type)
 	{
 		case(TilesTypes.plus):
 		{
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
 
 			break;
 		}
 		case(TilesTypes.cross):
 		{
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
 
 			break;
 		}
 		case(TilesTypes.diamond):
 		{
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY, true);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY, true);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value, true);
-			getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value, true);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY, true);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY, true);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value, true);
+			getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value, true);
 
 			break;
 		}
@@ -814,25 +794,25 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 			{
 				case (0):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY);
 					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][tileCoordY];
 					break;
 				}
 				case (1):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY + tile.value);
 					usedTile = global.mapObjects[tileCoordX][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case (2):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY);
 					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][tileCoordY];
 					break;
 				}
 				case (3):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX, tileCoordY - tile.value);
 					usedTile = global.mapObjects[tileCoordX][modulo(tileCoordY - 1, height)];
 					break;
 				}
@@ -846,25 +826,25 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 			{
 				case(0):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY + tile.value);
 					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case(1):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY + tile.value);
 					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][modulo(tileCoordY + 1, height)];
 					break;
 				}
 				case(2):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX - tile.value, tileCoordY - tile.value);
 					usedTile = global.mapObjects[modulo(tileCoordX - 1, width)][modulo(tileCoordY - 1, height)];
 					break;
 				}
 				case(3):
 				{
-					getRevealedLine(width, height, availableTiles, revealedTiles, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
+					getRevealedLine(width, height, gridState, tileCoordX, tileCoordY, tileCoordX + tile.value, tileCoordY - tile.value);
 					usedTile = global.mapObjects[modulo(tileCoordX + 1, width)][modulo(tileCoordY - 1, height)];
 					break;
 				}
@@ -877,10 +857,12 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 			var xx = decision % width;
 			var yy = decision / width;
 			
-			if (!revealedTiles[yy][xx])
+			var index = getLinearTileIndex(width, xx, yy);
+			buffer_seek(gridState, buffer_seek_start, index);
+			if (buffer_read(gridState, buffer_u8) == TileType.Unrevealed)
 			{
-				availableTiles[yy][xx] = true;
-				revealedTiles[yy][xx] = true;
+				buffer_seek(gridState, buffer_seek_start, index);
+				buffer_write(gridState, buffer_u8, TileType.Active);
 				usedTile = global.mapObjects[xx][yy];
 			}
 
@@ -891,7 +873,7 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, available
 	return usedTile;
 }
 
-function getRevealedLine(width, height, availableTiles, revealedTiles, x1, y1, x2, y2, isDiamond = false)
+function getRevealedLine(width, height, gridState, x1, y1, x2, y2, isDiamond = false)
 {
 	var length = point_distance(x1, y1, x2, y2);
 	
@@ -927,21 +909,34 @@ function getRevealedLine(width, height, availableTiles, revealedTiles, x1, y1, x
 				return;
 			}
 			
+			var index = getLinearTileIndex(width, xx, yy);
+			
 			if (xx = wrappedX2 and yy = wrappedY2)
 			{
-				if (!revealedTiles[yy][xx])
+				buffer_seek(gridState, buffer_seek_start, index);
+				
+				if (buffer_read(gridState, buffer_u8) == TileType.Unrevealed)
 				{
-					availableTiles[yy][xx] = true;
+					buffer_seek(gridState, buffer_seek_start, index);
+					buffer_write(gridState, buffer_u8, TileType.Active);
 				}
 			}
-			
-			revealedTiles[yy][xx] = true;
+			else
+			{	
+				buffer_seek(gridState, buffer_seek_start, index);
+				
+				if (buffer_read(gridState, buffer_u8) == TileType.Unrevealed)
+				{
+					buffer_seek(gridState, buffer_seek_start, index);
+					buffer_write(gridState, buffer_u8, TileType.Revealed);
+				}
+			}
 		}
 		
 		if (isDiamond)
 		{
-			getRevealedLine(width, height, availableTiles, revealedTiles, xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1));
-			getRevealedLine(width, height, availableTiles, revealedTiles, xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1));
+			getRevealedLine(width, height, gridState, xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1));
+			getRevealedLine(width, height, gridState, xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1));
 		}
 	}
 }
