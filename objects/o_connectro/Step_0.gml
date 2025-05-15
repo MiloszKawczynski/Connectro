@@ -13,28 +13,26 @@ for(var yy = 0; yy < global.height; yy++)
 	}
 }
 
-if (mouse_check_button(mb_left))
+if (global.isEditorOn)
 {
-	longPress++;
+    gameState();
 }
-else 
+else
 {
-	longPress = 0;
+    if (mouse_check_button_pressed(mb_left))
+    {
+    	gameState();
+    
+    	if (isAllRevealed() and gameState == normal)
+    	{
+    		drawSurface = true;
+    		gameState = gameEnd;
+    		drawState = endScreenTransitionDraw;
+    		audio_play_sound(sn_score, 0, true);
+    	}
+    }
 }
-
-if (longPress > 5)
-{
-	gameState();
-
-	if (isAllRevealed() and gameState == normal)
-	{
-		drawSurface = true;
-		gameState = gameEnd;
-		drawState = endScreenTransitionDraw;
-		audio_play_sound(sn_score, 0, true);
-	}
-}
-
+    
 if (keyboard_check_pressed(ord("R")))
 {
 	audio_stop_all();

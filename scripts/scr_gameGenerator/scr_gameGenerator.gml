@@ -223,8 +223,6 @@ function Tile(_type) constructor
 
 function populateGrid()
 {
-	grid = ds_grid_create(global.width, global.height);
-	
 	tileChances = array_create(0);
 	
 	repeat(global.crossRatio)
@@ -986,7 +984,11 @@ function generateGame()
 	
 	windowSetup();
 	defineTiles();
-	populateGrid();
+    
+    if (!global.isEditorOn)
+    {
+        populateGrid();
+    }
 	
 	if (global.gamesToSolve != 0)
 	{

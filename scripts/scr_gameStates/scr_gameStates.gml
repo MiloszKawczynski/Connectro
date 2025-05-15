@@ -25,6 +25,54 @@ function gameEnd(showPotential = false)
 	}
 }
 
+function editor()
+{
+	if (mouse_check_button_pressed(mb_left))
+    {
+        var newTile = new Tile(editorType);
+        newTile.isAvailable = true;
+        if (editorType != TilesTypes.block and editorType != TilesTypes.target)
+        {
+            newTile.value = editorValue;
+        }
+        ds_grid_set(grid, hoveredX, hoveredY, newTile);
+    }
+    
+    if (mouse_check_button_pressed(mb_right))
+    {
+        ds_grid_set(grid, hoveredX, hoveredY, 0);
+    }
+    
+    if (keyboard_check(vk_lshift))
+    {
+        editorValue += mouse_wheel_down() - mouse_wheel_up();
+        
+        if (editorValue < 1)
+        {
+            editorValue = 5;
+        }
+        
+        if (editorValue > 5)
+        {
+            editorValue = 1;
+        }
+    }
+    else 
+    {
+        editorType += mouse_wheel_down() - mouse_wheel_up();
+        
+        if (editorType < 0)
+        {
+            editorType = 6;
+        }
+        
+        if (editorType > 6)
+        {
+            editorType = 0;
+        }
+    }
+}
+
 //---
 
 function normalDraw()
@@ -92,6 +140,27 @@ function gameEndDraw()
 	lastMousePosition = lerp(lastMousePosition, mouse_x, 0.5);
 	
 	drawEndScreen();
+}
+
+function editorDraw()
+{
+    for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+			
+            if (tile != 0)
+            {
+                tile.drawColor(xx, yy);
+                tile.drawButton(xx, yy);
+            }
+			//tile.drawHover(xx, yy, hoveredX, hoveredY);
+			//tile.drawPotential(xx, yy);
+		}
+	}
+	
+	drawLines();
 }
 
 //---
