@@ -17,6 +17,7 @@ global.targetRatio = 1;
 
 global.seed = 0;
 
+global.isEditorOn = true;
 global.gamesToSolve = 0;
 
 calculateAllRatio();

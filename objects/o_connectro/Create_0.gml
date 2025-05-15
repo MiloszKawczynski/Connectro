@@ -3,6 +3,8 @@ if (global.seed == 0)
 	randomize();
 }
 
+grid = ds_grid_create(global.width, global.height);
+
 generateGame();
 
 hoveredX = 0;
@@ -27,5 +29,16 @@ lastMousePositionPressed = mouse_x;
 
 longPress = 0;
 
-gameState = normal;
-drawState = normalDraw;
+editorType = 0;
+editorValue = 1;
+
+if (global.isEditorOn)
+{
+    gameState = editor;
+    drawState = editorDraw;
+}
+else 
+{
+	gameState = normal;
+    drawState = normalDraw;
+}
