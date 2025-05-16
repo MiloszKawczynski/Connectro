@@ -31,6 +31,8 @@ longPress = 0;
 
 editorType = 0;
 editorValue = 1;
+editorStartingTileX = -1;
+editorStartingTileY = -1;
 
 if (global.isEditorOn)
 {
