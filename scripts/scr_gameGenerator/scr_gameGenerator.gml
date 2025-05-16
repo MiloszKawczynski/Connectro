@@ -987,7 +987,14 @@ function generateGame()
     
     if (!global.isEditorOn)
     {
-        populateGrid();
+        if (global.level != "")
+        {
+            loadMap();
+        }	
+        else 
+        {
+            populateGrid();	
+        }
     }
 	
 	if (global.gamesToSolve != 0)
