@@ -211,3 +211,54 @@ function drawLines()
 		draw_line_width(xx * global.cellSize, 0, xx * global.cellSize, room_height, 2);
 	}
 }
+
+//---
+
+function saveMap()
+{
+    var file = file_text_open_write(global.level + ".txt");
+    
+    file_text_write_real(file, global.width);
+    file_text_write_real(file, global.height);
+    file_text_writeln(file);
+    
+    for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+            file_text_write_real(file, tile.type);
+            file_text_write_real(file, tile.value);
+            file_text_writeln(file);
+        }
+    }
+    
+    file_text_close(file);
+}
+
+function loadMap()
+{
+    var file = file_text_open_read(global.level + ".txt");
+    
+    global.width = file_text_read_real(file);
+    global.height = file_text_read_real(file);
+    
+    for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{ 
+            var type = file_text_read_real(file);
+            var value = file_text_read_real(file);
+            
+            var newTile = new Tile(type);
+            newTile.value = value;
+            ds_grid_set(grid, xx, yy, newTile);
+        }
+    }
+    
+    file_text_close(file);
+    
+    tile = ds_grid_get(grid, floor(global.width / 2), floor(global.height / 2));
+	tile.isRevealed = true;
+	tile.isAvailable = true;
+}
