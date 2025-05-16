@@ -37,6 +37,11 @@ function editor()
             newTile.value = editorValue;
         }
         ds_grid_set(grid, hoveredX, hoveredY, newTile);
+        
+        if (isAllRevealed())
+        {
+            saveMap();
+        }
     }
     
     if (mouse_check_button_pressed(mb_right))

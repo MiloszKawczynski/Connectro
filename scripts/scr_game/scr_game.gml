@@ -5,6 +5,11 @@ function isAllRevealed()
 		for(var xx = 0; xx < global.width; xx++)
 		{
 			var tile = ds_grid_get(grid, xx, yy);
+            
+            if (tile == 0)
+            {
+                return false;
+            }
 			
 			if (!tile.isRevealed)
 			{
