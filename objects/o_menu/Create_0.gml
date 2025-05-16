@@ -18,7 +18,7 @@ global.targetRatio = 1;
 global.seed = 0;
 
 global.isEditorOn = false;
-global.level = "save";
+global.level = "";
 global.gamesToSolve = 0;
 
 calculateAllRatio();
@@ -173,6 +173,24 @@ with(ui)
 	seedInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	seedInput.setScale(2, 1);
     seedText = new Text("Seed RMB to paste", f_base, fa_left);
+    
+    var onCheckEditor = function(_value)
+	{
+		global.isEditorOn = _value;
+	}
+    
+    levelEditor = new Checkbox(onCheckEditor, global.isEditorOn);
+    levelEditor.setSpriteSheet(ats_checkboxUnchecked, ats_checkboxChecked);
+    levelEditorText = new Text("Level Editor", f_base, fa_left);
+    
+    var onTypeLevel = function(_value)
+	{
+		global.level = _value;
+	}
+    
+    levelInput = new InputText(onTypeLevel, 10, string(global.level));
+	levelInput.setSpriteSheet(ats_input);
+    levelText = new Text("Level name to save/load\nTo generate new leave empty", f_base, fa_left);
 	
 	gameToSolveInput = new InputText(onTypeGamesToSolve, 2, string(global.gamesToSolve));
 	gameToSolveInput.setSpriteSheet(ats_input);
@@ -236,6 +254,12 @@ with(ui)
 	mainLayer.addComponent(1.5, 6, gameToSolveInput);	
 	mainLayer.addComponent(2, 6.5, goButton);
 	mainLayer.addComponent(2, 6.5, goButtonText);
+    
+	mainLayer.addComponent(2.75, 0.5, levelEditor);
+	mainLayer.addComponent(3, 0.5, levelEditorText);
+    
+    mainLayer.addComponent(2.75, 1, levelInput);
+	mainLayer.addComponent(2, 1.5, levelText);
 	
 	pushLayer(mainLayer);
 }
