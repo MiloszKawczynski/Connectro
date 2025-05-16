@@ -207,6 +207,8 @@ with(ui)
 	
 	goButton = new Button(goNextFunction);
 	goButton.setSpriteSheet(ats_button);
+    goButtonText = new Text("Play!", f_base);
+    goButtonText.color = c_black;
 	
 	mainLayer.addComponent(0.5, 0.5, widthInput);
 	mainLayer.addComponent(0.75, 0.5, widthText);
@@ -232,7 +234,8 @@ with(ui)
 	mainLayer.addComponent(1.0, 6.0, seedText);	
     
 	mainLayer.addComponent(1.5, 6, gameToSolveInput);	
-	mainLayer.addComponent(2, 6, goButton);
+	mainLayer.addComponent(2, 6.5, goButton);
+	mainLayer.addComponent(2, 6.5, goButtonText);
 	
 	pushLayer(mainLayer);
 }
