@@ -31,6 +31,7 @@ function editor()
     {
         var newTile = new Tile(editorType);
         newTile.isAvailable = true;
+        newTile.isRevealed = true;
         if (editorType != TilesTypes.block and editorType != TilesTypes.target)
         {
             newTile.value = editorValue;
