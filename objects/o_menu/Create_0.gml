@@ -44,14 +44,6 @@ with(ui)
 		}
 	}
 	
-	var onTypeScale = function(_value)
-	{
-		if (_value != "")
-		{
-			global.cellWindowSize = 72.72 * real(_value);
-		}
-	}
-	
 	var onTypeCrossRatio = function(_value)
 	{
 		if (_value != "")
@@ -141,11 +133,6 @@ with(ui)
 	heightInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	heightText = new Text("Height", f_base);
 	
-	scaleInput = new InputText(onTypeScale, 3, "1");
-	scaleInput.setSpriteSheet(ats_input);
-	scaleInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]);
-	scaleText = new Text("Scale", f_base);
-	
 	crossRatio = new InputText(onTypeCrossRatio, 2, string(global.crossRatio));
 	crossRatio.setSpriteSheet(ats_input);
 	crossRatio.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
@@ -224,8 +211,6 @@ with(ui)
 	mainLayer.addComponent(2.5, 0.5, widthText);
 	mainLayer.addComponent(1.5, 1, heightInput);
 	mainLayer.addComponent(2.5, 1, heightText);
-	mainLayer.addComponent(1.5, 1.5, scaleInput);
-	mainLayer.addComponent(2.5, 1.5, scaleText);
 	mainLayer.addComponent(1.5, 2, crossRatio);
 	mainLayer.addComponent(2.5, 2, crossRatioText);	
 	mainLayer.addComponent(1.5, 2.5, diamondRatio);
