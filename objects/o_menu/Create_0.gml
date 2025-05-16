@@ -195,6 +195,19 @@ with(ui)
 	{
 		with(o_menu)
 		{
+            if (!global.isEditorOn)
+            {
+                if (global.level != "")
+                {
+                    var file = file_text_open_read(global.level + ".txt");
+
+                    global.width = file_text_read_real(file);
+                    global.height = file_text_read_real(file);
+
+                    file_text_close(file);
+                }	
+            }
+            
 			room_set_width(r_game, global.width * global.cellSize);
 			room_set_height(r_game, global.height * global.cellSize);
 			
