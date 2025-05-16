@@ -29,14 +29,22 @@ function editor()
 {
 	if (mouse_check_button_pressed(mb_left))
     {
-        var newTile = new Tile(editorType);
-        newTile.isAvailable = true;
-        newTile.isRevealed = true;
-        if (editorType != TilesTypes.block and editorType != TilesTypes.target)
+        if (keyboard_check(vk_lcontrol))
         {
-            newTile.value = editorValue;
+            editorStartingTileX = hoveredX;
+            editorStartingTileY = hoveredY;
         }
-        ds_grid_set(grid, hoveredX, hoveredY, newTile);
+        else 
+        {
+            var newTile = new Tile(editorType);
+            newTile.isAvailable = true;
+            newTile.isRevealed = true;
+            if (editorType != TilesTypes.block and editorType != TilesTypes.target)
+            {
+                newTile.value = editorValue;
+            }
+            ds_grid_set(grid, hoveredX, hoveredY, newTile);
+        }
         
         if (isAllRevealed())
         {
@@ -166,6 +174,11 @@ function editorDraw()
     
     draw_sprite(s_icon, editorType, hoveredX * global.cellSize, hoveredY * global.cellSize);
     draw_sprite(s_value, editorValue, hoveredX * global.cellSize, hoveredY * global.cellSize);
+    
+    draw_set_color(c_lime);
+    draw_set_alpha(0.25);
+    draw_rectangle(editorStartingTileX * global.cellSize, editorStartingTileY * global.cellSize, editorStartingTileX * global.cellSize + global.cellSize, editorStartingTileY * global.cellSize + global.cellSize, false);
+    draw_set_alpha(1);
 	
 	drawLines();
 }
@@ -228,6 +241,10 @@ function saveMap()
     file_text_write_real(file, global.height);
     file_text_writeln(file);
     
+    file_text_write_real(file, editorStartingTileX);
+    file_text_write_real(file, editorStartingTileY);
+    file_text_writeln(file);
+    
     for(var yy = 0; yy < global.height; yy++)
 	{
 		for(var xx = 0; xx < global.width; xx++)
@@ -249,6 +266,9 @@ function loadMap()
     global.width = file_text_read_real(file);
     global.height = file_text_read_real(file);
     
+    editorStartingTileX = file_text_read_real(file);
+    editorStartingTileY = file_text_read_real(file);
+    
     for(var yy = 0; yy < global.height; yy++)
 	{
 		for(var xx = 0; xx < global.width; xx++)
@@ -264,7 +284,16 @@ function loadMap()
     
     file_text_close(file);
     
-    tile = ds_grid_get(grid, floor(global.width / 2), floor(global.height / 2));
+    var tile;
+    
+    if (editorStartingTileX == -1 and editorStartingTileY == -1)
+    {
+        tile = ds_grid_get(grid, floor(global.width / 2), floor(global.height / 2));
+    }
+    else 
+    {
+    	tile = ds_grid_get(grid, editorStartingTileX, editorStartingTileY);
+    }
 	tile.isRevealed = true;
 	tile.isAvailable = true;
 }
