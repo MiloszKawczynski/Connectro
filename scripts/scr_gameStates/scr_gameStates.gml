@@ -155,10 +155,11 @@ function editorDraw()
                 tile.drawColor(xx, yy);
                 tile.drawButton(xx, yy);
             }
-			//tile.drawHover(xx, yy, hoveredX, hoveredY);
-			//tile.drawPotential(xx, yy);
 		}
 	}
+    
+    draw_sprite(s_icon, editorType, hoveredX * global.cellSize, hoveredY * global.cellSize);
+    draw_sprite(s_value, editorValue, hoveredX * global.cellSize, hoveredY * global.cellSize);
 	
 	drawLines();
 }
