@@ -172,6 +172,7 @@ with(ui)
 	seedInput.setSpriteSheet(ats_input);
 	seedInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	seedInput.setScale(2, 1);
+    seedText = new Text("Seed RMB to paste", f_base, fa_left);
 	
 	gameToSolveInput = new InputText(onTypeGamesToSolve, 2, string(global.gamesToSolve));
 	gameToSolveInput.setSpriteSheet(ats_input);
@@ -228,6 +229,8 @@ with(ui)
 	mainLayer.addComponent(1.2, 5, targetRatioText);	
     
 	mainLayer.addComponent(0.5, 6.0, seedInput);	
+	mainLayer.addComponent(1.0, 6.0, seedText);	
+    
 	mainLayer.addComponent(1.5, 6, gameToSolveInput);	
 	mainLayer.addComponent(2, 6, goButton);
 	
