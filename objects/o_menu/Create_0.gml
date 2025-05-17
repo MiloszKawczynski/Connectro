@@ -206,6 +206,7 @@ with(ui)
 	gameToSolveInput.setSpriteSheet(ats_input);
 	gameToSolveInput.setAcceptableCharacters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	gameToSolveInput.setScale(2, 1);
+    gameToSolveText = new Text("Number of games to\ngenerate and solve", f_base, fa_left);
 	
 	var goNextFunction = function()
 	{
@@ -261,8 +262,10 @@ with(ui)
 	mainLayer.addComponent(0.5, 6.0, seedInput);	
 	mainLayer.addComponent(1.0, 6.0, seedText);	
     
-	mainLayer.addComponent(1.5, 6, gameToSolveInput);	
-	mainLayer.addComponent(2, 6.5, goButton);
+	mainLayer.addComponent(2.5, 6, gameToSolveInput);	
+	mainLayer.addComponent(3, 6, gameToSolveText);	
+	
+    mainLayer.addComponent(2, 6.5, goButton);
 	mainLayer.addComponent(2, 6.5, goButtonText);
     
     mainLayer.addComponent(1.75, 0.5, levelEditor);
