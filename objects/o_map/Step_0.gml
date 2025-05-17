@@ -45,7 +45,33 @@ if (mouse_check_button(mb_left))
 }
 else 
 {
-    scrollSpeed = lerp(scrollSpeed, 0, 0.01);
+    if (abs(scrollSpeed) < 1)
+    {
+        if (scrollFingerPosition != 0 or scrollSpeed != 0)
+        {
+            scrollPosition += scrollFingerPosition;
+            scrollSpeed = 0;
+            scrollFingerPosition = 0;
+            
+            var negSrollPosition = -scrollPosition;
+            
+            var lengthToSnap = abs(negSrollPosition - levels[0].y);
+            for (var i = 0; i < array_length(levels); i++)
+            {
+                var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+                if (lengthToBuilding < lengthToSnap)
+                {
+                    lengthToSnap = lengthToBuilding;
+                    scrollSnap = -levels[i].y;
+                }
+            }
+        }
+        scrollPosition = lerp(scrollPosition, scrollSnap, 0.1);
+    }
+    else 
+    {
+    	scrollSpeed = lerp(scrollSpeed, 0, 0.02);
+    }
 }
 
 if (mouse_check_button_released(mb_left))
@@ -59,10 +85,23 @@ lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
 scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
-if (scrollPositionFinal == 0 or scrollPositionFinal == scrollMax)
+if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;
     scrollFingerPosition = 0;
     scrollPosition = scrollPositionFinal;
     lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
+    
+    var negSrollPosition = -scrollPosition;
+            
+    var lengthToSnap = abs(negSrollPosition - levels[0].y);
+    for (var i = 0; i < array_length(levels); i++)
+    {
+        var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+        if (lengthToBuilding < lengthToSnap)
+        {
+            lengthToSnap = lengthToBuilding;
+            scrollSnap = -levels[i].y;
+        }
+    }
 }
