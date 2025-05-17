@@ -998,9 +998,24 @@ function generateGame()
     }
     else 
     {
-    	if (global.generateBaseToEdit)
+    	if (global.typeOfLoad == 1)
         {
             populateGrid();
+            
+            for(var yy = 0; yy < global.height; yy++)
+	        {
+		        for(var xx = 0; xx < global.width; xx++)
+		        {
+			        var tile = ds_grid_get(grid, xx, yy);
+                    tile.isAvailable = true;
+                    tile.isRevealed = true;
+                }
+            }
+        }
+        
+        if (global.typeOfLoad == 2)
+        {
+            loadMap();
             
             for(var yy = 0; yy < global.height; yy++)
 	        {
