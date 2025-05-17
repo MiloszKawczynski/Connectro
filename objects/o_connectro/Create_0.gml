@@ -3,6 +3,8 @@ if (global.seed == 0)
 	randomize();
 }
 
+device_mouse_dbclick_enable(false);
+
 generateGame();
 
 hoveredX = 0;
