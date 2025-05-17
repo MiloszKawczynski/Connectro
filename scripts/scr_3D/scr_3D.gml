@@ -30,12 +30,14 @@ function createWall(z)
 	var size = z;
 	var hsize = size / 2.0;
 		
+	var aspect = global.height / global.width;
+		
 	// Przód kostki
 	addFace(vbuffer,
 		-hsize, -hsize, hsize,
 		hsize, -hsize, hsize,
-		hsize, hsize, hsize,
-		-hsize, hsize, hsize,
+		hsize, hsize * aspect, hsize,
+		-hsize, hsize * aspect, hsize,
 		4
 	);
 	
@@ -43,8 +45,8 @@ function createWall(z)
 	addFace(vbuffer,
 		hsize, -hsize, -hsize,
 		-hsize, -hsize, -hsize,
-		-hsize, hsize, -hsize,
-		hsize, hsize, -hsize,
+		-hsize, hsize * aspect, -hsize,
+		hsize, hsize * aspect, -hsize,
 		1
 	);
 	
@@ -52,8 +54,8 @@ function createWall(z)
 	addFace(vbuffer,
 		hsize, -hsize, hsize,
 		hsize, -hsize, -hsize,
-		hsize, hsize, -hsize,
-		hsize, hsize, hsize,
+		hsize, hsize * aspect, -hsize,
+		hsize, hsize * aspect, hsize,
 		0
 	);
 
@@ -61,8 +63,8 @@ function createWall(z)
 	addFace(vbuffer,
 		-hsize, -hsize, -hsize,
 		-hsize, -hsize, hsize,
-		-hsize, hsize, hsize,
-		-hsize, hsize, -hsize,
+		-hsize, hsize * aspect, hsize,
+		-hsize, hsize * aspect, -hsize,
 		2
 	);
 
