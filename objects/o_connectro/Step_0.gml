@@ -7,11 +7,10 @@ for(var yy = 0; yy < global.height; yy++)
             if (mouse_y > yy * global.cellSize and mouse_y < yy * global.cellSize + global.cellSize)
             {
                 var newHoverTile = ds_grid_get(grid, xx, yy);
+                var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
                 
                 if (gameState == mustPickDirection)
                 {
-                    var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
-                    
                     if (newHoverTile == hoverTile.sourceTile)
                     {
                         break;
@@ -20,18 +19,19 @@ for(var yy = 0; yy < global.height; yy++)
                 
                 if (mouse_check_button_pressed(mb_left))
                 {
-                    if (hoveredX == xx and hoveredY == yy)
+                    if ((hoveredX == xx and hoveredY == yy))
                     {
                         gameState();
                     }
                     
                     hoveredX = xx;
                     hoveredY = yy;
-                }
-                else if (newHoverTile.isTargeted)
-                {
-                	hoveredX = xx;
-                    hoveredY = yy;
+                    
+                    var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
+                    if (gameState == mustPickTarget and hoverTile.isTargeted)
+                    {
+                        gameState();
+                    }
                 }
             }
         }
