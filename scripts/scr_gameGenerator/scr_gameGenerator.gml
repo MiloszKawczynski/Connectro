@@ -996,6 +996,23 @@ function generateGame()
             populateGrid();	
         }
     }
+    else 
+    {
+    	if (global.generateBaseToEdit)
+        {
+            populateGrid();
+            
+            for(var yy = 0; yy < global.height; yy++)
+	        {
+		        for(var xx = 0; xx < global.width; xx++)
+		        {
+			        var tile = ds_grid_get(grid, xx, yy);
+                    tile.isAvailable = true;
+                    tile.isRevealed = true;
+                }
+            }
+        }
+    }
 	
 	if (global.gamesToSolve != 0)
 	{

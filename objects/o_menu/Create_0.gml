@@ -19,6 +19,7 @@ global.seed = 0;
 
 global.isEditorOn = false;
 global.level = "";
+global.generateBaseToEdit = false;
 global.gamesToSolve = 0;
 
 calculateAllRatio();
@@ -183,6 +184,15 @@ with(ui)
     levelEditor.setSpriteSheet(ats_checkboxUnchecked, ats_checkboxChecked);
     levelEditorText = new Text("Level Editor", f_base, fa_left);
     
+    var onCheckGenerateBase = function(_value)
+	{
+        global.generateBaseToEdit = _value;
+	}
+    
+    generateBase = new Checkbox(onCheckGenerateBase, global.generateBaseToEdit);
+    generateBase.setSpriteSheet(ats_checkboxUnchecked, ats_checkboxChecked);
+    generateBaseText = new Text("Generate base\nto edit", f_base, fa_left);
+    
     var onTypeLevel = function(_value)
 	{
 		global.level = _value;
@@ -255,10 +265,12 @@ with(ui)
 	mainLayer.addComponent(2, 6.5, goButton);
 	mainLayer.addComponent(2, 6.5, goButtonText);
     
-	mainLayer.addComponent(2.75, 0.5, levelEditor);
-	mainLayer.addComponent(3, 0.5, levelEditorText);
+	mainLayer.addComponent(1.75, 0.5, levelEditor);
+	mainLayer.addComponent(2, 0.5, levelEditorText);
+    mainLayer.addComponent(1.75, 1, generateBase);
+	mainLayer.addComponent(2, 1, generateBaseText);
     
-    mainLayer.addComponent(2.75, 1, levelInput);
+    mainLayer.addComponent(1.75, 1.5, levelInput);
 	mainLayer.addComponent(2, 1.5, levelText);
 	
 	pushLayer(mainLayer);
