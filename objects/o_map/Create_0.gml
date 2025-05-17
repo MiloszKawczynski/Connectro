@@ -1,4 +1,33 @@
-plane = createPlane(90, 160);
+#macro Windows:INVERT 1 
+#macro Android:INVERT -1
+
+function level(_seed, _x, _y) constructor 
+{
+    seed = _seed;
+    x = _x;
+    y = _y;
+}
+
+levels = array_create(0);
+array_push(levels,
+new level("11_11_2_4_2_2_2_1_1_368711115", -17, 55),
+new level("11_11_2_4_2_2_2_1_1_368711115", 17, -35),
+)
+
+scrollPosition = 0;
+scrollFingerPosition = 0;
+scrollPositionFinal = 0;
+scrollSpeed = 0;
+scrollMin = 0;
+scrollMax = sprite_get_height(s_background) - 100;
+
+lastMousePosition = mouse_x;
+lastMousePositionPressed = mouse_x;
+
+planeSize = sprite_get_height(s_background);
+planeScale = planeSize div 300;
+
+plane = createPlane(90, planeSize - 140 * planeScale);
 texture = sprite_get_texture(s_background, 0);
 
 buildingTexture = sprite_get_texture(s_block, 0);
