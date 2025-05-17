@@ -20,6 +20,8 @@ global.seed = 0;
 global.isEditorOn = false;
 global.level = "";
 global.typeOfLoad = 0;
+
+global.isSolverOn = false;
 global.gamesToSolve = 0;
 
 calculateAllRatio();
@@ -121,6 +123,14 @@ with(ui)
 		if (_value != "")
 		{
 			global.gamesToSolve = real(_value);
+            if (_value == 0)
+            {
+                global.isSolverOn = false;
+            }
+            else    
+            {
+            	global.isSolverOn = true;
+            }
 		}
 	}
 	

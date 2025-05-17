@@ -1029,14 +1029,17 @@ function generateGame()
         }
     }
 	
-	if (global.gamesToSolve != 0)
-	{
-		checkSolvability();	
-	}
-	else 
-	{
-		game_end();
-	}
+    if (global.isSolverOn)
+    {
+    	if (global.gamesToSolve != 0)
+    	{
+    		checkSolvability();	
+    	}
+    	else 
+    	{
+    		game_end();
+    	}
+    }
 }
 
 function getSeed()
