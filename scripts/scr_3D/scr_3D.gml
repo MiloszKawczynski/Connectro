@@ -20,8 +20,8 @@ function createWall(z)
 {
 	vertex_format_begin();
 	vertex_format_add_position_3d();
+    vertex_format_add_texcoord();
 	vertex_format_add_color();       
-	vertex_format_add_texcoord();
 	var vformat = vertex_format_end();
 	var vbuffer = vertex_create_buffer();
 	
@@ -76,6 +76,36 @@ function createWall(z)
 		hsize, -hsize, -hsize,
 		3
 	);
+
+	vertex_end(vbuffer);	
+	
+	return vbuffer;
+}
+
+function createPlane(w, h)
+{
+	vertex_format_begin();
+	vertex_format_add_position_3d();
+    vertex_format_add_texcoord();
+	vertex_format_add_color();       
+	var vformat = vertex_format_end();
+	var vbuffer = vertex_create_buffer();
+	
+	vertex_begin(vbuffer, vformat);
+		
+    var x1 = -w/2;
+    var x2 = w/2;
+    
+    var y1 = -h/2;
+    var y2 = h/2;
+    
+    addVertex(vbuffer, x2, y1, 0, 1, 0);
+	addVertex(vbuffer, x1, y1, 0, 0, 0);
+	addVertex(vbuffer, x2, y2, 0, 1, 1);
+	
+    addVertex(vbuffer, x2, y2, 0, 1, 1);
+	addVertex(vbuffer, x1, y1, 0, 0, 0);
+	addVertex(vbuffer, x1, y2, 0, 0, 1);
 
 	vertex_end(vbuffer);	
 	
