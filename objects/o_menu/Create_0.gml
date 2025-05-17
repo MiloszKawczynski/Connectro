@@ -19,7 +19,7 @@ global.seed = 0;
 
 global.isEditorOn = false;
 global.level = "";
-global.generateBaseToEdit = false;
+global.typeOfLoad = 0;
 global.gamesToSolve = 0;
 
 calculateAllRatio();
@@ -184,19 +184,19 @@ with(ui)
     levelEditor.setSpriteSheet(ats_checkboxUnchecked, ats_checkboxChecked);
     levelEditorText = new Text("Level Editor", f_base, fa_left);
     
-    var onCheckGenerateBase = function(_value)
-	{
-        global.generateBaseToEdit = _value;
-	}
-    
-    generateBase = new Checkbox(onCheckGenerateBase, global.generateBaseToEdit);
-    generateBase.setSpriteSheet(ats_checkboxUnchecked, ats_checkboxChecked);
-    generateBaseText = new Text("Generate base\nto edit", f_base, fa_left);
-    
     var onTypeLevel = function(_value)
 	{
 		global.level = _value;
 	}
+    
+    var onChooseTypeOfLoad = function(_value)
+    {
+        global.typeOfLoad = _value;
+    }
+	
+    typeOfLoad = new Radio(onChooseTypeOfLoad, ["Empty", "Generate", "From file"], 0, 16);
+    typeOfLoad.setSpriteSheet(ats_radioUnchecked, ats_radioChecked);
+    typeOfLoad.setDrawText(f_base, fa_left, fa_middle, 16);
     
     levelInput = new InputText(onTypeLevel, 10, string(global.level));
 	levelInput.setSpriteSheet(ats_input);
@@ -211,7 +211,7 @@ with(ui)
 	{
 		with(o_menu)
 		{
-            if (!global.isEditorOn)
+            if (!global.isEditorOn or (global.isEditorOn and global.typeOfLoad == 2))
             {
                 if (global.level != "")
                 {
@@ -265,13 +265,12 @@ with(ui)
 	mainLayer.addComponent(2, 6.5, goButton);
 	mainLayer.addComponent(2, 6.5, goButtonText);
     
-	mainLayer.addComponent(1.75, 0.5, levelEditor);
+    mainLayer.addComponent(1.75, 0.5, levelEditor);
 	mainLayer.addComponent(2, 0.5, levelEditorText);
-    mainLayer.addComponent(1.75, 1, generateBase);
-	mainLayer.addComponent(2, 1, generateBaseText);
+    mainLayer.addComponent(1.75, 1, levelInput);
+	mainLayer.addComponent(2, 1, levelText);
     
-    mainLayer.addComponent(1.75, 1.5, levelInput);
-	mainLayer.addComponent(2, 1.5, levelText);
+    mainLayer.addComponent(2.75, 1.5, typeOfLoad);
 	
 	pushLayer(mainLayer);
 }
