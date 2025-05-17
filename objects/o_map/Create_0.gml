@@ -9,10 +9,16 @@ function level(_seed, _x, _y) constructor
 }
 
 levels = array_create(0);
-array_push(levels,
-new level("11_11_2_4_2_2_2_1_1_368711115", -17, 55),
-new level("11_11_2_4_2_2_2_1_1_368711115", 17, -35),
-)
+//array_push(levels,
+//new level("11_11_2_4_2_2_2_1_1_368711115", -17, 55),
+//new level("11_11_2_4_2_2_2_1_1_368711115", 17, -35),
+//)
+
+for (var i = 0; i < 100; i++)
+{
+    array_push(levels,
+        new level("11_11_2_4_2_2_2_1_1_368711115", 17 * lerp(-1, 1, i mod 2), 55 - 90 * i));
+}
 
 scrollPosition = 0;
 scrollFingerPosition = 0;
@@ -20,6 +26,7 @@ scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = 0;
 scrollMax = sprite_get_height(s_background) - 100;
+scrollSnap = -levels[0].y;
 
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
