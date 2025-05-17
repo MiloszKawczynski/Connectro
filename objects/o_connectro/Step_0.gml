@@ -19,6 +19,14 @@ for(var yy = 0; yy < global.height; yy++)
                 
                 if (mouse_check_button_pressed(mb_left))
                 {
+                    if (gameState == mustPickDirection)
+                    {
+                        if (newHoverTile != hoverTile and newHoverTile.lineDirection == -1)
+                        {
+                            removeDirections();
+                        }   
+                    }
+                    
                     if ((hoveredX == xx and hoveredY == yy))
                     {
                         gameState();
