@@ -19,13 +19,18 @@ for(var yy = 0; yy < global.height; yy++)
                 
                 if (mouse_check_button_pressed(mb_left))
                 {
-                    if (gameState == mustPickDirection)
+                    if (newHoverTile != hoverTile)
                     {
-                        if (newHoverTile != hoverTile and newHoverTile.lineDirection == -1)
+                        if (gameState == mustPickDirection and newHoverTile.lineDirection == -1)
                         {
                             removeDirections();
-                        }   
-                    }
+                        }
+                        
+                        if (gameState == mustPickTarget and newHoverTile.isTargeted == false)
+                        {
+                            removeTarget();
+                        }
+                    }   
                     
                     if ((hoveredX == xx and hoveredY == yy))
                     {
