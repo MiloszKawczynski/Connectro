@@ -419,6 +419,65 @@ enum TileType
 	Active = 2,
 }
 
+function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles)
+{
+	var gridStateTemp = buffer_create(tilesToRevealCount, buffer_fast, 1);
+	buffer_copy(gridState, 0, tilesToRevealCount, gridStateTemp, 0);
+	
+	for (var column = 0; column < height; column++)
+	{
+		for (var row = 0; row < width; row++)
+		{
+			var index = getLinearTileIndex(width, row, column);
+			var tile = ds_grid_get(grid, row, column);
+			
+			if (tile.type == TilesTypes.block)
+			{
+				continue;
+			}
+
+			var decisions = 1;
+				
+			if (tile.type == TilesTypes.line or tile.type == TilesTypes.lineDiag)
+			{
+				decisions = 4;
+			}
+			else if (tile.type == TilesTypes.target)
+			{
+				decisions = tilesToRevealCount;
+			}
+			
+			for (var d = 0; d < decisions; d++)
+			{
+				var newGridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
+				buffer_copy(gridStateTemp, 0, tilesToRevealCount, newGridState, 0);
+
+				var usedTile = getRevealedTiles(width, height, tile, row, column, newGridState, d);
+
+				buffer_seek(newGridState, buffer_seek_start, index);
+				buffer_write(newGridState, buffer_u8, TileType.Revealed);
+				
+				buffer_seek(newGridState, buffer_seek_start, 0);
+				buffer_seek(gridStateTemp, buffer_seek_start, 0);
+				
+				var newTile = 0;
+				for (var i = 0; i < tilesToRevealCount; i++)
+				{
+					var previousState = buffer_read(gridStateTemp, buffer_u8);
+					var newState = buffer_read(newGridState, buffer_u8);
+					if (newState != previousState and previousState != TileType.Active and index != i)
+					{
+						tilesRevealedTiles[row][column][d][newTile] = {index: i, state: newState};
+						newTile += 1;
+					}
+				}
+				
+				buffer_delete(newGridState);
+			}
+		}
+	}
+}
+
 function getMostRevealed(tilesToRevealCount, tilesSortedByRevealCount, gridState)
 {
 	for (var i = 0; i < tilesToRevealCount; i++)
@@ -464,6 +523,20 @@ function runAStar()
 	
 	var tilesSortedByRevealCount = [];
 	
+	var tilesRevealedTiles = [
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+		[[], [], [], [], [], [], [], [], [], [], []],
+	];
+	
 	var gridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
 	buffer_fill(gridState, 0, buffer_u8, TileType.Unrevealed, tilesToRevealCount);
 	
@@ -499,12 +572,23 @@ function runAStar()
 				var revealCount = tile.value;
 				
 				array_push(tilesSortedByRevealCount, {index: index, revealCount: revealCount});
+				
+				for (var i = 0; i < 4; i++)
+				{
+					array_push(tilesRevealedTiles[row][column], []);
+				}
+				
 			}
 			else if (tile.type == TilesTypes.target)
 			{
 				var revealCount = 1;
 				
 				array_push(tilesSortedByRevealCount, {index: index, revealCount: revealCount});
+				
+				for (var i = 0; i < tilesToRevealCount; i++)
+				{
+					array_push(tilesRevealedTiles[row][column], []);
+				}
 			}
 		}
 	}
@@ -514,10 +598,14 @@ function runAStar()
 		return b.revealCount - a.revealCount;
 	});
 
+	getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles);
+	
+	var initiallyRevealedCount = getAvailableOrRevealedCount(tilesToRevealCount, gridState);
+
 	var queue = ds_priority_create();
 	var initialState = {
 		gridState: gridState,
-		revealedCount: 0,
+		revealedCount: initiallyRevealedCount,
 		g: 0,
 		//path: []
 	};
@@ -598,17 +686,18 @@ function runAStar()
 					var newGridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
 					buffer_copy(state.gridState, 0, tilesToRevealCount, newGridState, 0);
 
-					var usedTile = getRevealedTiles(width, height, tile, row, column, newGridState, d);
+					//var usedTile = getRevealedTiles(width, height, tile, row, column, newGridState, d);
+					var newlyRevealedCount = getRevealedTilesFromCache(row, column, tilesRevealedTiles, newGridState, d);
+					
+					if (newlyRevealedCount == 0)
+					{
+						continue;
+					}
 
 					buffer_seek(newGridState, buffer_seek_start, index);
 					buffer_write(newGridState, buffer_u8, TileType.Revealed);
 					
-					var newRevealedCount = getAvailableOrRevealedCount(tilesToRevealCount, newGridState);
-
-					if (newRevealedCount == revealedCount)
-					{
-						continue;
-					}
+					var newRevealedCount = newlyRevealedCount + revealedCount;
 
 					//var nextPath = [];
 					//array_copy(nextPath, 0, state.path, 0, array_length(state.path));
@@ -836,6 +925,28 @@ function getStartingTile()
 function modulo(a, b)
 {
     return ((a % b + b) % b);
+}
+
+function getRevealedTilesFromCache(tileCoordX, tileCoordY, tilesRevealedTiles, gridState, decision)
+{
+	var len = array_length(tilesRevealedTiles[tileCoordX][tileCoordY][decision]);
+	
+	var revealedCount = 0;
+	for (var i = 0; i < len; i++)
+	{
+		var indexAndState = tilesRevealedTiles[tileCoordX][tileCoordY][decision][i];
+		
+		buffer_seek(gridState, buffer_seek_start, indexAndState.index);
+		var currentState = buffer_read(gridState, buffer_u8);
+		if (currentState == TileType.Unrevealed)
+		{
+			buffer_seek(gridState, buffer_seek_start, indexAndState.index);
+			buffer_write(gridState, buffer_u8, indexAndState.state);
+			revealedCount += 1;
+		}
+	}
+	
+	return revealedCount;
 }
 
 function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, gridState, decision)
