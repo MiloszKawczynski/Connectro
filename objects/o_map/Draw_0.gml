@@ -107,9 +107,16 @@ for (var i = -2; i <= 2; i++)
     {
         if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
         {
-            scrollSpeed = 0;
-            scrollFingerPosition = 0;
-            scrollSnap = buildingUIId;
+            if (i == 0)
+            {
+                room_goto(r_game);
+            }
+            else    
+            {
+                scrollSpeed = 0;
+                scrollFingerPosition = 0;
+                scrollSnap = buildingUIId;
+            }
         }
     }
 }
