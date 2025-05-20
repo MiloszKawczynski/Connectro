@@ -1,37 +1,32 @@
 draw_clear(c_black);
-
 var eye = new vector3(15, 100, 90 * INVERT);
 var target = new vector3(0, 1, 0);
-
 var forward = normalize(subtract(target, eye))
 var right = normalize(cross(forward, worldUp))
 var up = cross(right, forward)
-
-
 var view = matrix_build_lookat(
     eye.x, eye.y, eye.z,
     target.x, target.y, target.z,
     up.x, up.y, up.z,
 );
-
 var proj = matrix_build_projection_ortho(
     90, 160,
     -100, 1000
 );
-
 gpu_set_zwriteenable(true);
 gpu_set_ztestenable(true);
 gpu_set_alphatestenable(true);
 gpu_set_cullmode(cull_clockwise);
-
 matrix_set(matrix_view, view);
 matrix_set(matrix_projection, proj);
 
 matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 0, 0, 0, 0, 2, 2, 1 * INVERT));
 vertex_submit(plane, pr_trianglelist, texture);
 
-var scale = 1.25;
+var current_view = matrix_get(matrix_view);
+var current_proj = matrix_get(matrix_projection);
 
+var scale = 1.25;
 for (var i = 0; i < array_length(levels); i++)
 {
     var lvl = levels[i];
@@ -40,7 +35,6 @@ for (var i = 0; i < array_length(levels); i++)
 }
 
 matrix_set(matrix_world, matrix_build_identity());
-
 matrix_set(matrix_view, matrix_build_identity());
 matrix_set(matrix_projection, matrix_build_identity());
 
@@ -48,3 +42,74 @@ gpu_set_zwriteenable(false);
 gpu_set_ztestenable(false);
 gpu_set_alphatestenable(false);
 gpu_set_cullmode(cull_noculling);
+
+var proj = matrix_build_projection_ortho(
+    90, -160 * INVERT,
+    -100, 1000
+);
+
+matrix_set(matrix_projection, proj);
+
+var negSrollPosition = -scrollPositionFinal;
+var closestBuilding = 0;            
+var lengthToSnap = abs(negSrollPosition - levels[0].y);
+
+var mouseX = mouse_x - room_width / 2;
+var mouseY = mouse_y - room_height / 2;
+
+for (var i = 0; i < array_length(levels); i++)
+{
+    var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+    if (lengthToBuilding < lengthToSnap)
+    {
+        lengthToSnap = lengthToBuilding;
+        closestBuilding = i;
+    }
+}
+
+for (var i = -2; i <= 2; i++)
+{
+    if (closestBuilding + i < 0 or closestBuilding + i >= array_length(levels))
+    {
+        continue;
+    }
+    
+    var buildingUIId = closestBuilding + i;
+    
+    var xx = lengthdir_x(levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_x(levels[buildingUIId].x, 354);
+    var yy = lengthdir_y(levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_y(levels[buildingUIId].x, 354) - 40;
+    
+    var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + levels[buildingUIId].y) / 90), 0, 1);
+    
+    var width = lerp(12, 12, lerpDistanceValue);
+    var height = lerp(4, 8, lerpDistanceValue);
+    var starsHeight = lerp(1, 4, lerpDistanceValue);
+    var textScale = lerp(0, 0.6, lerpDistanceValue);
+    var pinTail = lerp(height * 2, height, lerpDistanceValue);
+    
+    draw_set_color(c_white);
+    draw_set_alpha(1);
+    
+    draw_triangle(xx - 4, yy + height, xx + 4, yy + height, xx, yy + pinTail, false);
+    draw_roundrect(xx - width, yy - height, xx + width, yy + height, false);
+    
+    for (var s = -1; s <= 1; s++)
+    {
+        draw_sprite(s_star, s + 1 < levels[buildingUIId].stars, xx + s * 7 + 0.5, yy + starsHeight);
+    }
+    
+    draw_set_color(c_black);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", levels[buildingUIId].moves, levels[buildingUIId].movesToStar), textScale, textScale, 0);
+    
+    if (mouse_check_button_released(mb_left))
+    {
+        if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
+        {
+            scrollSpeed = 0;
+            scrollFingerPosition = 0;
+            scrollSnap = buildingUIId;
+        }
+    }
+}

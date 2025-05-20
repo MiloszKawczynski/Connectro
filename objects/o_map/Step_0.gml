@@ -29,7 +29,7 @@ if (keyboard_check_pressed(vk_lcontrol))
 
 if (keyboard_check_pressed(ord("P")))
 {
-    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", x, y, z, r, scrollPositionFinal));
+    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", levels[scrollSnap].x, levels[scrollSnap].y, z, r, scrollPositionFinal));
 }
 
 if (mouse_check_button_pressed(mb_left))
@@ -62,11 +62,11 @@ else
                 if (lengthToBuilding < lengthToSnap)
                 {
                     lengthToSnap = lengthToBuilding;
-                    scrollSnap = -levels[i].y;
+                    scrollSnap = i;
                 }
             }
         }
-        scrollPosition = lerp(scrollPosition, scrollSnap, 0.1);
+        scrollPosition = lerp(scrollPosition, -levels[scrollSnap].y, 0.1);
     }
     else 
     {
@@ -101,7 +101,7 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
         if (lengthToBuilding < lengthToSnap)
         {
             lengthToSnap = lengthToBuilding;
-            scrollSnap = -levels[i].y;
+            scrollSnap = i;
         }
     }
 }
