@@ -6,6 +6,9 @@ function level(_seed, _x, _y) constructor
     seed = _seed;
     x = _x;
     y = _y;
+    stars = choose(0, 1, 2, 3);
+    moves = 21;
+    movesToStar = 37;
 }
 
 levels = array_create(0);
@@ -26,7 +29,7 @@ scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = 0;
 scrollMax = sprite_get_height(s_background) - 100;
-scrollSnap = -levels[0].y;
+scrollSnap = 0;
 
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
