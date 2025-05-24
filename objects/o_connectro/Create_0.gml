@@ -4,6 +4,7 @@ if (global.seed == 0)
 }
 
 global.cellSize = room_width / global.width;
+gameOffset = (room_height - global.height * global.cellSize) / 2;
 
 grid = ds_grid_create(global.width, global.height);
 

@@ -4,7 +4,7 @@ for(var yy = 0; yy < global.height; yy++)
 	{
 		if (mouse_x > xx * global.cellSize and mouse_x < xx * global.cellSize + global.cellSize)
 		{
-			if (mouse_y > yy * global.cellSize and mouse_y < yy * global.cellSize + global.cellSize)
+			if (mouse_y - other.gameOffset > yy * global.cellSize and mouse_y - other.gameOffset < yy * global.cellSize + global.cellSize)
 			{
 				hoveredX = xx;
 				hoveredY = yy;
