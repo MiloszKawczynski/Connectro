@@ -109,6 +109,7 @@ for (var i = -2; i <= 2; i++)
         {
             if (i == 0)
             {
+                setSeed(levels[buildingUIId].seed)
                 room_goto(r_game);
             }
             else    
