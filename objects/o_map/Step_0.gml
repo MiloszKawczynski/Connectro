@@ -29,7 +29,7 @@ if (keyboard_check_pressed(vk_lcontrol))
 
 if (keyboard_check_pressed(ord("P")))
 {
-    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", levels[scrollSnap].x, levels[scrollSnap].y, z, r, scrollPositionFinal));
+    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", global.levels[scrollSnap].x, global.levels[scrollSnap].y, z, r, scrollPositionFinal));
 }
 
 if (mouse_check_button_pressed(mb_left))
@@ -55,10 +55,10 @@ else
             
             var negSrollPosition = -scrollPosition;
             
-            var lengthToSnap = abs(negSrollPosition - levels[0].y);
-            for (var i = 0; i < array_length(levels); i++)
+            var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
+            for (var i = 0; i < array_length(global.levels); i++)
             {
-                var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+                var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
                 if (lengthToBuilding < lengthToSnap)
                 {
                     lengthToSnap = lengthToBuilding;
@@ -66,7 +66,7 @@ else
                 }
             }
         }
-        scrollPosition = lerp(scrollPosition, -levels[scrollSnap].y, 0.1);
+        scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
     }
     else 
     {
@@ -94,10 +94,10 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
     
     var negSrollPosition = -scrollPosition;
             
-    var lengthToSnap = abs(negSrollPosition - levels[0].y);
-    for (var i = 0; i < array_length(levels); i++)
+    var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
+    for (var i = 0; i < array_length(global.levels); i++)
     {
-        var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+        var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
         if (lengthToBuilding < lengthToSnap)
         {
             lengthToSnap = lengthToBuilding;
