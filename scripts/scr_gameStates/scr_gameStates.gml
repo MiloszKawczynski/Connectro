@@ -204,7 +204,7 @@ function drawEndScreen()
 	var shiftV = ((global.height * global.cellSize) - buildingSizeHeight) / 2;
 	
 	var centerX = shiftH + buildingSizeWidth/2;
-	var centerY = shiftV + buildingSizeHeight/2;
+	var centerY = shiftV + buildingSizeHeight/2 + gameOffset;
 	
 	matrix_set(matrix_world, matrix_build(centerX, centerY, 0, buildingTilt, 180 + buildingRotation + buildingFingerRotation, 0, buildingScale, buildingScale, buildingScale));
 	vertex_submit(front, pr_trianglelist, surfaceTexture);
