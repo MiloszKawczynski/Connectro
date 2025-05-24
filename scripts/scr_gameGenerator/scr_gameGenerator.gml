@@ -532,20 +532,11 @@ function greedyMinimalMoves(width, height, tilesToRevealCount, unreaveledCount, 
 					bestTile = tileCoords;
 					bestDecision = i;
 				}
-				//else if (bestTile == undefined)
-				//{
-				//	show_debug_message("{0} {1}", revealedCount, bestCoverage);
-				//}
 			}
 		}
 		
 		moveCount += 1;
 		unreaveledCount -= bestCoverage;
-		
-		//if (bestTile == undefined)
-		//{
-		//	show_debug_message("CHuj");
-		//}
 		
 		getRevealedTilesFromCacheSetActive(bestTile.x, bestTile.y, tilesRevealedTiles, uncovered, bestDecision);
 		
@@ -592,6 +583,46 @@ function getMostRevealed2(tilesToRevealCount, currentTilesToRevealCount, tilesSo
 	}
 	
 	return 999;
+}
+
+function getMostRevealed3(tilesToRevealCount, currentTilesToRevealCount, tilesSortedByRevealCount, gridState, tilesRevealedTiles)
+{
+	var tilesLeft = currentTilesToRevealCount;
+	var bestTileLeft = tilesLeft;
+	
+	var len = array_length(tilesSortedByRevealCount);
+	for (var i = 0; i < len; i++)
+	{
+		var tileCoords = tilesSortedByRevealCount[i].tileCoords;
+		buffer_seek(gridState, buffer_seek_start, tilesSortedByRevealCount[i].index);
+		if (buffer_read(gridState, buffer_u8) == TileType.Active)
+		{
+			var tile = ds_grid_get(grid, tileCoords.x, tileCoords.y);
+				
+			var decisions = 1;
+				
+			if (tile.type == TilesTypes.line or tile.type == TilesTypes.lineDiag)
+			{
+				decisions = 4;
+			}
+			else if (tile.type == TilesTypes.target)
+			{	
+				decisions = tilesToRevealCount;
+			}
+				
+			for (var d = 0; d < decisions; d++)
+			{
+				var tilesLeftAfterMove = tilesLeft - getRevealedTilesCountFromCache(tileCoords.x, tileCoords.y, tilesRevealedTiles, gridState, d);
+				
+				if (tilesLeftAfterMove < bestTileLeft)
+				{
+					bestTileLeft = tilesLeftAfterMove;
+				}
+			}
+		}
+	}
+	
+	return bestTileLeft;
 }
 
 function runAStar()
@@ -824,10 +855,12 @@ function runAStar()
 					//var h = numberOfMoves;
 					
 					//var mostPossiblyRevealed = getMostRevealed(tilesToRevealCount, tilesSortedByRevealCount, newGridState);	
+					var h = getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
+					//var h = ceil(getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles) / 24.0);
 					//var h = ceil(((tilesToRevealCount - newRevealedCount) / mostPossiblyRevealed));
 					//var h = ceil(((tilesToRevealCount - newRevealedCount) / mostPossiblyRevealed) - mostPossiblyRevealed);
 					//var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0);
-					var h = greedyMinimalMoves(width, height, tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesRevealedTiles, gridState, tilesSortedByRevealCount, tilesSortedByRevealCountLength);
+					//var h = greedyMinimalMoves(width, height, tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesRevealedTiles, gridState, tilesSortedByRevealCount, tilesSortedByRevealCountLength);
 					//var h = tilesToRevealCount - newRevealedCount;
 
 					var priority = g + h;
