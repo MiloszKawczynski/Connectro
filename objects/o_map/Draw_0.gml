@@ -27,11 +27,11 @@ var current_view = matrix_get(matrix_view);
 var current_proj = matrix_get(matrix_projection);
 
 var scale = 1.25;
-for (var i = 0; i < array_length(levels); i++)
+for (var i = 0; i < array_length(global.levels); i++)
 {
-    var lvl = levels[i];
+    var lvl = global.levels[i];
     matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, 15 * scale * INVERT, -90, 0, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
-    vertex_submit(building, pr_trianglelist, buildingTexture);
+    vertex_submit(building, pr_trianglelist, global.levels[i].texture);
 }
 
 matrix_set(matrix_world, matrix_build_identity());
@@ -52,14 +52,14 @@ matrix_set(matrix_projection, proj);
 
 var negSrollPosition = -scrollPositionFinal;
 var closestBuilding = 0;            
-var lengthToSnap = abs(negSrollPosition - levels[0].y);
+var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 
 var mouseX = mouse_x - room_width / 2;
 var mouseY = mouse_y - room_height / 2;
 
-for (var i = 0; i < array_length(levels); i++)
+for (var i = 0; i < array_length(global.levels); i++)
 {
-    var lengthToBuilding = abs(negSrollPosition - levels[i].y);
+    var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
     if (lengthToBuilding < lengthToSnap)
     {
         lengthToSnap = lengthToBuilding;
@@ -69,17 +69,17 @@ for (var i = 0; i < array_length(levels); i++)
 
 for (var i = -2; i <= 2; i++)
 {
-    if (closestBuilding + i < 0 or closestBuilding + i >= array_length(levels))
+    if (closestBuilding + i < 0 or closestBuilding + i >= array_length(global.levels))
     {
         continue;
     }
     
     var buildingUIId = closestBuilding + i;
     
-    var xx = lengthdir_x(levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_x(levels[buildingUIId].x, 354);
-    var yy = lengthdir_y(levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_y(levels[buildingUIId].x, 354) - 40;
+    var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_x(global.levels[buildingUIId].x, 354);
+    var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_y(global.levels[buildingUIId].x, 354) - 40;
     
-    var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + levels[buildingUIId].y) / 90), 0, 1);
+    var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + global.levels[buildingUIId].y) / 90), 0, 1);
     
     var width = lerp(12, 12, lerpDistanceValue);
     var height = lerp(4, 8, lerpDistanceValue);
@@ -95,13 +95,13 @@ for (var i = -2; i <= 2; i++)
     
     for (var s = -1; s <= 1; s++)
     {
-        draw_sprite(s_star, s + 1 < levels[buildingUIId].stars, xx + s * 7 + 0.5, yy + starsHeight);
+        draw_sprite(s_star, s + 1 < global.levels[buildingUIId].stars, xx + s * 7 + 0.5, yy + starsHeight);
     }
     
     draw_set_color(c_black);
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
-    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", levels[buildingUIId].moves, levels[buildingUIId].movesToStar), textScale, textScale, 0);
+    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", global.levels[buildingUIId].moves, global.levels[buildingUIId].movesToStar), textScale, textScale, 0);
     
     if (mouse_check_button_released(mb_left))
     {
@@ -109,7 +109,7 @@ for (var i = -2; i <= 2; i++)
         {
             if (i == 0)
             {
-                setSeed(levels[buildingUIId].seed)
+                setSeed(global.levels[buildingUIId].seed)
                 room_goto(r_game);
             }
             else    
