@@ -855,13 +855,25 @@ function runAStar()
 					//var h = numberOfMoves;
 					
 					//var mostPossiblyRevealed = getMostRevealed(tilesToRevealCount, tilesSortedByRevealCount, newGridState);	
-					var h = getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
+					//var h = getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
 					//var h = ceil(getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles) / 24.0);
 					//var h = ceil(((tilesToRevealCount - newRevealedCount) / mostPossiblyRevealed));
 					//var h = ceil(((tilesToRevealCount - newRevealedCount) / mostPossiblyRevealed) - mostPossiblyRevealed);
 					//var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0);
 					//var h = greedyMinimalMoves(width, height, tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesRevealedTiles, gridState, tilesSortedByRevealCount, tilesSortedByRevealCountLength);
 					//var h = tilesToRevealCount - newRevealedCount;
+                    //var h = round((tilesToRevealCount - newRevealedCount) / 24.0);
+                    //var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0) + ceil(getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles) / 24.0);
+                    //var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0);
+                    
+                    
+                    // NOTE: Heuristic that matters
+                    
+                    // NAIVE
+                    //var h = tilesToRevealCount - newRevealedCount;
+                    
+                    // getMostRevealed3
+                    //var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0) + getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
 
 					var priority = g + h;
 
