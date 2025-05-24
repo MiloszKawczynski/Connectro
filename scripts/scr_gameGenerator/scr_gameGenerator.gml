@@ -1469,3 +1469,22 @@ function getSeed()
 	clipboard_set_text(finalSeed);
 	return finalSeed;
 }
+
+function setSeed(seed)
+{
+    var parts = string_split(seed, "_");
+		
+    if (array_length(parts) == 10)
+    {
+        global.width        = real(parts[0]);
+        global.height       = real(parts[1]);
+        global.crossRatio   = real(parts[2]);
+        global.diamondRatio = real(parts[3]);
+        global.lineRatio    = real(parts[4]);
+        global.diagRatio    = real(parts[5]);
+        global.plusRatio    = real(parts[6]);
+        global.blockRatio   = real(parts[7]);
+        global.targetRatio  = real(parts[8]);
+        global.seed         = real(parts[9]);
+    }
+}
