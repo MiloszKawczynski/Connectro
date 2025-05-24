@@ -19,8 +19,11 @@ function gameEnd(showPotential = false)
 	{
 		if (mouse_check_button_pressed(mb_left))
 		{
-			//audio_stop_all();
-			//room_restart();
+			audio_stop_all();
+            global.levels[global.choosedLevel].texture = surfaceTexture;
+            global.levels[global.choosedLevel].stars = 3;
+            global.levels[global.choosedLevel].moves = moves;
+			room_goto(r_map);
 		}
 	}
 }
