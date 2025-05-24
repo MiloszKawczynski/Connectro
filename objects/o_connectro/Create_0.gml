@@ -3,6 +3,8 @@ if (global.seed == 0)
 	randomize();
 }
 
+global.cellSize = room_width / global.width;
+
 grid = ds_grid_create(global.width, global.height);
 
 generateGame();

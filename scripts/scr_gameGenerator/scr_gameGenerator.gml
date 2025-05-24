@@ -1,13 +1,5 @@
 #macro SOLUTION_PRINT_PATH false
 
-function windowSetup()
-{
-	window_set_size(global.width * global.cellWindowSize, global.height * global.cellWindowSize);
-	camera_set_view_size(view_camera[0], global.width * global.cellSize, global.height * global.cellSize);
-	surface_resize(application_surface, global.width * global.cellSize, global.height * global.cellSize);
-	window_set_position(30, 30);
-}
-
 function defineTiles()
 {
 	enum TilesTypes 
@@ -97,7 +89,7 @@ function Tile(_type) constructor
 		{
 			if (type == TilesTypes.block)
 			{
-				draw_sprite(s_icon, type, xx * global.cellSize, yy * global.cellSize); 
+				draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
 			}
 			else 
 			{
@@ -145,7 +137,7 @@ function Tile(_type) constructor
 		{
 			draw_set_color(color);
 			draw_set_alpha(flash);	
-			draw_sprite(s_icon, type, xx * global.cellSize, yy * global.cellSize); 
+			draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
 		}
@@ -164,8 +156,8 @@ function Tile(_type) constructor
 		if (isAvailable)
 		{
 			draw_set_color(c_red);
-			draw_sprite(s_icon, type, xx * global.cellSize, yy * global.cellSize); 
-			draw_sprite(s_value, value, xx * global.cellSize, yy * global.cellSize);
+			draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
+			draw_sprite_stretched(s_value, value, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize);
 			
 			draw_set_color(color);
 			draw_set_alpha(0.25);	
@@ -178,13 +170,13 @@ function Tile(_type) constructor
 			draw_set_color(c_red);
 			if (isLineDiag)
 			{
-				draw_sprite(s_arrowDiagonal, lineDirection, xx * global.cellSize, yy * global.cellSize);
+				draw_sprite_stretched(s_arrowDiagonal, lineDirection, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
 			}
 			else 
 			{
-				draw_sprite(s_arrowStreight, lineDirection, xx * global.cellSize, yy * global.cellSize);
+				draw_sprite_stretched(s_arrowStreight, lineDirection, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
 			}
-			draw_sprite(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize);
+			draw_sprite_stretched(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize); 
 			draw_set_alpha(0.25 + power(sin(current_time / 500), 2) * 0.25);
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
@@ -193,7 +185,7 @@ function Tile(_type) constructor
 		if (isTargeted)
 		{
 			draw_set_color(c_red);
-			draw_sprite(s_target, 0, xx * global.cellSize, yy * global.cellSize);
+			draw_sprite_stretched(s_target, 0, xx * global.cellSize, yy * global.cellSize, global.cellSize, global.cellSize);
 			draw_set_alpha(0.25 + power(sin(current_time / 500), 2) * 0.25);
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 			draw_set_alpha(1);
@@ -1399,7 +1391,6 @@ function generateGame()
 	
 	maxSearchTime = 0.1; // minutes
 	
-	windowSetup();
 	defineTiles();
     
     if (!global.isEditorOn)

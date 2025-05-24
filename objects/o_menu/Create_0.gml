@@ -234,9 +234,6 @@ with(ui)
                     file_text_close(file);
                 }	
             }
-            
-			room_set_width(r_game, global.width * global.cellSize);
-			room_set_height(r_game, global.height * global.cellSize);
 			
 			random_set_seed(global.seed);
 			
