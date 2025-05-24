@@ -225,12 +225,12 @@ function drawLines()
 	draw_set_alpha(1);
 	for(var yy = 0; yy < global.height; yy++)
 	{
-		draw_line_width(0, yy * global.cellSize, room_width, yy * global.cellSize, 2);
+		draw_line_width(0, yy * global.cellSize + gameOffset, room_width, yy * global.cellSize + gameOffset, 2);
 	}
 	
 	for(var xx = 0; xx < global.width; xx++)
 	{
-		draw_line_width(xx * global.cellSize, 0, xx * global.cellSize, room_height, 2);
+		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, room_width + gameOffset, 2);
 	}
 }
 
