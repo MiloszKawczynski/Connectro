@@ -235,8 +235,6 @@ with(ui)
                 }	
             }
 			
-			random_set_seed(global.seed);
-			
 			alarm[0] = 1;
 		}
 	}
