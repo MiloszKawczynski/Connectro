@@ -1478,4 +1478,6 @@ function setSeed(seed)
         global.targetRatio  = real(parts[8]);
         global.seed         = real(parts[9]);
     }
+    
+    random_set_seed(global.seed);
 }
