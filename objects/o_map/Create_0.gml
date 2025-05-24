@@ -20,6 +20,9 @@ building = createWall(20);
 tilt = 0;
 r = 0;
 
+bioms = array_create();
+array_push(bioms, 0, 12, 13, 26, 27, 33);
+
 worldUp = new vector3(0, 0, 1);
 
 function vector3(_x, _y, _z) constructor 

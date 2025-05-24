@@ -123,3 +123,45 @@ for (var i = -2; i <= 2; i++)
         }
     }
 }
+
+var navigationX = 45 - 20;
+var navigationY = 80 - 20;
+var navigationScale = 0.5;
+var buttonSize = 30;
+draw_sprite_ext(s_arrowStreight, 3, navigationX, navigationY - 20, navigationScale, navigationScale, 0, c_white, 1);
+draw_sprite_ext(s_arrowStreight, 1, navigationX, navigationY, navigationScale, navigationScale, 0, c_white, 1);
+
+if (mouse_check_button_released(mb_left))
+{
+    if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY - 20, navigationX + buttonSize * navigationScale, navigationY - 20 + buttonSize * navigationScale))
+    {
+        show_debug_message(scrollSnap);
+        for (var i = 0; i < array_length(bioms); i++)
+        {
+            if (bioms[i] > scrollSnap)
+            {
+                scrollSpeed = 0;
+                scrollFingerPosition = 0;
+                scrollSnap = bioms[i];
+                break;
+            }
+        }
+        show_debug_message(scrollSnap);
+    }
+    
+    if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY, navigationX + buttonSize * navigationScale, navigationY + buttonSize * navigationScale))
+    {
+        show_debug_message(scrollSnap);
+        for (var i = array_length(bioms) - 1; i >= 0; i--)
+        {
+            if (bioms[i] < scrollSnap)
+            {
+                scrollSpeed = 0;
+                scrollFingerPosition = 0;
+                scrollSnap = bioms[i];
+                break;
+            }
+        }
+        show_debug_message(scrollSnap);
+    }
+}
