@@ -419,7 +419,7 @@ enum TileType
 	Active = 2,
 }
 
-function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles)
+function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles, tilesUsedTiles)
 {
 	var gridStateTemp = buffer_create(tilesToRevealCount, buffer_fast, 1);
 	buffer_copy(gridState, 0, tilesToRevealCount, gridStateTemp, 0);
@@ -468,6 +468,7 @@ function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, 
 					if (newState != previousState and previousState != TileType.Active and index != i)
 					{
 						tilesRevealedTiles[row][column][d][newTile] = {index: i, state: newState};
+						tilesUsedTiles[row][column][d] = usedTile;
 						newTile += 1;
 					}
 				}
@@ -732,7 +733,8 @@ function runAStar()
 
 	tilesSortedByRevealCountLength = array_length(tilesSortedByRevealCount);
 
-	getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles);
+	var tilesUsedTiles = variable_clone(tilesRevealedTiles);
+	getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, tilesRevealedTiles, tilesUsedTiles);
 	
 	var initiallyRevealedCount = getAvailableOrRevealedCount(tilesToRevealCount, gridState);
 
@@ -837,6 +839,7 @@ function runAStar()
 					//array_copy(nextPath, 0, state.path, 0, array_length(state.path));
 					//array_push(nextPath, global.mapObjects[row][column]);
 					
+					//var usedTile = tilesUsedTiles[row][column][d];
 					//if (usedTile != undefined)
 					//{
 					//	array_push(nextPath, global.decisionString);
