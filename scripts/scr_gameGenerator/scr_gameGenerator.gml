@@ -1,3 +1,5 @@
+#macro SOLUTION_PRINT_PATH false
+
 function windowSetup()
 {
 	window_set_size(global.width * global.cellWindowSize, global.height * global.cellWindowSize);
@@ -739,13 +741,26 @@ function runAStar()
 	var initiallyRevealedCount = getAvailableOrRevealedCount(tilesToRevealCount, gridState);
 
 	var queue = ds_priority_create();
-	var initialState = {
-		gridState: gridState,
-		revealedCount: initiallyRevealedCount,
-		g: 0,
-		//path: []
-	};
-	ds_priority_add(queue, initialState, 0);
+	
+	if (SOLUTION_PRINT_PATH)
+	{
+		var initialState = {
+			gridState: gridState,
+			revealedCount: initiallyRevealedCount,
+			g: 0,
+			path: []
+		};
+		ds_priority_add(queue, initialState, 0);
+	}
+	else
+	{
+		var initialState = {
+			gridState: gridState,
+			revealedCount: initiallyRevealedCount,
+			g: 0,
+		};
+		ds_priority_add(queue, initialState, 0);
+	}
 
 	while (!ds_priority_empty(queue))
 	{
@@ -768,17 +783,21 @@ function runAStar()
 		{
 			var msg = "SOLUTION FOUND:\n";
 			msg += string("seed: {0}\n", getSeed());
-			//for (var i = 0; i < array_length(state.path); i++)
-			//{
-			//	if (state.path[i] == "Decision")
-			//	{
-			//		msg += "  Decision: ";
-			//		continue;
-			//	}
+			
+			if (SOLUTION_PRINT_PATH)
+			{
+				for (var i = 0; i < array_length(state.path); i++)
+				{
+					if (state.path[i] == "Decision")
+					{
+						msg += "  Decision: ";
+						continue;
+					}
 				
-			//	var step = state.path[i];
-			//	msg += "  " + string(step.x) + "," + string(step.y) + "\n";
-			//}
+					var step = state.path[i];
+					msg += "  " + string(step.x) + "," + string(step.y) + "\n";
+				}
+			}
 			
 			msg += string("Number of moves {0}\n", state.g);
 			msg += string("time: {0}\n", (get_timer() - global.solveTimeStart) / 60000000);
@@ -835,16 +854,20 @@ function runAStar()
 					
 					var newRevealedCount = newlyRevealedCount + revealedCount;
 
-					//var nextPath = [];
-					//array_copy(nextPath, 0, state.path, 0, array_length(state.path));
-					//array_push(nextPath, global.mapObjects[row][column]);
+					var nextPath;
+					if (SOLUTION_PRINT_PATH)
+					{
+						nextPath = [];
+						array_copy(nextPath, 0, state.path, 0, array_length(state.path));
+						array_push(nextPath, global.mapObjects[row][column]);
 					
-					//var usedTile = tilesUsedTiles[row][column][d];
-					//if (usedTile != undefined)
-					//{
-					//	array_push(nextPath, global.decisionString);
-					//	array_push(nextPath, usedTile);
-					//}
+						var usedTile = tilesUsedTiles[row][column][d];
+						if (usedTile != undefined)
+						{
+							array_push(nextPath, global.decisionString);
+							array_push(nextPath, usedTile);
+						}
+					}
 
 					var g = state.g + 1;
 
@@ -880,12 +903,23 @@ function runAStar()
 
 					var priority = g + h;
 
-					ds_priority_add(queue, {
-						gridState: newGridState,
-						revealedCount: newRevealedCount,
-						g: g,
-						//path: nextPath
-					}, priority);
+					if (SOLUTION_PRINT_PATH)
+					{
+						ds_priority_add(queue, {
+							gridState: newGridState,
+							revealedCount: newRevealedCount,
+							g: g,
+							path: nextPath
+						}, priority);
+					}
+					else
+					{
+						ds_priority_add(queue, {
+							gridState: newGridState,
+							revealedCount: newRevealedCount,
+							g: g,
+						}, priority);
+					}
 				}
 			}
 		}
