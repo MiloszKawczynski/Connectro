@@ -230,7 +230,7 @@ function drawLines()
 	
 	for(var xx = 0; xx < global.width; xx++)
 	{
-		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, room_width + gameOffset, 2);
+		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, yy * global.cellSize + gameOffset, 2);
 	}
 }
 
