@@ -39,7 +39,7 @@ if (drawSurface)
 	draw_sprite(s_block, 0, 0, 0);
 	surface_reset_target();
 	
-	surfaceTexture = surface_get_texture(blockSurface);
+    surfaceTexture = sprite_get_texture(sprite_create_from_surface(blockSurface, 0, 0, 39 * 5, 39, false, false, 0, 0), 0);
 	front = createWall(global.height * global.cellSize);
 }
 
