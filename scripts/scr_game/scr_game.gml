@@ -67,6 +67,19 @@ function removePotential()
 	}
 }
 
+function removeFreshness()
+{
+	for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+			
+			tile.isFreshlyRevealed = false;
+		}
+	}
+}
+
 function normalTileEffect(showPotential = false)
 {
 	var tile = ds_grid_get(grid, hoveredX, hoveredY);
@@ -242,6 +255,8 @@ function normalTileEffect(showPotential = false)
 				break;
 			}
 		}
+        
+        removeFreshness();
 	}
 }
 
@@ -400,7 +415,7 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			
 			if (xx = wrappedX2 and yy = wrappedY2)
 			{
-				if (!isRevealed)
+				if (!isRevealed or isFreshlyRevealed)
 				{
 					if (showPotential)
 					{
@@ -431,7 +446,8 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			else 
 			{
 				isRevealed = true; 
-				
+				isFreshlyRevealed = true;
+                
 				//flashTimer = 0;
 				
 				//if (abs(xStep) == abs(yStep))
