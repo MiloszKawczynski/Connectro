@@ -175,12 +175,12 @@ function editorDraw()
 		}
 	}
     
-    draw_sprite(s_icon, editorType, hoveredX * global.cellSize, hoveredY * global.cellSize);
-    draw_sprite(s_value, editorValue, hoveredX * global.cellSize, hoveredY * global.cellSize);
+    draw_sprite_stretched(s_icon, editorType, hoveredX * global.cellSize, hoveredY * global.cellSize + gameOffset, global.cellSize, global.cellSize);
+    draw_sprite_stretched(s_value, editorValue, hoveredX * global.cellSize, hoveredY * global.cellSize + gameOffset, global.cellSize, global.cellSize);
     
     draw_set_color(c_lime);
     draw_set_alpha(0.25);
-    draw_rectangle(editorStartingTileX * global.cellSize, editorStartingTileY * global.cellSize, editorStartingTileX * global.cellSize + global.cellSize, editorStartingTileY * global.cellSize + global.cellSize, false);
+    draw_rectangle(editorStartingTileX * global.cellSize, editorStartingTileY * global.cellSize + gameOffset, editorStartingTileX * global.cellSize + global.cellSize, editorStartingTileY * global.cellSize + global.cellSize + gameOffset, false);
     draw_set_alpha(1);
 	
 	drawLines();
