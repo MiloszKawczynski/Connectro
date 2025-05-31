@@ -19,6 +19,18 @@ if (global.isEditorOn)
 }
 else
 {
+    if (mouse_check_button_pressed(mb_left))
+    {
+        if (mouse_y < other.gameOffset or mouse_y > other.gameOffset + global.cellSize * global.height)
+        {
+            hoveredX = -1;
+            hoveredY = -1;
+            removeDirections();
+            removePotential();
+            removeTarget();
+        }
+    }
+    
     for(var yy = 0; yy < global.height; yy++)
     {
         for(var xx = 0; xx < global.width; xx++)
@@ -32,7 +44,7 @@ else
                     
                     if (gameState == mustPickDirection)
                     {
-                        if (newHoverTile == hoverTile.sourceTile)
+                        if (hoverTile == undefined or newHoverTile == hoverTile.sourceTile)
                         {
                             break;
                         }

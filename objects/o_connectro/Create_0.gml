@@ -6,6 +6,7 @@ if (global.seed == 0)
 device_mouse_dbclick_enable(false);
 
 global.cellSize = room_width / global.width;
+
 gameOffset = (room_height - global.height * global.cellSize) / 2;
 
 grid = ds_grid_create(global.width, global.height);

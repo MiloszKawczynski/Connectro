@@ -86,7 +86,11 @@ function getState()
 function normalTileEffect(showPotential = false)
 {
 	var tile = ds_grid_get(grid, hoveredX, hoveredY);
-		
+	if (tile == undefined)
+    {
+        return;
+    }
+    
 	if (tile.isAvailable)
 	{
         var state = getState();
@@ -266,6 +270,10 @@ function normalTileEffect(showPotential = false)
 function mustPickDirectionTileEffect(showPotential = false)
 {
 	var tile = ds_grid_get(grid, hoveredX, hoveredY);
+    if (tile == undefined)
+    {
+        return;
+    }
 		
 	if (tile.lineDirection == -1)
 	{
@@ -352,7 +360,11 @@ function mustPickDirectionTileEffect(showPotential = false)
 function mustPickTargetTileEffect(showPotential = false)
 {
 	var tile = ds_grid_get(grid, hoveredX, hoveredY);
-		
+	if (tile == undefined)
+    {
+        return;
+    }	
+    
 	if (tile.isTargeted == false)
 	{
 		if (!showPotential)
