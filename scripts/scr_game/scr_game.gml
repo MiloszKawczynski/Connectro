@@ -67,17 +67,20 @@ function removePotential()
 	}
 }
 
-function removeFreshness()
+function getState()
 {
-	for(var yy = 0; yy < global.height; yy++)
-	{
-		for(var xx = 0; xx < global.width; xx++)
-		{
-			var tile = ds_grid_get(grid, xx, yy);
-			
-			tile.isFreshlyRevealed = false;
-		}
-	}
+    var state = ds_grid_create(global.width, global.height);
+    
+    for(var ix = 0; ix < global.width; ix++)
+    {
+        for(var iy = 0; iy < global.height; iy++)
+        {
+            var tile = ds_grid_get(grid, ix, iy);
+            ds_grid_set(state, ix, iy, tile.isAvailable || tile.isRevealed);
+        }
+    }
+    
+    return state;
 }
 
 function normalTileEffect(showPotential = false)
@@ -86,6 +89,8 @@ function normalTileEffect(showPotential = false)
 		
 	if (tile.isAvailable)
 	{
+        var state = getState();
+        
 		if (!showPotential)
 		{
 			tile.isRevealed = true;
@@ -96,10 +101,10 @@ function normalTileEffect(showPotential = false)
 		{
 			case(TilesTypes.plus):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential);
 				
 				if (!showPotential)
 				{
@@ -111,10 +116,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.cross):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY + tile.value, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY + tile.value, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY - tile.value, tile.color, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY - tile.value, tile.color, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY + tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY + tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY - tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY - tile.value, tile.color, state, showPotential);
 				
 				if (!showPotential)
 				{
@@ -126,10 +131,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.diamond):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, showPotential, true);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, true);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, true);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, true);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, true);
 				
 				if (!showPotential)
 				{
@@ -255,8 +260,6 @@ function normalTileEffect(showPotential = false)
 				break;
 			}
 		}
-        
-        removeFreshness();
 	}
 }
 
@@ -274,6 +277,8 @@ function mustPickDirectionTileEffect(showPotential = false)
 	}
 	else 
 	{
+        var state = getState();
+        
 		if (!showPotential)
 		{
 			moves++;
@@ -286,22 +291,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 			}
@@ -312,22 +317,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, showPotential);
+					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
 					break;
 				}
 			}
@@ -337,7 +342,6 @@ function mustPickDirectionTileEffect(showPotential = false)
 		{
 			tile.sourceTile.isAvailable = false;
 		
-            removeFreshness();
 			removeDirections();
 		}
 		
@@ -378,7 +382,7 @@ function mustPickTargetTileEffect(showPotential = false)
 	}
 }
 
-function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
+function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = false)
 {
 	var length = point_distance(x1, y1, x2, y2);
 	
@@ -407,6 +411,8 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 		xx = position.x;
 		yy = position.y;
 		
+        var stateTile = ds_grid_get(state, xx, yy);
+        
 		with(ds_grid_get(grid, xx, yy))
 		{
 			if (type == TilesTypes.block)
@@ -416,7 +422,7 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			
 			if (xx = wrappedX2 and yy = wrappedY2)
 			{
-				if (!isRevealed or isFreshlyRevealed)
+				if (!stateTile)
 				{
 					if (showPotential)
 					{
@@ -447,7 +453,6 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 			else 
 			{
 				isRevealed = true; 
-				isFreshlyRevealed = true;
                 
 				//flashTimer = 0;
 				
@@ -468,8 +473,8 @@ function revealLine(x1, y1, x2, y2, _color, showPotential, isDiamond = false)
 		
 		if (isDiamond)
 		{
-			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, showPotential);
-			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, showPotential);
+			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, state, showPotential);
+			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, state, showPotential);
 		}
 	}
 }

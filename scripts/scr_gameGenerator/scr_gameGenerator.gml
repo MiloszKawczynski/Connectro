@@ -29,7 +29,6 @@ function Tile(_type) constructor
 	flash = 0;
 	flashTimer = -1;
 	flashNext = array_create(0);
-    isFreshlyRevealed = false;
 	
 	switch(type)
 	{
