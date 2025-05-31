@@ -337,6 +337,7 @@ function mustPickDirectionTileEffect(showPotential = false)
 		{
 			tile.sourceTile.isAvailable = false;
 		
+            removeFreshness();
 			removeDirections();
 		}
 		
