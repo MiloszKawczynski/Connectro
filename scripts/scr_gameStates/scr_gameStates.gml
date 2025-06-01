@@ -223,15 +223,17 @@ function drawLines()
 {
 	draw_set_color(c_black);
 	draw_set_alpha(1);
-	for(var yy = 0; yy < global.height; yy++)
+	for(var yy = 0; yy <= global.height; yy++)
 	{
 		draw_line_width(0, yy * global.cellSize + gameOffset, room_width, yy * global.cellSize + gameOffset, 2);
 	}
 	
 	for(var xx = 0; xx < global.width; xx++)
 	{
-		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, yy * global.cellSize + gameOffset, 2);
+		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, global.height * global.cellSize + gameOffset, 2);
 	}
+    
+    draw_line_width(global.width * global.cellSize - 1.5, gameOffset, global.width * global.cellSize - 1.5, global.height * global.cellSize + gameOffset, 2);
 }
 
 //---
