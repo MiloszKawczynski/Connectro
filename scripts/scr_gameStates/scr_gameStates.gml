@@ -20,9 +20,29 @@ function gameEnd(showPotential = false)
 		if (mouse_check_button_pressed(mb_left))
 		{
 			audio_stop_all();
-            global.levels[global.choosedLevel].texture = surfaceTexture;
-            global.levels[global.choosedLevel].stars = 3;
-            global.levels[global.choosedLevel].moves = moves;
+            
+            var gainedStars = 3;
+            
+            if (moves > global.levels[global.choosedLevel].movesToStar[0])
+            {
+                gainedStars = 0;
+            }    
+            else if (moves > global.levels[global.choosedLevel].movesToStar[1])
+            {
+                gainedStars = 1;
+            }
+            else if (moves > global.levels[global.choosedLevel].movesToStar[2])
+            {
+                gainedStars = 2;
+            }
+            
+            if (moves <= global.levels[global.choosedLevel].moves)
+            {
+                global.levels[global.choosedLevel].stars = gainedStars;
+                global.levels[global.choosedLevel].texture = surfaceTexture;
+                global.levels[global.choosedLevel].moves = moves;
+            }
+            
 			room_goto(r_map);
 		}
 	}

@@ -101,7 +101,14 @@ for (var i = -2; i <= 2; i++)
     draw_set_color(c_black);
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
-    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", global.levels[buildingUIId].moves, global.levels[buildingUIId].movesToStar), textScale, textScale, 0);
+    
+    var movesText = global.levels[buildingUIId].moves;
+    if (global.levels[buildingUIId].moves = 999)
+    {
+        movesText = "-"
+    }
+    
+    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", movesText, global.levels[buildingUIId].movesToStar), textScale, textScale, 0);
     
     if (mouse_check_button_released(mb_left))
     {

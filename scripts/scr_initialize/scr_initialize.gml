@@ -12,7 +12,7 @@ function initialize()
         x = _x;
         y = _y;
         stars = 0;
-        moves = 0;
+        moves = 999;
         movesToStar = _movesToStar;
         texture = sprite_get_texture(s_block, 1);
     }
