@@ -1,3 +1,4 @@
+ui.draw();
 
 draw_set_font(f_base);
 draw_set_halign(fa_center);
