@@ -108,7 +108,24 @@ for (var i = -2; i <= 2; i++)
         movesText = "-"
     }
     
-    draw_text_transformed(xx + 1, yy - 2, string("{0}/{1}", movesText, global.levels[buildingUIId].movesToStar), textScale, textScale, 0);
+    var movesToStarIndex = 0;
+    var movesToStarText = string("/{0}", global.levels[buildingUIId].movesToStar[movesToStarIndex]);
+    
+    while(global.levels[buildingUIId].movesToStar[movesToStarIndex] > global.levels[buildingUIId].moves)
+    {
+        movesToStarIndex++;
+        if (movesToStarIndex >= 3)
+        {
+            movesToStarText = "";
+            break;
+        }
+        else 
+        {
+        	movesToStarText = string("/{0}", global.levels[buildingUIId].movesToStar[movesToStarIndex]);
+        }
+    }
+    
+    draw_text_transformed(xx + 1, yy - 2, string("{0}{1}", movesText, movesToStarText), textScale, textScale, 0);
     
     if (mouse_check_button_released(mb_left))
     {
