@@ -110,7 +110,6 @@ for (var i = -2; i <= 2; i++)
             if (i == 0)
             {
                 global.choosedLevel = buildingUIId;
-                setSeed(global.levels[buildingUIId].seed)
                 
                 room_goto(r_game);
             }
