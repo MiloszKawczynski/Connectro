@@ -545,28 +545,64 @@ function revealDot(xx, yy, _color, showPotential)
 	}
 }
 
+#macro MAX_ITERATIONS 100
+
 function wrapAroundGrid(width, height, xx, yy)
 {
-	if (xx > width - 1)
+	var iterations = 0;
+
+	while (true)
 	{
-		var xxMod = xx mod width;
-		xx = xxMod;
-	}
-	else if (xx < 0)
-	{
-		var xxMod = xx mod width;
-		xx = width + xxMod;
+		if (xx > width - 1)
+		{
+			var xxMod = xx mod width;
+			xx = xxMod;
+		}
+		else if (xx < 0)
+		{
+			var xxMod = xx mod width;
+			xx = width + xxMod;
+		}
+		else
+		{
+			break;
+		}
+		
+		iterations += 1;
+		
+		if (iterations > MAX_ITERATIONS)
+		{
+			show_debug_message("Something went wrong with move wrapping. Iterations exceeded.");
+			break;
+		}
 	}
 	
-	if (yy > height - 1)
+	iterations = 0;
+	
+	while (true)
 	{
-		var yyMod = yy mod height;
-		yy = yyMod;
-	}
-	else if (yy < 0)
-	{
-		var yyMod = yy mod height;
-		yy = height + yyMod;
+		if (yy > height - 1)
+		{
+			var yyMod = yy mod height;
+			yy = yyMod;
+		}
+		else if (yy < 0)
+		{
+			var yyMod = yy mod height;
+			yy = height + yyMod;
+		}
+		else
+		{
+			break;
+		}
+		
+		iterations += 1;
+		
+		if (iterations > MAX_ITERATIONS)
+		{
+			show_debug_message("Something went wrong with move wrapping. Iterations exceeded.");
+			break;
+		}
 	}
 	
 	return global.mapObjects[xx][yy];
