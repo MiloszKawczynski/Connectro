@@ -1,20 +1,24 @@
 with(ui)
 {
     var numberOfMoves = clamp(1 - (other.moves / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
+    var numberOfMovesToFirst = clamp(1 - (global.levels[global.choosedLevel].movesToStar[0] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
     var numberOfMovesToSecond = clamp(1 - (global.levels[global.choosedLevel].movesToStar[1] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
     var numberOfMovesToThird = clamp(1 - (global.levels[global.choosedLevel].movesToStar[2] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
     
     movesCount.setContent(string(other.moves));
     movesBar.setValue(numberOfMoves);
     
+    firstStarRing.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToFirst * movesBar.scaleX * movesBar.width);
     secondStarRing.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToSecond * movesBar.scaleX * movesBar.width - 8);
     thirdStarRing.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToThird * movesBar.scaleX * movesBar.width - 8);
     
-    movesToSecondStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToSecond * movesBar.scaleX * movesBar.width - 7, 40);
-    movesToThirdStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToThird * movesBar.scaleX * movesBar.width - 7, 40);
+    movesToFirstStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToFirst * movesBar.scaleX * movesBar.width + 3, 12);
+    movesToSecondStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToSecond * movesBar.scaleX * movesBar.width - 5, 12);
+    movesToThirdStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToThird * movesBar.scaleX * movesBar.width - 5, 12);
     
     if (other.moves > global.levels[global.choosedLevel].movesToStar[0])
     {
+        firstStarRing.setSprite(s_uiLimit);
         firstStar.isGold = false;
     }
     

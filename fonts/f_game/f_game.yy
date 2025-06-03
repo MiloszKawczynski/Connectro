@@ -1,6 +1,6 @@
 {
   "$GMFont":"",
-  "%Name":"f_base",
+  "%Name":"f_game",
   "AntiAlias":0,
   "applyKerning":0,
   "ascender":28,
@@ -112,7 +112,7 @@
   "last":0,
   "lineHeight":32,
   "maintainGms1Font":false,
-  "name":"f_base",
+  "name":"f_game",
   "parent":{
     "name":"Fonts",
     "path":"folders/Fonts.yy",
@@ -129,10 +129,7 @@
   "sdfSpread":7,
   "size":24.0,
   "styleName":"Regular",
-  "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
-  },
+  "textureGroupId":null,
   "TTFName":"",
   "usesSDF":true,
 }

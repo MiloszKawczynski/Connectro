@@ -51,6 +51,10 @@ with(ui)
     movesBar = new GradientBar(1);
     movesBar.setScale(8, 1);
     
+    firstStarRing = new Output();
+    firstStarRing.setSprite(s_uiLimitGold);
+    firstStarRing.setScale(4, 4);
+    
     secondStarRing = new Output();
     secondStarRing.setSprite(s_uiLimitGold);
     secondStarRing.setScale(4, 4);
@@ -59,11 +63,14 @@ with(ui)
     thirdStarRing.setSprite(s_uiLimitGold);
     thirdStarRing.setScale(4, 4);
     
-    movesToSecondStar = new Text(global.levels[global.choosedLevel].movesToStar[1], f_base);
-    movesToSecondStar.setScale(2, 2);
+    movesToFirstStar = new Text(global.levels[global.choosedLevel].movesToStar[0], f_game);
+    movesToFirstStar.setScale(0.55, 0.55);
     
-    movesToThirdStar = new Text(global.levels[global.choosedLevel].movesToStar[2], f_base);
-    movesToThirdStar.setScale(2, 2);
+    movesToSecondStar = new Text(global.levels[global.choosedLevel].movesToStar[1], f_game);
+    movesToSecondStar.setScale(0.55, 0.55);
+    
+    movesToThirdStar = new Text(global.levels[global.choosedLevel].movesToStar[2], f_game);
+    movesToThirdStar.setScale(0.55, 0.55);
     
     firstStar = new Output();
     
@@ -71,6 +78,7 @@ with(ui)
     
     thirdStar = new Output();
     
+    var starsMoves = [movesToFirstStar, movesToSecondStar, movesToThirdStar]
     var stars = [firstStar, secondStar, thirdStar]
     
     for (var i = 0; i < 3; i ++)
@@ -105,6 +113,31 @@ with(ui)
                 }
             }
         }
+        
+        with(starsMoves[i])
+        {
+            draw = function() 
+    		{
+    			draw_set_color(color);
+    			draw_set_alpha(alpha);
+    			draw_set_font(font);
+    			draw_set_halign(horizontalAlign);
+    			draw_set_valign(verticalAlign);
+                
+                font_enable_effects(f_game, true, 
+                {
+                    outlineEnable: true,
+                    outlineDistance: 5,
+                    outlineColour: c_black
+                });
+    			
+    			draw_text_transformed(posX, posY, content, scaleX, scaleY, rotation);
+    			 
+    			draw_set_alpha(1);
+    		};
+    		
+    		state.draw = draw;
+        }
     }
     
     with(movesBar)
@@ -137,8 +170,11 @@ with(ui)
     
     mainLayer.addComponent(3.5, 2.5, movesBar);
     
+    mainLayer.addComponent(3.5, 2.5, firstStarRing);
     mainLayer.addComponent(3.5, 2.5, secondStarRing);
     mainLayer.addComponent(3.5, 2.5, thirdStarRing);
+    
+    mainLayer.addComponent(3.5, 2.5, movesToFirstStar);
     mainLayer.addComponent(3.5, 2.5, movesToSecondStar);
     mainLayer.addComponent(3.5, 2.5, movesToThirdStar);
     
