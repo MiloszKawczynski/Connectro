@@ -670,20 +670,19 @@ function runAStar()
 	
 	var tilesSortedByRevealCount = [];
 	var tilesSortedByRevealCountLength = 0;
+	var tilesRevealedTiles = array_create();
 	
-	var tilesRevealedTiles = [
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-		[[], [], [], [], [], [], [], [], [], [], []],
-	];
+    for (var _x = 0; _x < global.width; _x++)
+    {
+        var tr = array_create();
+        
+        for (var _y = 0; _y < global.height; _y++)
+        {
+            array_push(tr, []);
+        }
+        
+        array_push(tilesRevealedTiles, tr);
+    }
 	
 	var gridState = buffer_create(tilesToRevealCount, buffer_fast, 1);
 	buffer_fill(gridState, 0, buffer_u8, TileType.Unrevealed, tilesToRevealCount);
