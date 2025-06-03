@@ -70,7 +70,7 @@ function Tile(_type) constructor
 		case(TilesTypes.target):
 		{
 			value = 0;
-			color = make_color_rgb(214, 75, 34);;
+			color = make_color_rgb(255, 0, 0);
 			break;
 		}
 		
@@ -145,7 +145,14 @@ function Tile(_type) constructor
 	
 	static drawMural = function(xx, yy) 
 	{
-		draw_set_color(color);
+        if (type == TilesTypes.target)
+        {
+            draw_set_color(make_color_rgb(214, 75, 34));
+        }
+        else 
+        {
+        	draw_set_color(color);
+        }
 		draw_set_alpha(1);	
 		draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
 		draw_set_alpha(1);
