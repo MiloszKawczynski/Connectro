@@ -247,11 +247,6 @@ function drawEndScreen()
 	gpu_set_ztestenable(false);
 	gpu_set_alphatestenable(false);
 	gpu_set_cullmode(cull_noculling);
-	
-	draw_set_color(c_white);
-	draw_text(room_width / 2, room_height * 0.1, moves);
-}
-
 }
 
 //---
