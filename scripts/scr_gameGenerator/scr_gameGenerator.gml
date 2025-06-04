@@ -440,6 +440,13 @@ function getLinearTileIndex(width, xx, yy)
 	return yy * width + xx;
 }
 
+function getXYFromLinearIndex(width, index)
+{
+	var xx = index % width;
+	var yy = floor(index / width);
+	return global.mapObjects[xx][yy];
+}
+
 enum TileType
 {
 	Unrevealed = 0,
@@ -481,6 +488,7 @@ function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, 
 				buffer_copy(gridStateTemp, 0, tilesToRevealCount, newGridState, 0);
 
 				var usedTile = getRevealedTiles(width, height, tile, row, column, newGridState, d);
+				tilesUsedTiles[row][column][d] = usedTile;
 
 				buffer_seek(newGridState, buffer_seek_start, index);
 				buffer_write(newGridState, buffer_u8, TileType.Revealed);
@@ -496,7 +504,6 @@ function getWhichTilesRevealWhich(tilesToRevealCount, width, height, gridState, 
 					if (newState != previousState and previousState != TileType.Active and index != i)
 					{
 						tilesRevealedTiles[row][column][d][newTile] = {index: i, state: newState};
-						tilesUsedTiles[row][column][d] = usedTile;
 						newTile += 1;
 					}
 				}
@@ -1301,16 +1308,23 @@ function getRevealedTiles(width, height, tile, tileCoordX, tileCoordY, gridState
 		}
 		case(TilesTypes.target):
 		{
-			var xx = decision % width;
-			var yy = decision / width;
+			// NOTE: Here we treat `decision` the same as linear tile index.
+			var tileCoords = getXYFromLinearIndex(width, decision);
 			
-			var index = getLinearTileIndex(width, xx, yy);
-			buffer_seek(gridState, buffer_seek_start, index);
+			if (debug_mode)
+			{
+				if (decision != getLinearTileIndex(width, tileCoords.x, tileCoords.y))
+				{
+					show_debug_message("Tile coordinates different than linear tile index, something went wrong!");
+				}
+			}
+
+			buffer_seek(gridState, buffer_seek_start, decision);
 			if (buffer_read(gridState, buffer_u8) == TileType.Unrevealed)
 			{
-				buffer_seek(gridState, buffer_seek_start, index);
+				buffer_seek(gridState, buffer_seek_start, decision);
 				buffer_write(gridState, buffer_u8, TileType.Active);
-				usedTile = global.mapObjects[xx][yy];
+				usedTile = global.mapObjects[tileCoords.x][tileCoords.y];
 			}
 
 			break;
