@@ -1518,7 +1518,7 @@ function generateGame()
         array_push(global.mapObjects, mo);
     }
 	
-	maxSearchTime = 0.1; // minutes
+	maxSearchTime = 0.15; // minutes
 	
 	defineTiles();
     
