@@ -115,21 +115,38 @@ function editor()
 function normalDraw()
 {
 	gameState(true);
+    
 	for(var yy = 0; yy < global.height; yy++)
 	{
 		for(var xx = 0; xx < global.width; xx++)
 		{
+            if (hoveredX == xx and hoveredY == yy)
+            {
+                continue;
+            }
+            
 			var tile = ds_grid_get(grid, xx, yy);
 			
 			tile.drawColor(xx, yy);
 			tile.drawButton(xx, yy);
             tile.drawHover(xx, yy);   
             tile.drawPotential(xx, yy);
+            tile.drawGrid(xx, yy);
 		}
 	}
+    
+    if (hoveredX != -1 and hoveredY != -1)
+    {
+        var tile = ds_grid_get(grid, hoveredX, hoveredY);
+        
+        tile.drawColor(hoveredX, hoveredY);
+        tile.drawGrid(hoveredX, hoveredY);
+        tile.drawButton(hoveredX, hoveredY);
+        tile.drawHover(hoveredX, hoveredY);   
+        tile.drawPotential(hoveredX, hoveredY);
+    }
 	
 	removePotential();
-	drawLines();
 }
 
 function endScreenTransitionDraw()
@@ -202,16 +219,12 @@ function editorDraw()
     draw_set_alpha(0.25);
     draw_rectangle(editorStartingTileX * global.cellSize, editorStartingTileY * global.cellSize + gameOffset, editorStartingTileX * global.cellSize + global.cellSize, editorStartingTileY * global.cellSize + global.cellSize + gameOffset, false);
     draw_set_alpha(1);
-	
-	drawLines();
 }
 
 //---
 
 function drawEndScreen()
 { 
-	drawLines();
-	
 	gpu_set_zwriteenable(true);
 	gpu_set_ztestenable(true);
 	gpu_set_alphatestenable(true);
@@ -239,21 +252,6 @@ function drawEndScreen()
 	draw_text(room_width / 2, room_height * 0.1, moves);
 }
 
-function drawLines()
-{
-	draw_set_color(c_black);
-	draw_set_alpha(1);
-	for(var yy = 0; yy <= global.height; yy++)
-	{
-		draw_line_width(0, yy * global.cellSize + gameOffset, room_width, yy * global.cellSize + gameOffset, 2);
-	}
-	
-	for(var xx = 0; xx < global.width; xx++)
-	{
-		draw_line_width(xx * global.cellSize, gameOffset, xx * global.cellSize, global.height * global.cellSize + gameOffset, 2);
-	}
-    
-    draw_line_width(global.width * global.cellSize - 1.5, gameOffset, global.width * global.cellSize - 1.5, global.height * global.cellSize + gameOffset, 2);
 }
 
 //---

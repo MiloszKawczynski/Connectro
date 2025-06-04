@@ -177,7 +177,7 @@ function Tile(_type) constructor
 		{
             draw_set_color(color);
 			draw_set_alpha(0.25);	
-			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize - 1, yy * global.cellSize + global.cellSize - 1 + other.gameOffset, false);
+			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
 			draw_set_alpha(1);
             
             if (lineDirection == -1)
@@ -247,6 +247,12 @@ function Tile(_type) constructor
 			draw_set_alpha(1);
 		}
 	}
+    
+    static drawGrid = function(xx, yy)
+    {
+        draw_set_color(c_black);
+		draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, true);
+    }
 }
 
 function populateGrid()
