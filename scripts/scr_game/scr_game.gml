@@ -67,6 +67,19 @@ function removePotential()
 	}
 }
 
+function removeHover()
+{
+	for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+			
+			tile.isHovered = false;
+		}
+	}
+}
+
 function getState()
 {
     var state = ds_grid_create(global.width, global.height);

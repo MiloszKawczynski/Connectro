@@ -67,6 +67,7 @@ else
             removeDirections();
             removePotential();
             removeTarget();
+            removeHover();
         }
     }
     
@@ -109,10 +110,12 @@ else
                             gameState();
                         }
                         
+                        removeHover();
                         hoveredX = xx;
                         hoveredY = yy;
                         
                         var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
+                        hoverTile.isHovered = true;
                         if (gameState == mustPickTarget and hoverTile.isTargeted)
                         {
                             gameState();

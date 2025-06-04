@@ -29,6 +29,7 @@ function Tile(_type) constructor
 	flash = 0;
 	flashTimer = -1;
 	flashNext = array_create(0);
+    isHovered = false;
 	
 	switch(type)
 	{
@@ -160,6 +161,18 @@ function Tile(_type) constructor
 	
 	static drawButton = function(xx, yy)
 	{
+        var float = 1;
+        var blink = 0;
+            
+        if (isHovered)
+        {
+            float = power(sin(current_time / 500), 2) * 0.25 + 1;
+        }
+        
+        var scale = global.cellSize * float;
+        var xPos = xx * global.cellSize - scale / 2 + global.cellSize / 2;
+        var yPos = yy * global.cellSize + other.gameOffset - scale / 2 + global.cellSize / 2;
+        
 		if (isAvailable)
 		{
             draw_set_color(color);
@@ -167,14 +180,29 @@ function Tile(_type) constructor
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize - 1, yy * global.cellSize + global.cellSize - 1 + other.gameOffset, false);
 			draw_set_alpha(1);
             
-			draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
-			draw_sprite_stretched(s_value, value, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize);
+            if (lineDirection == -1)
+            {
+    			draw_sprite_stretched(s_icon, type, xPos, yPos, scale, scale); 
+			    draw_sprite_stretched(s_value, value, xPos, yPos, scale, scale);
+            }
 		}
 		
 		if (lineDirection != -1)
 		{
+            if (isHovered)
+            {
+                blink = 1;
+            }
+            else 
+            {
+                if (sourceTile.isHovered)
+                {
+                    blink = sin(current_time / 500 - (pi / 2) * lineDirection);
+                }
+            }
+            
             draw_set_color(sourceTile.color);
-			draw_set_alpha(0.25 + (sin(current_time / 500 - (pi / 2) * lineDirection)) * 0.5);
+			draw_set_alpha(0.25 + blink * 0.5);
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
             draw_set_alpha(1);
             
@@ -185,8 +213,7 @@ function Tile(_type) constructor
 				spr = s_arrowDiagonal;
 			}
             
-            draw_sprite_stretched(spr, lineDirection, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
-            draw_sprite_stretched(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
+            draw_sprite_stretched(spr, lineDirection, xPos, yPos, scale, scale); 
 		}
 		
 		if (isTargeted)
@@ -210,9 +237,9 @@ function Tile(_type) constructor
 		}
 	}
 	
-	static drawHover = function(xx, yy, hx, hy)
+	static drawHover = function(xx, yy)
 	{
-		if (hx == xx and hy == yy and isAvailable)
+		if (isHovered and isAvailable)
 		{
 			draw_set_color(c_white);
 			draw_set_alpha(0.25);
