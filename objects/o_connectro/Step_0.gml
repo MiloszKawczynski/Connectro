@@ -108,6 +108,7 @@ else
                         if ((hoveredX == xx and hoveredY == yy))
                         {
                             gameState();
+                            break;
                         }
                         
                         removeHover();

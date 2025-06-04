@@ -78,6 +78,9 @@ function removeHover()
 			tile.isHovered = false;
 		}
 	}
+    
+    hoveredX = -1;
+    hoveredY = -1;
 }
 
 function getState()
@@ -364,6 +367,7 @@ function mustPickDirectionTileEffect(showPotential = false)
 			tile.sourceTile.isAvailable = false;
 		
 			removeDirections();
+            removeHover();
 		}
 		
 		return;
@@ -401,6 +405,7 @@ function mustPickTargetTileEffect(showPotential = false)
 			tile.sourceTile.isAvailable = false;
 			
 			removeTarget();
+            removeHover();
 		}
 		
 		return;
