@@ -1,4 +1,5 @@
-#macro SOLUTION_PRINT_PATH false
+#macro SOLUTION_PRINT_PATH true
+#macro SOLUTION_PRINT_STARS false
 
 function defineTiles()
 {
@@ -405,25 +406,39 @@ function printStackAndClear(stack)
 	}
 }
 
-function checkSolvability()
+enum HeuristicType
 {
-	global.solutionFile = file_text_open_append("solutions.txt");
+	Naive,
+	GetRevealed3,
+}
+
+function checkSolvability(heuristic)
+{
+	if (!SOLUTION_PRINT_STARS)
+	{
+		global.solutionFile = file_text_open_append("solutions.txt");
+	}
 	
 	var aStar = true;
 	global.solveTimeStart = get_timer();
 	
+	var solution = undefined;
+	
 	if (aStar)
 	{
-		runAStar();
+		solution = runAStar(heuristic);
 	}
 	else
 	{
 		runDFS();
 	}
 	
-	file_text_close(global.solutionFile);
+	if (!SOLUTION_PRINT_STARS)
+	{
+		file_text_close(global.solutionFile);
+	}
 	
-	room_restart();	
+	return solution;
 }
 
 function getAvailableOrRevealedCount(tileCount, buffer)
@@ -439,6 +454,51 @@ function getAvailableOrRevealedCount(tileCount, buffer)
 	}
 	
 	return sum;
+}
+
+function solveGame()
+{
+	var gamesToSolve = global.gamesToSolve;
+	var gamesToSolveOriginal = gamesToSolve;
+	
+	var foundNaive = false;
+	var foundRevealed3 = false;
+	
+	var revealed3Solution = checkSolvability(HeuristicType.GetRevealed3);
+	
+	if (global.gamesToSolve != gamesToSolve)
+	{
+		foundRevealed3 = true;
+	}
+	
+	gamesToSolve = global.gamesToSolve;
+	
+	var naiveSolution = checkSolvability(HeuristicType.Naive);
+	
+	if (global.gamesToSolve != gamesToSolve)
+	{
+		foundNaive = true;
+	}
+
+	if (foundNaive && foundRevealed3)
+	{
+		global.gamesToSolve = gamesToSolveOriginal - 1;
+		
+		if (SOLUTION_PRINT_STARS)
+		{
+			global.solutionFile = file_text_open_append("solutions.txt");
+			var msg = revealed3Solution + naiveSolution;
+			file_text_write_string(global.solutionFile, msg);
+			show_debug_message(msg);
+			file_text_close(global.solutionFile);
+		}
+	}
+	else
+	{
+		global.gamesToSolve = gamesToSolveOriginal;
+	}
+
+	room_restart();
 }
 
 function getLinearTileIndex(width, xx, yy)
@@ -667,7 +727,7 @@ function getMostRevealed3(tilesToRevealCount, currentTilesToRevealCount, tilesSo
 	return bestTileLeft;
 }
 
-function runAStar()
+function runAStar(heuristic)
 {
 	var width = global.width;
 	var height = global.height;
@@ -819,32 +879,61 @@ function runAStar()
 		var revealedCount = state.revealedCount;
 		if (revealedCount == tilesToRevealCount)
 		{
-			var msg = "SOLUTION FOUND:\n";
-			msg += string("seed: {0}\n", getSeed());
-			
-			if (SOLUTION_PRINT_PATH)
+			var msg = "";
+			if (!SOLUTION_PRINT_STARS)
 			{
-				for (var i = 0; i < array_length(state.path); i++)
+				msg = "SOLUTION FOUND:\n";
+				msg += string("seed: {0}\n", getSeed());
+			
+				if (SOLUTION_PRINT_PATH)
 				{
-					if (state.path[i] == "Decision")
+					for (var i = 0; i < array_length(state.path); i++)
 					{
-						msg += "  Decision: ";
-						continue;
-					}
+						if (state.path[i] == "Decision")
+						{
+							msg += "  Decision: ";
+							continue;
+						}
 				
-					var step = state.path[i];
-					msg += "  " + string(step.x) + "," + string(step.y) + "\n";
+						var step = state.path[i];
+						msg += "  " + string(step.x) + "," + string(step.y) + "\n";
+					}
 				}
+		
+
+				msg += string("Number of moves {0}\n", state.g);
+				msg += string("time: {0}\n", (get_timer() - global.solveTimeStart) / 60000000);
+				msg += "\n---\n";
+				file_text_write_string(global.solutionFile, msg);
+				show_debug_message(msg);
+			}
+			else
+			{
+				if (heuristic == HeuristicType.Naive)
+				{
+					var star1 = floor((state.g + 10) / 5.0) * 5.0;
+					msg += string("{0}, {1}])),", state.g, star1);
+					
+					
+					msg += "\n---\n";
+				}
+				else if (heuristic == HeuristicType.GetRevealed3)
+				{
+					msg = "SOLUTION FOUND:\n";
+					msg += string("new level(\"{0}\", , , [{1}, ", getSeed(), state.g);
+				}
+				
 			}
 			
-			msg += string("Number of moves {0}\n", state.g);
-			msg += string("time: {0}\n", (get_timer() - global.solveTimeStart) / 60000000);
-			msg += "\n---\n";
-			file_text_write_string(global.solutionFile, msg);
-			show_debug_message(msg);
 			buffer_delete(state.gridState);
 			ds_priority_destroy(queue);
 			global.gamesToSolve--;
+			
+			if (SOLUTION_PRINT_STARS)
+			{
+				return msg;
+			}
+			
 			return;
 		}
 
@@ -934,11 +1023,17 @@ function runAStar()
                     // NOTE: Heuristic that matters
                     
                     // NAIVE
-                    //var h = tilesToRevealCount - newRevealedCount;
-                    
-                    // getMostRevealed3
-                    //var h = ceil((tilesToRevealCount - newRevealedCount) / 24.0) + getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
-
+					var h = 0;
+					
+					if (heuristic == HeuristicType.Naive)
+					{
+						h = tilesToRevealCount - newRevealedCount;
+					}
+					else if (heuristic == HeuristicType.GetRevealed3)
+					{
+						h = ceil((tilesToRevealCount - newRevealedCount) / 24.0) + getMostRevealed3(tilesToRevealCount, tilesToRevealCount - newRevealedCount, tilesSortedByRevealCount, newGridState, tilesRevealedTiles);
+					}
+					
 					var priority = g + h;
 
 					if (SOLUTION_PRINT_PATH)
@@ -1477,17 +1572,17 @@ function generateGame()
         }
     }
 	
-    if (global.isSolverOn)
-    {
-    	if (global.gamesToSolve != 0)
-    	{
-    		checkSolvability();	
-    	}
-    	else 
-    	{
-    		//game_end();
-    	}
-    }
+	if (global.isSolverOn)
+	{
+		if (global.gamesToSolve > 0)
+		{
+			solveGame();
+		}
+		else
+		{
+			//game_end();
+		}
+	}
 }
 
 function getSeed()
