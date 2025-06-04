@@ -168,19 +168,19 @@ with(ui)
     
     mainLayer.addComponent(3.5, 0.5, add);
     
-    mainLayer.addComponent(3.5, 2.5, movesBar);
+    mainLayer.addComponent(3.5, 2.25, movesBar);
     
-    mainLayer.addComponent(3.5, 2.5, firstStarRing);
-    mainLayer.addComponent(3.5, 2.5, secondStarRing);
-    mainLayer.addComponent(3.5, 2.5, thirdStarRing);
+    mainLayer.addComponent(3.5, 2.25, firstStarRing);
+    mainLayer.addComponent(3.5, 2.25, secondStarRing);
+    mainLayer.addComponent(3.5, 2.25, thirdStarRing);
     
-    mainLayer.addComponent(3.5, 2.5, movesToFirstStar);
-    mainLayer.addComponent(3.5, 2.5, movesToSecondStar);
-    mainLayer.addComponent(3.5, 2.5, movesToThirdStar);
+    mainLayer.addComponent(3.5, 2.25, movesToFirstStar);
+    mainLayer.addComponent(3.5, 2.25, movesToSecondStar);
+    mainLayer.addComponent(3.5, 2.25, movesToThirdStar);
     
-    mainLayer.addComponent(1.5, 1.55, firstStar);
-    mainLayer.addComponent(3.5, 1.55, secondStar);
-    mainLayer.addComponent(5.5, 1.55, thirdStar);
+    mainLayer.addComponent(1.5, 1.35, firstStar);
+    mainLayer.addComponent(3.5, 1.35, secondStar);
+    mainLayer.addComponent(5.5, 1.35, thirdStar);
 
     pushLayer(mainLayer);
 }
@@ -194,7 +194,7 @@ device_mouse_dbclick_enable(false);
 
 global.cellSize = room_width / global.width;
 
-gameOffset = camera_get_view_height(view_camera[0]) / 14 * 3.5;
+gameOffset = camera_get_view_height(view_camera[0]) / 14 * 2.9;
 
 grid = ds_grid_create(global.width, global.height);
 
