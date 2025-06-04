@@ -162,31 +162,31 @@ function Tile(_type) constructor
 	{
 		if (isAvailable)
 		{
-			draw_set_color(c_red);
+            draw_set_color(color);
+			draw_set_alpha(0.25);	
+			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize - 1, yy * global.cellSize + global.cellSize - 1 + other.gameOffset, false);
+			draw_set_alpha(1);
+            
 			draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
 			draw_sprite_stretched(s_value, value, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize);
-			
-			draw_set_color(color);
-			draw_set_alpha(0.25);	
-			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
-			draw_set_alpha(1);
 		}
 		
 		if (lineDirection != -1)
 		{
-			draw_set_color(c_red);
+            draw_set_color(sourceTile.color);
+			draw_set_alpha(0.25 + (sin(current_time / 500 - (pi / 2) * lineDirection)) * 0.5);
+			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
+            draw_set_alpha(1);
+            
+            var spr = s_arrowStreight;
+            
 			if (isLineDiag)
 			{
-				draw_sprite_stretched(s_arrowDiagonal, lineDirection, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
+				spr = s_arrowDiagonal;
 			}
-			else 
-			{
-				draw_sprite_stretched(s_arrowStreight, lineDirection, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
-			}
-			draw_sprite_stretched(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
-			draw_set_alpha(0.25 + power(sin(current_time / 500), 2) * 0.25);
-			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
-			draw_set_alpha(1);
+            
+            draw_sprite_stretched(spr, lineDirection, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
+            draw_sprite_stretched(s_value, sourceTile.value, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
 		}
 		
 		if (isTargeted)
