@@ -23,17 +23,17 @@ function initialize()
         
         if (width == height)
         {
-            sprite = s_block1_1;
+            sprite = choose(s_block1_1, s_blockBrick1_1);
         }
         
         if (width == 7 and height == 9)
         {
-            sprite = s_block7_9;
+            sprite = choose(s_blockBrick7_9, s_blockBrick7_9);
         }
         
         if (width == 9 and height == 13)
         {
-            sprite = s_block9_13;
+            sprite = choose(s_block9_13, s_blockBrick9_13);
         }
         
         texture = sprite_get_texture(sprite, 1);

@@ -1,5 +1,5 @@
 draw_clear(c_black);
-var eye = new vector3(15, 100, 90 * INVERT);
+var eye = new vector3(15, 100, 60 * INVERT);
 var target = new vector3(0, 1, 0);
 var forward = normalize(subtract(target, eye))
 var right = normalize(cross(forward, worldUp))
@@ -9,8 +9,9 @@ var view = matrix_build_lookat(
     target.x, target.y, target.z,
     up.x, up.y, up.z,
 );
+var pow = 1;
 var proj = matrix_build_projection_ortho(
-    90, 160,
+    room_width * pow, room_width / global.aspect * pow,
     -100, 1000
 );
 gpu_set_zwriteenable(true);
@@ -26,12 +27,13 @@ vertex_submit(plane, pr_trianglelist, texture);
 var current_view = matrix_get(matrix_view);
 var current_proj = matrix_get(matrix_projection);
 
-var scale = 1.25;
+var scale = 1;
 for (var i = 0; i < array_length(global.levels); i++)
 {
     var lvl = global.levels[i];
-    matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, 15 * scale * INVERT, -90, 0, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
-    vertex_submit(building, pr_trianglelist, global.levels[i].texture);
+    var zz = 10 * lvl.height / lvl.width;
+    matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, zz * INVERT, -90, 45, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
+    vertex_submit(global.levels[i].model, pr_trianglelist, global.levels[i].texture);
 }
 
 matrix_set(matrix_world, matrix_build_identity());
@@ -44,7 +46,7 @@ gpu_set_alphatestenable(false);
 gpu_set_cullmode(cull_noculling);
 
 var proj = matrix_build_projection_ortho(
-    90, -160 * INVERT,
+    room_width * pow, room_width / global.aspect * pow * -INVERT,
     -100, 1000
 );
 
