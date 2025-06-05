@@ -17,8 +17,6 @@ planeScale = planeSize div 300;
 plane = createPlane(90, planeSize - 140 * planeScale);
 texture = sprite_get_texture(s_background, 0);
 
-building = createWall(20);
-
 tilt = 0;
 r = 0;
 

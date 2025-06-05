@@ -16,7 +16,7 @@ function addFace(buffer, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, subimg)
 	addVertex(buffer, x4, y4, z4, 0.2 * subimg, 1);
 }
 
-function createWall(z)
+function createWall(w, h, z)
 {
 	vertex_format_begin();
 	vertex_format_add_position_3d();
@@ -30,7 +30,7 @@ function createWall(z)
 	var size = z;
 	var hsize = size / 2.0;
 		
-	var aspect = global.height / global.width;
+	var aspect = h / w;
 		
 	// Przód kostki
 	addFace(vbuffer,
