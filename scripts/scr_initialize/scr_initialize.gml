@@ -19,7 +19,7 @@ function initialize()
         width = real(splitSeed[0]);
         height = real(splitSeed[1]);
         
-        sprite = undefined;
+        sprite = s_block1_1;
         
         if (width == height)
         {
