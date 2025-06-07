@@ -1,10 +1,10 @@
 camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
 
 scrollPosition = 0;
-scrollFingerPosition = 0;
+scrollFingerPosition = -1010;
 scrollPositionFinal = 0;
 scrollSpeed = 0;
-scrollMin = 0;
+scrollMin = -1010;
 scrollMax = sprite_get_height(s_background) - 100;
 scrollSnap = 0;
 

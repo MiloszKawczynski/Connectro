@@ -58,6 +58,11 @@ else
             var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
             for (var i = 0; i < array_length(global.levels); i++)
             {
+                if (!global.levels[i].hasMural)
+                {
+                    continue;
+                }
+                
                 var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
                 if (lengthToBuilding < lengthToSnap)
                 {
@@ -66,7 +71,7 @@ else
                 }
             }
         }
-        //scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
+        scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
     }
     else 
     {
@@ -84,7 +89,7 @@ scrollPosition += scrollSpeed;
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
-//scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
+scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;
@@ -97,6 +102,11 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
     var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
     for (var i = 0; i < array_length(global.levels); i++)
     {
+        if (!global.levels[i].hasMural)
+        {
+            continue;
+        }
+        
         var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
         if (lengthToBuilding < lengthToSnap)
         {

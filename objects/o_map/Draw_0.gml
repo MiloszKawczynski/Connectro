@@ -67,6 +67,11 @@ var mouseY = mouse_y - room_height / 2;
 
 for (var i = 0; i < array_length(global.levels); i++)
 {
+    if (!global.levels[i].hasMural)
+    {
+        continue;
+    }
+    
     var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
     if (lengthToBuilding < lengthToSnap)
     {
