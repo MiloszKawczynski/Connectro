@@ -140,9 +140,10 @@ for (var i = -2; i <= 2; i++)
     
     draw_text_transformed(xx + 1, yy - 2, string("{0}{1}", movesText, movesToStarText), textScale, textScale, 0);
     
-    if (mouse_check_button_released(mb_left))
+    //if (mouse_check_button_released(mb_left))
+    if (keyboard_check_pressed(vk_f4))
     {
-        if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
+        //if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
         {
             if (i == 0)
             {
