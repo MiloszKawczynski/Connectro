@@ -66,7 +66,7 @@ else
                 }
             }
         }
-        scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
+        //scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
     }
     else 
     {
@@ -84,7 +84,7 @@ scrollPosition += scrollSpeed;
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
-scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
+//scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;

@@ -1,6 +1,6 @@
 draw_clear(c_black);
 var eye = new vector3(15, 100, 60 * INVERT);
-var target = new vector3(0, 1, 0);
+var target = new vector3(0, 0, 0);
 var forward = normalize(subtract(target, eye))
 var right = normalize(cross(forward, worldUp))
 var up = cross(right, forward)
@@ -9,10 +9,11 @@ var view = matrix_build_lookat(
     target.x, target.y, target.z,
     up.x, up.y, up.z,
 );
-var pow = 1;
+
+var pow = 1.2;
 var proj = matrix_build_projection_ortho(
     room_width * pow, room_width / global.aspect * pow,
-    -100, 1000
+    -1000, 1000
 );
 gpu_set_zwriteenable(true);
 gpu_set_ztestenable(true);
@@ -21,8 +22,13 @@ gpu_set_cullmode(cull_clockwise);
 matrix_set(matrix_view, view);
 matrix_set(matrix_projection, proj);
 
+matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, -2 * INVERT, 0, 0, 0, 2, 2, 1 * INVERT));
+vertex_submit(plane, pr_trianglelist, road);
 matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 0, 0, 0, 0, 2, 2, 1 * INVERT));
-vertex_submit(plane, pr_trianglelist, texture);
+vertex_submit(plane, pr_trianglelist, ground);
+matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 2 * INVERT, 0, 0, 0, 2, 2, 1 * INVERT));
+vertex_submit(plane, pr_trianglelist, flowers);
+matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 0, 0, 0, 0, 2, 2, 1 * INVERT));
 
 var current_view = matrix_get(matrix_view);
 var current_proj = matrix_get(matrix_projection);
@@ -31,8 +37,8 @@ var scale = 1;
 for (var i = 0; i < array_length(global.levels); i++)
 {
     var lvl = global.levels[i];
-    var zz = 10 * lvl.height / lvl.width;
-    matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, zz * INVERT, -90, 45, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
+    var zz = 64 / 2 * lvl.height / lvl.width * scale;
+    matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, zz * INVERT, -90, 45 + lvl.rotation, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
     vertex_submit(global.levels[i].model, pr_trianglelist, global.levels[i].texture);
 }
 
@@ -153,8 +159,8 @@ var navigationX = 45 - 20;
 var navigationY = 80 - 20;
 var navigationScale = 0.5;
 var buttonSize = 30;
-draw_sprite_ext(s_arrowStreight, 3, navigationX, navigationY - 20, navigationScale, navigationScale, 0, c_white, 1);
-draw_sprite_ext(s_arrowStreight, 1, navigationX, navigationY, navigationScale, navigationScale, 0, c_white, 1);
+//draw_sprite_ext(s_arrowStreight, 3, navigationX, navigationY - 20, navigationScale, navigationScale, 0, c_white, 1);
+//draw_sprite_ext(s_arrowStreight, 1, navigationX, navigationY, navigationScale, navigationScale, 0, c_white, 1);
 
 if (mouse_check_button_released(mb_left))
 {

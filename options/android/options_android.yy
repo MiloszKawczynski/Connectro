@@ -1,6 +1,14 @@
 {
   "$GMAndroidOptions":"v1",
   "%Name":"Android",
+  "ConfigValues":{
+    "Windows":{
+      "option_android_texture_page":"4096x4096",
+    },
+    "Android":{
+      "option_android_texture_page":"4096x4096",
+    },
+  },
   "name":"Android",
   "option_android_application_tag_inject":"",
   "option_android_arch_arm64":true,

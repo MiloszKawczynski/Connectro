@@ -1,6 +1,11 @@
 {
   "$GMWindowsOptions":"",
   "%Name":"Windows",
+  "ConfigValues":{
+    "Windows":{
+      "option_windows_texture_page":"8192x8192",
+    },
+  },
   "name":"Windows",
   "option_windows_allow_fullscreen_switching":false,
   "option_windows_borderless":false,

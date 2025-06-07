@@ -14,8 +14,10 @@ lastMousePositionPressed = mouse_x;
 planeSize = sprite_get_height(s_background);
 planeScale = planeSize div 300;
 
-plane = createPlane(90, planeSize - 140 * planeScale);
-texture = sprite_get_texture(s_background, 0);
+plane = createPlane(200, 3000);
+road = sprite_get_texture(s_background, 0);
+ground = sprite_get_texture(s_background, 1);
+flowers = sprite_get_texture(s_background, 2);
 
 tilt = 0;
 r = 0;

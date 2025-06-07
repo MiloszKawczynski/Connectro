@@ -9,11 +9,13 @@ function initialize()
     function level(_seed, _x, _y, _movesToStar = [30, 25, 20]) constructor 
     {
         seed = _seed;
-        x = lerp(-45, 45, _x / 5);
-        y = -100 - _y * 15;
+        x = 32 * (_x - 7 / 2);
+        y = (-_y + 47) * 32 - 15;
         stars = 0;
         moves = 999;
         movesToStar = _movesToStar;
+        
+        rotation = choose(0, 90, 180, 270);
         
         splitSeed = string_split(seed, "_");
         width = real(splitSeed[0]);
@@ -38,21 +40,23 @@ function initialize()
         
         texture = sprite_get_texture(sprite, 1);
         
-        model = createWall(width, height, 20);
+        model = createWall(width, height, 64);
     }
     
     global.levels = array_create(0);
     
-    for(var i = 0; i < 100; i+= 2)
+    for(var i = 0; i < 100; i++)
     {
         array_push(global.levels,
-            new level("11_11" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 0, i, [50, 25, 20]),
-            new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 2, i, [50, 25, 20]),
-            new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 4, i, [50, 25, 20]),
+            new level("11_11" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 0, 3 + 10 * i, [50, 25, 20]),
+            new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 2, 5 + 10 * i, [50, 25, 20]),
         
-            new level("11_11" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 1, i + 1, [50, 25, 20]),
-            new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 3, i + 1, [50, 25, 20]),
-            new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, i + 1, [50, 25, 20]),
+            new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, 0 + 10 * i, [50, 25, 20]),
+            new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 7, 2 + 10 * i, [50, 25, 20]),
+        
+            //new level("11_11" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 0, 1, [50, 25, 20]),
+            //new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 3, 1, [50, 25, 20]),
+            //new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, 1, [50, 25, 20]),
         );
     }
     
