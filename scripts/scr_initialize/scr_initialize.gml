@@ -56,33 +56,74 @@ function initialize()
         texture = sprite_get_texture(sprite, 1);
         
         model = createWall(width, height, 64);
+        
+        if (hasMural)
+        {
+            if (string_digits(splitSeed[2]) == "")
+            {
+                seed = splitSeed[2];
+            }
+        }
     }
     
     global.levels = array_create(0);
     
-    for(var i = 0; i < 10; i++)
-    {
-        if (i == 0)
-        {
-            array_push(global.levels,
-            new level("11_11", 0, 3 + 10 * i),
-            new level("9_13", 2, 5 + 10 * i),
-        
-            new level("7_9", 5, 0 + 10 * i),
-            new level("7_9", 7, 2 + 10 * i),
-            );
-        }
-        else 
-        {
-        	array_push(global.levels,
-            new level("11_11", 0, 3 + 10 * i),
-            new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 2, 5 + 10 * i, true, [50, 25, 20]),
-        
-            new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, 0 + 10 * i, true, [50, 25, 20]),
-            new level("7_9", 7, 2 + 10 * i),
-            );
-        }
-    }
+    var i = 0;
+    array_push(global.levels,
+    //i = 0 dek dek dek dek
+        new level("7_9", 5, 0),
+        new level("7_9", 7, 2),
+    
+        new level("11_11", 0, 3),
+        new level("9_13", 2, 5),
+    //i = 1 dek dek test dek
+        new level("9_11_test", 2, 5 + 10, true, [50, 25, 20]),
+        new level("7_9", 7, 2 + 10),
+    
+        new level("11_11", 0, 3 + 10),
+        new level("9_13", 5, 0 + 10),
+    //i = 2 dek wrap cross dek
+        new level("9_11_wrap", 5, 0 + 10 * 2, true, [50, 25, 20]),
+        new level("7_9", 7, 2 + 10 * 2),
+    
+        new level("11_11", 0, 3 + 10 * 2),
+        new level("9_11_cross", 2, 5 + 10 * 2, true, [50, 25, 20]),
+    //i = 3 dek walls last dek
+        new level("9_11_walls", 5, 0 + 10 * 3, true, [50, 25, 20]),
+        new level("7_9", 7, 2 + 10 * 3),
+    
+        new level("11_11", 0, 3 + 10 * 3),
+        new level("9_13_last", 2, 5 + 10 * 3, true, [50, 25, 20]),
+    //i = 4 dek dek dek dek
+        new level("11_11", 0, 3 + 10 * 4),
+        new level("9_13", 2, 5 + 10 * 4),
+    
+        new level("7_9", 5, 0 + 10 * 4),
+        new level("7_9", 7, 2 + 10 * 4),);
+    
+    //for(var i = 0; i < 10; i++)
+    //{
+        //if (i == 0)
+        //{
+            //array_push(global.levels,
+            //new level("11_11", 0, 3 + 10 * i),
+            //new level("9_13", 2, 5 + 10 * i),
+        //
+            //new level("7_9", 5, 0 + 10 * i),
+            //new level("7_9", 7, 2 + 10 * i),
+            //);
+        //}
+        //else 
+        //{
+        	//array_push(global.levels,
+            //new level("11_11", 0, 3 + 10 * i),
+            //new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 2, 5 + 10 * i, true, [50, 25, 20]),
+        //
+            //new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, 0 + 10 * i, true, [50, 25, 20]),
+            //new level("7_9", 7, 2 + 10 * i),
+            //);
+        //}
+    //}
     
     global.choosedLevel = 0;
     

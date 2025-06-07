@@ -1,4 +1,15 @@
-setSeed(global.levels[global.choosedLevel].seed);
+global.width = global.levels[global.choosedLevel].width;
+global.height = global.levels[global.choosedLevel].height;
+
+if (string_digits(global.levels[global.choosedLevel].seed) == "")
+{
+    global.typeOfLoad = 2;
+    global.level = global.levels[global.choosedLevel].seed;
+}
+else 
+{
+	global.typeOfLoad = 0;
+}
 
 event_inherited();
 

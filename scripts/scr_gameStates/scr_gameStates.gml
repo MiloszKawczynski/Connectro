@@ -277,12 +277,14 @@ function saveMap()
     file_text_close(file);
 }
 
-function loadMap()
+function loadMap(lvl = global.level)
 {
-    var file = file_text_open_read(global.level + ".txt");
+    var file = file_text_open_read(lvl + ".txt");
     
     global.width = file_text_read_real(file);
     global.height = file_text_read_real(file);
+    
+    grid = ds_grid_create(global.width, global.height);
     
     editorStartingTileX = file_text_read_real(file);
     editorStartingTileY = file_text_read_real(file);
