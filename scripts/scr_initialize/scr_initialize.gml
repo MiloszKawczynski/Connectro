@@ -48,6 +48,11 @@ function initialize()
             sprite = choose(s_blockBrick7_9, s_blockBrick7_9);
         }
         
+        if (width == 9 and height == 11)
+        {
+            sprite = choose(s_block9_11, s_blockBrick9_11);
+        }
+        
         if (width == 9 and height == 13)
         {
             sprite = choose(s_block9_13, s_blockBrick9_13);
