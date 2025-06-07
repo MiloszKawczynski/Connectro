@@ -8,6 +8,10 @@ if (drawSurface)
 {
 	drawSurface = false;
 	removePotential();
+    
+    var buildingSprite = global.levels[global.choosedLevel].sprite;
+    var spriteWidth = sprite_get_width(buildingSprite);
+    var spriteHeight = sprite_get_height(buildingSprite);
 	
 	if (!surface_exists(muralSurface))
 	{
@@ -27,21 +31,21 @@ if (drawSurface)
 	}
 	
 	surface_reset_target();
-
+    
 	if (!surface_exists(blockSurface))
 	{
-		blockSurface = surface_create(39 * 5, 39);
+		blockSurface = surface_create(spriteWidth, spriteHeight);
 	}
 	
 	surface_set_target(blockSurface);
 	draw_clear_alpha(c_white, 0);
 	
-	draw_surface_stretched(muralSurface, 159, 3, 33, 33);
+	draw_surface_stretched(muralSurface, (global.width + 2) * 3 * 4 + 3, 3, global.width * 3, global.height * 3);
 	draw_sprite(global.levels[global.choosedLevel].sprite, 0, 0, 0);
 	surface_reset_target();
 	
-    surfaceTexture = sprite_get_texture(sprite_create_from_surface(blockSurface, 0, 0, 39 * 5, 39, false, false, 0, 0), 0);
-	front = createWall(global.width, global.height, global.height * global.cellSize);
+    surfaceTexture = sprite_get_texture(sprite_create_from_surface(blockSurface, 0, 0, spriteWidth, spriteHeight, false, false, 0, 0), 0);
+	front = createWall(global.width, global.height, global.width * global.cellSize);
 }
 
 drawState();

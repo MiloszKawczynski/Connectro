@@ -219,8 +219,12 @@ moves = 0;
 drawSurface = false;
 is3DCreated = false;
 
+var buildingSprite = global.levels[global.choosedLevel].sprite;
+var spriteWidth = sprite_get_width(buildingSprite);
+var spriteHeight = sprite_get_height(buildingSprite);
+
 muralSurface = surface_create(global.width * global.cellSize, global.height * global.cellSize);
-blockSurface = surface_create(39 * 5, 39);
+blockSurface = surface_create(spriteWidth, spriteHeight);
 
 buildingRotation = 0;
 buildingFingerRotation = 0;
