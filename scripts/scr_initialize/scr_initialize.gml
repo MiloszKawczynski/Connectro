@@ -82,23 +82,23 @@ function initialize()
         new level("11_11", 0, 3),
         new level("9_13", 2, 5),
     //i = 1 dek dek test dek
-        new level("9_11_test", 2, 5 + 10, true, [50, 25, 20]),
+        new level("9_11_test", 2, 5 + 10, true, [20, 15, 11]),
         new level("7_9", 7, 2 + 10),
     
         new level("11_11", 0, 3 + 10),
         new level("9_13", 5, 0 + 10),
     //i = 2 dek wrap cross dek
-        new level("9_11_wrap", 5, 0 + 10 * 2, true, [50, 25, 20]),
+        new level("9_11_wrap", 5, 0 + 10 * 2, true, [20, 15, 12]),
         new level("7_9", 7, 2 + 10 * 2),
     
         new level("11_11", 0, 3 + 10 * 2),
-        new level("9_11_cross", 2, 5 + 10 * 2, true, [50, 25, 20]),
+        new level("9_11_cross", 2, 5 + 10 * 2, true, [20, 15, 13]),
     //i = 3 dek walls last dek
-        new level("9_11_walls", 5, 0 + 10 * 3, true, [50, 25, 20]),
+        new level("9_11_walls", 5, 0 + 10 * 3, true, [20, 15, 12]),
         new level("7_9", 7, 2 + 10 * 3),
     
         new level("11_11", 0, 3 + 10 * 3),
-        new level("9_13_last", 2, 5 + 10 * 3, true, [50, 25, 20]),
+        new level("9_13_last", 2, 5 + 10 * 3, true, [25, 20, 17]),
     //i = 4 dek dek dek dek
         new level("11_11", 0, 3 + 10 * 4),
         new level("9_13", 2, 5 + 10 * 4),
