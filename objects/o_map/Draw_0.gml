@@ -51,6 +51,8 @@ gpu_set_ztestenable(false);
 gpu_set_alphatestenable(false);
 gpu_set_cullmode(cull_noculling);
 
+pow = 1;
+
 var proj = matrix_build_projection_ortho(
     room_width * pow, room_width / global.aspect * pow * -INVERT,
     -100, 1000
@@ -62,8 +64,11 @@ var negSrollPosition = -scrollPositionFinal;
 var closestBuilding = 0;            
 var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 
-var mouseX = mouse_x - room_width / 2;
-var mouseY = mouse_y - room_height / 2;
+//var mouseX = mouse_x - (room_width * pow) / 2;
+//var mouseY = mouse_y - (room_width / global.aspect * pow * -INVERT) / 2;
+
+var mouseX = mouse_x - (room_width * pow) / 2;
+var mouseY = mouse_y - (room_width / global.aspect * pow) / 2;
 
 for (var i = 0; i < array_length(global.levels); i++)
 {
@@ -89,15 +94,22 @@ for (var i = -2; i <= 2; i++)
     
     var buildingUIId = closestBuilding + i;
     
-    var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_x(global.levels[buildingUIId].x, 354);
-    var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, 257) * 0.66 + lengthdir_y(global.levels[buildingUIId].x, 354) - 40;
+    //var screen_pos = world_to_screen(global.levels[buildingUIId].x, global.levels[buildingUIId].y, 20, view, proj);
+    //var xx = room_width - screen_pos[0];
+    //var yy = screen_pos[1];
+    
+    //var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, 257) + lengthdir_x(global.levels[buildingUIId].x, 354);
+    //var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, 257) + lengthdir_y(global.levels[buildingUIId].x, 354) - 40;
+    
+    var xx = global.levels[buildingUIId].x * 1.2;
+    var yy = (global.levels[buildingUIId].y + scrollPositionFinal - 70) * 1.2;
     
     var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + global.levels[buildingUIId].y) / 90), 0, 1);
     
-    var width = lerp(12, 12, lerpDistanceValue);
-    var height = lerp(4, 8, lerpDistanceValue);
-    var starsHeight = lerp(1, 4, lerpDistanceValue);
-    var textScale = lerp(0, 0.6, lerpDistanceValue);
+    var width = lerp(24, 24, lerpDistanceValue);
+    var height = lerp(8, 16, lerpDistanceValue);
+    var starsHeight = lerp(2, 8, lerpDistanceValue);
+    var textScale = lerp(0, 1.2, lerpDistanceValue);
     var pinTail = lerp(height * 2, height, lerpDistanceValue);
     
     draw_set_color(c_white);
@@ -140,10 +152,9 @@ for (var i = -2; i <= 2; i++)
     
     draw_text_transformed(xx + 1, yy - 2, string("{0}{1}", movesText, movesToStarText), textScale, textScale, 0);
     
-    //if (mouse_check_button_released(mb_left))
-    if (keyboard_check_pressed(vk_f4))
+    if (mouse_check_button_released(mb_left))
     {
-        //if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
+        if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
         {
             if (i == 0)
             {
@@ -168,37 +179,37 @@ var buttonSize = 30;
 //draw_sprite_ext(s_arrowStreight, 3, navigationX, navigationY - 20, navigationScale, navigationScale, 0, c_white, 1);
 //draw_sprite_ext(s_arrowStreight, 1, navigationX, navigationY, navigationScale, navigationScale, 0, c_white, 1);
 
-if (mouse_check_button_released(mb_left))
-{
-    if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY - 20, navigationX + buttonSize * navigationScale, navigationY - 20 + buttonSize * navigationScale))
-    {
-        show_debug_message(scrollSnap);
-        for (var i = 0; i < array_length(bioms); i++)
-        {
-            if (bioms[i] > scrollSnap)
-            {
-                scrollSpeed = 0;
-                scrollFingerPosition = 0;
-                scrollSnap = bioms[i];
-                break;
-            }
-        }
-        show_debug_message(scrollSnap);
-    }
-    
-    if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY, navigationX + buttonSize * navigationScale, navigationY + buttonSize * navigationScale))
-    {
-        show_debug_message(scrollSnap);
-        for (var i = array_length(bioms) - 1; i >= 0; i--)
-        {
-            if (bioms[i] < scrollSnap)
-            {
-                scrollSpeed = 0;
-                scrollFingerPosition = 0;
-                scrollSnap = bioms[i];
-                break;
-            }
-        }
-        show_debug_message(scrollSnap);
-    }
-}
+//if (mouse_check_button_released(mb_left))
+//{
+    //if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY - 20, navigationX + buttonSize * navigationScale, navigationY - 20 + buttonSize * navigationScale))
+    //{
+        //show_debug_message(scrollSnap);
+        //for (var i = 0; i < array_length(bioms); i++)
+        //{
+            //if (bioms[i] > scrollSnap)
+            //{
+                //scrollSpeed = 0;
+                //scrollFingerPosition = 0;
+                //scrollSnap = bioms[i];
+                //break;
+            //}
+        //}
+        //show_debug_message(scrollSnap);
+    //}
+    //
+    //if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY, navigationX + buttonSize * navigationScale, navigationY + buttonSize * navigationScale))
+    //{
+        //show_debug_message(scrollSnap);
+        //for (var i = array_length(bioms) - 1; i >= 0; i--)
+        //{
+            //if (bioms[i] < scrollSnap)
+            //{
+                //scrollSpeed = 0;
+                //scrollFingerPosition = 0;
+                //scrollSnap = bioms[i];
+                //break;
+            //}
+        //}
+        //show_debug_message(scrollSnap);
+    //}
+//}
