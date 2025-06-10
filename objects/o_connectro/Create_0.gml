@@ -24,7 +24,17 @@ with(ui)
     
     var goBackFunction = function()
 	{
-		room_goto(r_map);
+        with(o_connectro)
+        {
+            if (gameState == gameEnd)
+            {
+                gameState();
+            }
+            else 
+            {
+            	room_goto(r_map);
+            }
+        }
 	}
     
     goBackButton = new Button(goBackFunction);

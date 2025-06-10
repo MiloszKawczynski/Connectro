@@ -128,12 +128,20 @@ else
     }
 }
 
-if (isAllRevealed() and gameState == normal)
+if (isAllRevealed())
 {
-	drawSurface = true;
-	gameState = gameEnd;
-	drawState = endScreenTransitionDraw;
-	audio_play_sound(sn_score, 0, true);
+    if (gameState == gameEnd)
+    {
+        //gameState();
+    }
+    
+    if (gameState == normal)
+    {
+    	drawSurface = true;
+    	gameState = gameEnd;
+    	drawState = endScreenTransitionDraw;
+    	audio_play_sound(sn_score, 0, true);
+    }
 }
 
 if (keyboard_check_pressed(ord("R")))
