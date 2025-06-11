@@ -64,9 +64,6 @@ var negSrollPosition = -scrollPositionFinal;
 var closestBuilding = 0;            
 var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 
-//var mouseX = mouse_x - (room_width * pow) / 2;
-//var mouseY = mouse_y - (room_width / global.aspect * pow * -INVERT) / 2;
-
 var mouseX = mouse_x - (room_width * pow) / 2;
 var mouseY = mouse_y - (room_width / global.aspect * pow) / 2;
 
@@ -85,24 +82,39 @@ for (var i = 0; i < array_length(global.levels); i++)
     }
 }
 
-for (var i = -2; i <= 2; i++)
+for (var i = -5; i <= 5; i++)
 {
     if (closestBuilding + i < 0 or closestBuilding + i >= array_length(global.levels))
     {
         continue;
     }
     
-    var buildingUIId = closestBuilding + i;
+    var hm = i;
     
-    //var screen_pos = world_to_screen(global.levels[buildingUIId].x, global.levels[buildingUIId].y, 20, view, proj);
-    //var xx = room_width - screen_pos[0];
-    //var yy = screen_pos[1];
+    while (!global.levels[closestBuilding + hm].hasMural)
+    {
+        hm += sign(hm);
+        
+        if (closestBuilding + hm < 0 || closestBuilding + hm >= array_length(global.levels))
+        {
+            break;
+        }
+    }
+
+    if (closestBuilding + hm < 0 || closestBuilding + hm >= array_length(global.levels))
+    {
+        continue;
+    }
     
-    //var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, 257) + lengthdir_x(global.levels[buildingUIId].x, 354);
-    //var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, 257) + lengthdir_y(global.levels[buildingUIId].x, 354) - 40;
+    var buildingUIId = closestBuilding + hm;
     
-    var xx = global.levels[buildingUIId].x * 1.2;
-    var yy = (global.levels[buildingUIId].y + scrollPositionFinal - 70) * 1.2;
+    var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, -105) + lengthdir_x(global.levels[buildingUIId].x, 0) * 1.7;
+    var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, -60) + lengthdir_y(global.levels[buildingUIId].x, 0);
+    
+    xx *= 0.5;
+    yy *= 0.5;
+    
+    yy -= 70;
     
     var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + global.levels[buildingUIId].y) / 90), 0, 1);
     
@@ -118,45 +130,25 @@ for (var i = -2; i <= 2; i++)
     draw_triangle(xx - 4, yy + height, xx + 4, yy + height, xx, yy + pinTail, false);
     draw_roundrect(xx - width, yy - height, xx + width, yy + height, false);
     
-    for (var s = -1; s <= 1; s++)
+    if (global.levels[buildingUIId].stars != 0)
     {
-        draw_sprite(s_star, s + 1 < global.levels[buildingUIId].stars, xx + s * 7 + 0.5, yy + starsHeight);
-    }
-    
-    draw_set_color(c_black);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    
-    var movesText = global.levels[buildingUIId].moves;
-    if (global.levels[buildingUIId].moves = 999)
-    {
-        movesText = "-"
-    }
-    
-    var movesToStarIndex = 0;
-    var movesToStarText = string("/{0}", global.levels[buildingUIId].movesToStar[movesToStarIndex]);
-    
-    while(global.levels[buildingUIId].movesToStar[movesToStarIndex] > global.levels[buildingUIId].moves)
-    {
-        movesToStarIndex++;
-        if (movesToStarIndex >= 3)
+        for (var s = -1; s <= 1; s++)
         {
-            movesToStarText = "";
-            break;
+            draw_sprite_ext(s_star, s + 1 < global.levels[buildingUIId].stars, xx + s * 14 + 0.5, yy + starsHeight, 2, 2, 0, c_white, 1);
         }
-        else 
-        {
-        	movesToStarText = string("/{0}", global.levels[buildingUIId].movesToStar[movesToStarIndex]);
-        }
+        
+        draw_set_color(c_black);
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+            
+        draw_text_transformed(xx + 2, yy - 4, string(global.levels[buildingUIId].moves), textScale, textScale, 0);
     }
-    
-    draw_text_transformed(xx + 1, yy - 2, string("{0}{1}", movesText, movesToStarText), textScale, textScale, 0);
     
     if (mouse_check_button_released(mb_left))
     {
         if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
         {
-            if (i == 0)
+            if (hm == 0)
             {
                 global.choosedLevel = buildingUIId;
                 
@@ -171,45 +163,3 @@ for (var i = -2; i <= 2; i++)
         }
     }
 }
-
-var navigationX = 45 - 20;
-var navigationY = 80 - 20;
-var navigationScale = 0.5;
-var buttonSize = 30;
-//draw_sprite_ext(s_arrowStreight, 3, navigationX, navigationY - 20, navigationScale, navigationScale, 0, c_white, 1);
-//draw_sprite_ext(s_arrowStreight, 1, navigationX, navigationY, navigationScale, navigationScale, 0, c_white, 1);
-
-//if (mouse_check_button_released(mb_left))
-//{
-    //if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY - 20, navigationX + buttonSize * navigationScale, navigationY - 20 + buttonSize * navigationScale))
-    //{
-        //show_debug_message(scrollSnap);
-        //for (var i = 0; i < array_length(bioms); i++)
-        //{
-            //if (bioms[i] > scrollSnap)
-            //{
-                //scrollSpeed = 0;
-                //scrollFingerPosition = 0;
-                //scrollSnap = bioms[i];
-                //break;
-            //}
-        //}
-        //show_debug_message(scrollSnap);
-    //}
-    //
-    //if (point_in_rectangle(mouseX, mouseY, navigationX, navigationY, navigationX + buttonSize * navigationScale, navigationY + buttonSize * navigationScale))
-    //{
-        //show_debug_message(scrollSnap);
-        //for (var i = array_length(bioms) - 1; i >= 0; i--)
-        //{
-            //if (bioms[i] < scrollSnap)
-            //{
-                //scrollSpeed = 0;
-                //scrollFingerPosition = 0;
-                //scrollSnap = bioms[i];
-                //break;
-            //}
-        //}
-        //show_debug_message(scrollSnap);
-    //}
-//}

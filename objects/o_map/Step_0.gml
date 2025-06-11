@@ -29,7 +29,7 @@ if (keyboard_check_pressed(vk_lcontrol))
 
 if (keyboard_check_pressed(ord("P")))
 {
-    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", global.levels[scrollSnap].x, global.levels[scrollSnap].y, z, r, scrollPositionFinal));
+    show_debug_message(string("x: {0}, y: {1}, z: {2}, r: {3}, s: {4}", x, y, z, r, scrollPositionFinal));
 }
 
 if (mouse_check_button_pressed(mb_left))
