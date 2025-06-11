@@ -82,6 +82,7 @@
   },
   "name":"Connectro",
   "resources":[
+    {"id":{"name":"ac_buildingShout","path":"animcurves/ac_buildingShout/ac_buildingShout.yy",},},
     {"id":{"name":"ac_loseStar","path":"animcurves/ac_loseStar/ac_loseStar.yy",},},
     {"id":{"name":"ac_start","path":"animcurves/ac_start/ac_start.yy",},},
     {"id":{"name":"atac_hearth","path":"animcurves/atac_hearth/atac_hearth.yy",},},
@@ -197,6 +198,7 @@
     {"id":{"name":"s_blockBrick9_11","path":"sprites/s_blockBrick9_11/s_blockBrick9_11.yy",},},
     {"id":{"name":"s_blockBrick9_13","path":"sprites/s_blockBrick9_13/s_blockBrick9_13.yy",},},
     {"id":{"name":"s_icon","path":"sprites/s_icon/s_icon.yy",},},
+    {"id":{"name":"s_playButton","path":"sprites/s_playButton/s_playButton.yy",},},
     {"id":{"name":"s_star","path":"sprites/s_star/s_star.yy",},},
     {"id":{"name":"s_target","path":"sprites/s_target/s_target.yy",},},
     {"id":{"name":"s_uiAdd","path":"sprites/s_uiAdd/s_uiAdd.yy",},},

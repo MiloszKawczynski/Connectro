@@ -15,6 +15,7 @@ function initialize()
         moves = 999;
         movesToStar = _movesToStar;
         hasMural = _hasMural;
+        shoutRotation = 0;
         
         if (hasMural)
         {

@@ -116,16 +116,18 @@ for (var i = -5; i <= 5; i++)
     
     yy -= 70;
     
+    var shoutScale = animcurve_get_point(ac_buildingShout, 0, buildingShout);
     var lerpDistanceValue = clamp(1 - (abs(scrollPositionFinal + global.levels[buildingUIId].y) / 90), 0, 1);
     
-    var width = lerp(24, 24, lerpDistanceValue);
-    var height = lerp(8, 16, lerpDistanceValue);
-    var starsHeight = lerp(2, 8, lerpDistanceValue);
+    var width = lerp(35, 24, lerpDistanceValue);
+    var height = lerp(12, 16, lerpDistanceValue);
+    var starsHeight = lerp(0, 6, lerpDistanceValue);
     var textScale = lerp(0, 1.2, lerpDistanceValue);
     var pinTail = lerp(height * 2, height, lerpDistanceValue);
+    var spike = lerp(shoutScale, 0, lerpDistanceValue);
     
-    draw_set_color(c_white);
     draw_set_alpha(1);
+    draw_set_color(c_white);
     
     draw_triangle(xx - 4, yy + height, xx + 4, yy + height, xx, yy + pinTail, false);
     draw_roundrect(xx - width, yy - height, xx + width, yy + height, false);
@@ -142,6 +144,27 @@ for (var i = -5; i <= 5; i++)
         draw_set_valign(fa_middle);
             
         draw_text_transformed(xx + 2, yy - 4, string(global.levels[buildingUIId].moves), textScale, textScale, 0);
+    }
+    else 
+    {
+        draw_set_color(c_black);
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        draw_set_font(f_base);
+        
+        global.levels[buildingUIId].shoutRotation = lerp(global.levels[buildingUIId].shoutRotation, 0, 0.02);
+        
+        if (shoutScale == 1)
+        {
+            global.levels[buildingUIId].shoutRotation = random_range(-15, 15);
+        }
+        
+        var paintMeScale = (1 - textScale) * shoutScale;
+        if (textScale < 0.1)
+        {
+            draw_text_transformed(xx + 2, yy + 1, string("Paint Me!"), paintMeScale, paintMeScale, global.levels[buildingUIId].shoutRotation);
+        }
+        draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale, textScale, 0, c_white, 1);
     }
     
     if (mouse_check_button_released(mb_left))

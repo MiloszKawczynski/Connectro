@@ -54,3 +54,5 @@ function normalize(a)
 }
 
 z = 0;
+
+buildingShout = 0;

@@ -115,3 +115,5 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
         }
     }
 }
+
+buildingShout = timer(buildingShout, 0.02);
