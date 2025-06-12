@@ -84,6 +84,56 @@ function Tile(_type) constructor
 			break;
 		}
 	}
+    
+    setColorFromType();
+    
+    static setColorFromType = function()
+    { 
+        switch(type)
+    	{
+    		case(TilesTypes.plus):
+    		{
+    			color = make_color_rgb(115, 74, 219);
+    			break;
+    		}
+    		
+    		case(TilesTypes.cross):
+    		{
+    			color = make_color_rgb(136, 203, 237);
+    			break;
+    		}
+    		
+    		case(TilesTypes.diamond):
+    		{
+    			color = make_color_rgb(222, 98, 172);
+    			break;
+    		}
+    		
+    		case(TilesTypes.line):
+    		{
+    			color = make_color_rgb(255, 205, 17);
+    			break;
+    		}
+    		
+    		case(TilesTypes.lineDiag):
+    		{
+    			color = make_color_rgb(191, 245, 56);
+    			break;
+    		}
+    		
+    		case(TilesTypes.target):
+    		{
+    			color = make_color_rgb(255, 0, 0);
+    			break;
+    		}
+    		
+    		case(TilesTypes.block):
+    		{
+    			color = c_black;
+    			break;
+    		}
+    	}
+    }
 	
 	static drawColor = function(xx, yy) 
 	{

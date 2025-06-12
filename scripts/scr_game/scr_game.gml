@@ -461,6 +461,7 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = fa
 					else 
 					{
 						isAvailable = true;
+                        setColorFromType();
 					}
 				}
 			}
