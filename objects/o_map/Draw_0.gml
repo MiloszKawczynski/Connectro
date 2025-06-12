@@ -1,3 +1,34 @@
+if (createBariarSurface)
+{
+    createBariarSurface = false;
+    
+    var surf = surface_create(200, 64);
+    surface_set_target(surf);
+    draw_clear_alpha(c_white, 0);
+    draw_set_color(c_white);
+    draw_set_alpha(1);
+    
+    draw_sprite(s_barier, 0, 0, 0);
+    draw_set_font(f_game);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_middle);
+    
+    font_enable_effects(f_game, true, 
+    {
+        outlineEnable: true,
+        outlineDistance: 4,
+        outlineColour: c_black
+    });
+    
+    draw_text_transformed(95, 36, global.bioms[activeBarier].limit, 0.75, 0.75, 0);
+    surface_reset_target();
+    
+    star = sprite_get_texture(sprite_create_from_surface(surf, 0, 0, 200, 64, false, false, 0, 0), 0);
+}
+
+var pow = 1.2;
+var positionOnMap = scrollPositionFinal + 1010 + room_width / global.aspect * pow;
+
 draw_clear(c_black);
 var eye = new vector3(15, 100, 60 * INVERT);
 var target = new vector3(0, 0, 0);
@@ -10,7 +41,6 @@ var view = matrix_build_lookat(
     up.x, up.y, up.z,
 );
 
-var pow = 1.2;
 var proj = matrix_build_projection_ortho(
     room_width * pow, room_width / global.aspect * pow,
     -1000, 1000
@@ -28,6 +58,11 @@ matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 6
 vertex_submit(plane, pr_trianglelist, ground);
 matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 2 * INVERT, 0, 0, 0, 2, 2, 1 * INVERT));
 vertex_submit(plane, pr_trianglelist, flowers);
+if (activeBarier != -1)
+{
+    matrix_set(matrix_world, matrix_build(0, positionOnMap - global.bioms[activeBarier].y, 32 * INVERT, 90, 0, 0, 2, 2, 1 * INVERT));
+    vertex_submit(starBarier, pr_trianglelist, star);
+}
 matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 0, 0, 0, 0, 2, 2, 1 * INVERT));
 
 var current_view = matrix_get(matrix_view);
@@ -189,17 +224,6 @@ for (var i = -5; i <= 5; i++)
             }
         }
     }
-}
-
-var gainedStars = 0;
-for (var i = 0; i < array_length(global.levels); i++)
-{
-    if (!global.levels[i].hasMural)
-    {
-        continue;
-    }
-    
-    gainedStars += global.levels[i].stars;
 }
 
 draw_sprite_ext(s_uiBigStarGold, 0, -viewWidth / 2 + 20, -viewHeight / 2 + 20, 2, 2, 0, c_white, 1);

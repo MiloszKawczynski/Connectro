@@ -72,7 +72,14 @@ function initialize()
         }
     }
     
+    function biom(_y, _limit) constructor 
+    {
+        y = _y * 2 - 13
+        limit = _limit;
+    }
+    
     global.levels = array_create(0);
+    global.bioms = array_create(0);
     
     var i = 0;
     array_push(global.levels,
@@ -107,29 +114,10 @@ function initialize()
         new level("7_9", 5, 0 + 10 * 4),
         new level("7_9", 7, 2 + 10 * 4),);
     
-    //for(var i = 0; i < 10; i++)
-    //{
-        //if (i == 0)
-        //{
-            //array_push(global.levels,
-            //new level("11_11", 0, 3 + 10 * i),
-            //new level("9_13", 2, 5 + 10 * i),
-        //
-            //new level("7_9", 5, 0 + 10 * i),
-            //new level("7_9", 7, 2 + 10 * i),
-            //);
-        //}
-        //else 
-        //{
-        	//array_push(global.levels,
-            //new level("11_11", 0, 3 + 10 * i),
-            //new level("9_13" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 2, 5 + 10 * i, true, [50, 25, 20]),
-        //
-            //new level("7_9" + "_2_4_2_2_2_1_1_" + string(irandom(999999999)), 5, 0 + 10 * i, true, [50, 25, 20]),
-            //new level("7_9", 7, 2 + 10 * i),
-            //);
-        //}
-    //}
+    array_push(global.bioms, 
+    new biom(904, 12),
+    new biom(904 * 2, 40),
+    )
     
     global.choosedLevel = 0;
     

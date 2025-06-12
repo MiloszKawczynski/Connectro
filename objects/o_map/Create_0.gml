@@ -5,8 +5,9 @@ scrollFingerPosition = -1010;
 scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = -1010;
-scrollMax = sprite_get_height(s_background) - 100;
 scrollSnap = 0;
+
+isSnapInRange = false;
 
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
@@ -15,9 +16,12 @@ planeSize = sprite_get_height(s_background);
 planeScale = planeSize div 300;
 
 plane = createPlane(200, 3000);
+starBarier = createPlane(200, 64);
 road = sprite_get_texture(s_background, 0);
 ground = sprite_get_texture(s_background, 1);
 flowers = sprite_get_texture(s_background, 2);
+
+createBariarSurface = true;
 
 tilt = 0;
 r = 0;
@@ -56,3 +60,26 @@ function normalize(a)
 z = 0;
 
 buildingShout = 0;
+
+gainedStars = 0;
+for (var i = 0; i < array_length(global.levels); i++)
+{
+    if (!global.levels[i].hasMural)
+    {
+        continue;
+    }
+    
+    gainedStars += global.levels[i].stars;
+}
+
+activeBarier = -1;
+for (var i = 0; i < array_length(global.bioms); i++)
+{
+    if (global.bioms[i].limit > gainedStars)
+    {
+        activeBarier = i;
+        break;
+    }
+}
+
+scrollMax = global.bioms[activeBarier].y - 1010 * 1.5

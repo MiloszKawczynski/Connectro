@@ -47,6 +47,7 @@ else
 {
     if (abs(scrollSpeed) < 1)
     {
+        isSnapInRange = false;
         if (scrollFingerPosition != 0 or scrollSpeed != 0)
         {
             scrollPosition += scrollFingerPosition;
@@ -56,6 +57,7 @@ else
             var negSrollPosition = -scrollPosition;
             
             var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
+            
             for (var i = 0; i < array_length(global.levels); i++)
             {
                 if (!global.levels[i].hasMural)
@@ -71,7 +73,16 @@ else
                 }
             }
         }
-        scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
+        
+        if (abs(scrollPosition - -global.levels[scrollSnap].y) < 300)
+        {
+            isSnapInRange = true;
+        }
+        
+        if (isSnapInRange)
+        {
+            scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
+        }
     }
     else 
     {
@@ -89,7 +100,15 @@ scrollPosition += scrollSpeed;
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
-scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
+if (activeBarier == -1)
+{
+    scrollPositionFinal = max(scrollPositionFinal, scrollMin);
+}
+else 
+{
+	scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
+}
+
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;

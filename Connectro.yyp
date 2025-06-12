@@ -190,6 +190,7 @@
     {"id":{"name":"s_arrowDiagonal","path":"sprites/s_arrowDiagonal/s_arrowDiagonal.yy",},},
     {"id":{"name":"s_arrowStreight","path":"sprites/s_arrowStreight/s_arrowStreight.yy",},},
     {"id":{"name":"s_background","path":"sprites/s_background/s_background.yy",},},
+    {"id":{"name":"s_barier","path":"sprites/s_barier/s_barier.yy",},},
     {"id":{"name":"s_black","path":"sprites/s_black/s_black.yy",},},
     {"id":{"name":"s_block1_1","path":"sprites/s_block1_1/s_block1_1.yy",},},
     {"id":{"name":"s_block7_9","path":"sprites/s_block7_9/s_block7_9.yy",},},
