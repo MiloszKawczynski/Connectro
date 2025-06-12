@@ -7,6 +7,8 @@
     },
     "Android":{
       "option_android_texture_page":"4096x4096",
+      "option_android_orient_landscape_flipped":"false",
+      "option_android_orient_landscape":"false",
     },
   },
   "name":"Android",
