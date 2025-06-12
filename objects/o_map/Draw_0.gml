@@ -53,8 +53,11 @@ gpu_set_cullmode(cull_noculling);
 
 pow = 1;
 
+var viewWidth = (room_width * pow)
+var viewHeight = (room_width / global.aspect * pow)
+
 var proj = matrix_build_projection_ortho(
-    room_width * pow, room_width / global.aspect * pow * -INVERT,
+    viewWidth, viewHeight * -INVERT,
     -100, 1000
 );
 
@@ -64,8 +67,8 @@ var negSrollPosition = -scrollPositionFinal;
 var closestBuilding = 0;            
 var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 
-var mouseX = mouse_x - (room_width * pow) / 2;
-var mouseY = mouse_y - (room_width / global.aspect * pow) / 2;
+var mouseX = mouse_x - viewWidth / 2;
+var mouseY = mouse_y - viewHeight / 2;
 
 for (var i = 0; i < array_length(global.levels); i++)
 {
@@ -142,6 +145,7 @@ for (var i = -5; i <= 5; i++)
         draw_set_color(c_black);
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
+        draw_set_font(f_base);
             
         draw_text_transformed(xx + 2, yy - 4, string(global.levels[buildingUIId].moves), textScale, textScale, 0);
     }
@@ -186,3 +190,29 @@ for (var i = -5; i <= 5; i++)
         }
     }
 }
+
+var gainedStars = 0;
+for (var i = 0; i < array_length(global.levels); i++)
+{
+    if (!global.levels[i].hasMural)
+    {
+        continue;
+    }
+    
+    gainedStars += global.levels[i].stars;
+}
+
+draw_sprite_ext(s_uiBigStarGold, 0, -viewWidth / 2 + 20, -viewHeight / 2 + 20, 2, 2, 0, c_white, 1);
+draw_set_color(c_white);
+draw_set_alpha(1);
+draw_set_font(f_game);
+draw_set_halign(fa_left);
+draw_set_valign(fa_middle);
+
+font_enable_effects(f_game, true, 
+{
+    outlineEnable: true,
+    outlineDistance: 4,
+    outlineColour: c_black
+});
+draw_text_transformed(-viewWidth / 2 + 40, -viewHeight / 2 + 25, gainedStars, 0.4, 0.4, 0);

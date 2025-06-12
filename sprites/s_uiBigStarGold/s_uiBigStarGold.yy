@@ -15,7 +15,7 @@
   },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
-  "For3D":false,
+  "For3D":true,
   "frames":[
     {"$GMSpriteFrame":"","%Name":"87a99094-650f-487b-a595-57c515c54822","name":"87a99094-650f-487b-a595-57c515c54822","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
