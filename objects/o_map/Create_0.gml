@@ -2,10 +2,7 @@ camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect)
 
 longPress = 0;
 scrollPosition = 0;
-if (!variable_global_exists("scrollFingerPosition"))
-{
-    global.scrollFingerPosition = -1010;
-}
+scrollFingerPosition = global.positionOnMap;
 scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = -1010;

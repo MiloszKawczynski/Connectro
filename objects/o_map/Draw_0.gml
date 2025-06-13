@@ -203,8 +203,10 @@ for (var i = 5; i >= -5; i--)
         {
             if (buildingUIId == pressedID)
             {
-                if (hm == 0 and (abs(scrollPositionFinal - -global.levels[buildingUIId].y) < 300))
+                if (hm == 0)
                 {
+                    global.positionOnMap = scrollPositionFinal;
+                    
                     global.choosedLevel = buildingUIId;
                     
                     room_goto(r_game);
@@ -214,9 +216,9 @@ for (var i = 5; i >= -5; i--)
                     isSnapping = true;
                     scrollSnap = buildingUIId;
                     
-                    scrollPosition += global.scrollFingerPosition;
+                    scrollPosition += scrollFingerPosition;
                     scrollSpeed = 0;
-                    global.scrollFingerPosition = 0;
+                    scrollFingerPosition = 0;
                 }
             }
         }

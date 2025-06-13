@@ -160,6 +160,7 @@ function initialize()
     global.choosedLevel = 0;
     
     global.aspect = 9 / 20;
+    global.positionOnMap = -1010;
     
     if (MOBILE)
     {

@@ -13,10 +13,10 @@ if (longPress >= 4)
 {
     if (longPress == 4)
     {
-        lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
+        lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
     }
     
-    global.scrollFingerPosition = mouse_y - lastMousePositionPressed;
+    scrollFingerPosition = mouse_y - lastMousePositionPressed;
     scrollSpeed = 0;
     scrollPosition = 0;
     isSnapping = false;
@@ -46,11 +46,11 @@ else
     if (checkForSnap)
     {
         checkForSnap = false;
-        if (global.scrollFingerPosition != 0 or scrollSpeed != 0)
+        if (scrollFingerPosition != 0 or scrollSpeed != 0)
         {
-            scrollPosition += global.scrollFingerPosition;
+            scrollPosition += scrollFingerPosition;
             scrollSpeed = 0;
-            global.scrollFingerPosition = 0;
+            scrollFingerPosition = 0;
             
             var negSrollPosition = -scrollPosition;
             
@@ -94,7 +94,7 @@ scrollPosition += scrollSpeed;
 
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
-scrollPositionFinal = scrollPosition + global.scrollFingerPosition;
+scrollPositionFinal = scrollPosition + scrollFingerPosition;
 
 if (activeBarier == -1)
 {
@@ -108,9 +108,9 @@ else
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;
-    global.scrollFingerPosition = 0;
+    scrollFingerPosition = 0;
     scrollPosition = scrollPositionFinal;
-    lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
+    lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
     
     checkForSnap = true;
 }
