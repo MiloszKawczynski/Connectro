@@ -125,6 +125,13 @@ for (var i = 5; i >= -5; i--)
     
     var buildingUIId = closestBuilding + hm;
     
+    var isInRange = true;
+    
+    if (abs(scrollPositionFinal - -global.levels[buildingUIId].y) > 300)
+    {
+        isInRange = false;
+    }
+    
     var xx = lengthdir_x(global.levels[buildingUIId].y + scrollPositionFinal, -105) + lengthdir_x(global.levels[buildingUIId].x, 0) * 1.7;
     var yy = lengthdir_y(global.levels[buildingUIId].y + scrollPositionFinal, -60) + lengthdir_y(global.levels[buildingUIId].x, 0);
     
@@ -187,7 +194,7 @@ for (var i = 5; i >= -5; i--)
     
     
     var zoneScale = 1;
-    if (hm != 0)
+    if (hm != 0 or !isInRange)
     {
        	zoneScale = 7;
     }
@@ -203,7 +210,7 @@ for (var i = 5; i >= -5; i--)
         {
             if (buildingUIId == pressedID)
             {
-                if (hm == 0)
+                if (hm == 0 and isInRange)
                 {
                     global.positionOnMap = scrollPositionFinal;
                     
