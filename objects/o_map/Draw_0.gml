@@ -34,7 +34,7 @@ matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 6
 vertex_submit(plane, pr_trianglelist, flowers);
 if (activeBarier != -1)
 {
-    matrix_set(matrix_world, matrix_build(0, positionOnMap - global.bioms[activeBarier].y, 32 * INVERT, 90, 0, 0, 2, 2, 1 * INVERT));
+    matrix_set(matrix_world, matrix_build(0, positionOnMap - global.bioms[activeBarier].y, 32 * INVERT, 90, 0, 0, 2, 1, 2 * INVERT));
     vertex_submit(starBarier, pr_trianglelist, star);
 }
 matrix_set(matrix_world, matrix_build(0, scrollPositionFinal - planeSize / 2 + 60, 0, 0, 0, 0, 2, 2, 1 * INVERT));
