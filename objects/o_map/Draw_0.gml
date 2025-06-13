@@ -1,7 +1,7 @@
 createBarierSurface();
 
 var pow = 1.2;
-var positionOnMap = scrollPositionFinal + 1010 + room_width / global.aspect * pow;
+var positionOnMap = scrollPositionFinal + 1010 * 1.53;
 
 draw_clear(c_black);
 var eye = new vector3(15, 100, 60 * INVERT);
