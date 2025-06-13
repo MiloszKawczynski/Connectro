@@ -180,21 +180,32 @@ for (var i = -5; i <= 5; i++)
         draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale, textScale, 0, c_white, 1);
     }
     
-    if (mouse_check_button_released(mb_left))
+    if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
     {
-        if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
+        if (mouse_check_button_pressed(mb_left))
         {
-            if (hm == 0)
+            pressedID = buildingUIId;
+        }
+        
+        if (mouse_check_button_released(mb_left))
+        {
+            if (buildingUIId == pressedID)
             {
-                global.choosedLevel = buildingUIId;
-                
-                room_goto(r_game);
-            }
-            else    
-            {
-                scrollSpeed = 0;
-                scrollFingerPosition = 0;
-                scrollSnap = buildingUIId;
+                if (hm == 0)
+                {
+                    global.choosedLevel = buildingUIId;
+                    
+                    room_goto(r_game);
+                }
+                else    
+                {
+                    isSnapping = true;
+                    scrollSnap = buildingUIId;
+                    
+                    scrollPosition += scrollFingerPosition;
+                    scrollSpeed = 0;
+                    scrollFingerPosition = 0;
+                }
             }
         }
     }

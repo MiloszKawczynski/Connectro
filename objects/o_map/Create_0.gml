@@ -1,13 +1,16 @@
 camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
 
+longPress = 0;
 scrollPosition = 0;
 scrollFingerPosition = -1010;
 scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = -1010;
 scrollSnap = 0;
+checkForSnap = false;
+isSnapping = false;
 
-isSnapInRange = false;
+pressedID = -1;
 
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;

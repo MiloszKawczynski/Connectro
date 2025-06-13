@@ -8,15 +8,44 @@ if (mouse_check_button_pressed(mb_left))
 
 if (mouse_check_button(mb_left))
 {
+    if (longPress < 3)
+    {
+        longPress++;
+    }
+}
+
+if (longPress >= 3)
+{
     scrollFingerPosition = mouse_y - lastMousePositionPressed;
     scrollSpeed = 0;
     scrollPosition = 0;
+    isSnapping = false;
 }
 else 
 {
-    if (abs(scrollSpeed) < 1)
+    if (isSnapping)
     {
-        isSnapInRange = false;
+        scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
+    }
+    else 
+    {
+        if (abs(scrollSpeed) < 1)
+        {
+            if (scrollSpeed != 0)
+            {
+                scrollSpeed = 0;
+                checkForSnap = true;
+            }
+        }
+        else 
+        {
+        	scrollSpeed = lerp(scrollSpeed, 0, 0.02);
+        }
+    }
+    
+    if (checkForSnap)
+    {
+        checkForSnap = false;
         if (scrollFingerPosition != 0 or scrollSpeed != 0)
         {
             scrollPosition += scrollFingerPosition;
@@ -45,23 +74,20 @@ else
         
         if (abs(scrollPosition - -global.levels[scrollSnap].y) < 300)
         {
-            isSnapInRange = true;
+            isSnapping = true;
         }
-        
-        if (isSnapInRange)
-        {
-            scrollPosition = lerp(scrollPosition, -global.levels[scrollSnap].y, 0.1);
-        }
-    }
-    else 
-    {
-    	scrollSpeed = lerp(scrollSpeed, 0, 0.02);
     }
 }
 
 if (mouse_check_button_released(mb_left))
 {
     scrollSpeed += mouse_y - lastMousePosition;
+    longPress = 0;
+    
+    if (abs(scrollSpeed) < 1)
+    {
+        checkForSnap = true;
+    }
 }
 
 scrollPosition += scrollSpeed;
@@ -69,6 +95,7 @@ scrollPosition += scrollSpeed;
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
+
 if (activeBarier == -1)
 {
     scrollPositionFinal = max(scrollPositionFinal, scrollMin);
