@@ -105,6 +105,11 @@ for (var i = 5; i >= -5; i--)
     
     while (!global.levels[closestBuilding + hm].hasMural)
     {
+        if (sign(hm) == 0)
+        {
+            break;
+        }
+        
         hm += sign(hm);
         
         if (closestBuilding + hm < 0 || closestBuilding + hm >= array_length(global.levels))
@@ -198,7 +203,7 @@ for (var i = 5; i >= -5; i--)
         {
             if (buildingUIId == pressedID)
             {
-                if (hm == 0)
+                if (hm == 0 and (abs(scrollPositionFinal - -global.levels[buildingUIId].y) < 300))
                 {
                     global.choosedLevel = buildingUIId;
                     

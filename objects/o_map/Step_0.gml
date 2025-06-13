@@ -112,23 +112,7 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
     scrollPosition = scrollPositionFinal;
     lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
     
-    var negSrollPosition = -scrollPosition;
-            
-    var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
-    for (var i = 0; i < array_length(global.levels); i++)
-    {
-        if (!global.levels[i].hasMural)
-        {
-            continue;
-        }
-        
-        var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
-        if (lengthToBuilding < lengthToSnap)
-        {
-            lengthToSnap = lengthToBuilding;
-            scrollSnap = i;
-        }
-    }
+    checkForSnap = true;
 }
 
 buildingShout = timer(buildingShout, 0.02);
