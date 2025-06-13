@@ -61,25 +61,6 @@ z = 0;
 
 buildingShout = 0;
 
-gainedStars = 0;
-for (var i = 0; i < array_length(global.levels); i++)
-{
-    if (!global.levels[i].hasMural)
-    {
-        continue;
-    }
-    
-    gainedStars += global.levels[i].stars;
-}
+calculateGainedStars();
 
-activeBarier = -1;
-for (var i = 0; i < array_length(global.bioms); i++)
-{
-    if (global.bioms[i].limit > gainedStars)
-    {
-        activeBarier = i;
-        break;
-    }
-}
-
-scrollMax = global.bioms[activeBarier].y - 1010 * 1.5
+calculateActiveBarier();

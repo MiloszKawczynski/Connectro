@@ -1,30 +1,4 @@
-if (createBariarSurface)
-{
-    createBariarSurface = false;
-    
-    var surf = surface_create(200, 64);
-    surface_set_target(surf);
-    draw_clear_alpha(c_white, 0);
-    draw_set_color(c_white);
-    draw_set_alpha(1);
-    
-    draw_sprite(s_barier, 0, 0, 0);
-    draw_set_font(f_game);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_middle);
-    
-    font_enable_effects(f_game, true, 
-    {
-        outlineEnable: true,
-        outlineDistance: 4,
-        outlineColour: c_black
-    });
-    
-    draw_text_transformed(95, 36, global.bioms[activeBarier].limit, 0.75, 0.75, 0);
-    surface_reset_target();
-    
-    star = sprite_get_texture(sprite_create_from_surface(surf, 0, 0, 200, 64, false, false, 0, 0), 0);
-}
+createBarierSurface();
 
 var pow = 1.2;
 var positionOnMap = scrollPositionFinal + 1010 + room_width / global.aspect * pow;
