@@ -86,39 +86,75 @@ function initialize()
     var i = 0;
     array_push(global.levels,
     //i = 0 dek dek dek dek
-        new level("7_9", 5, 0),
-        new level("7_9", 7, 2),
+        new level("7_9", 5, 0 + 10 * (0 + i)),
+        new level("7_9", 7, 2 + 10 * (0 + i)),
     
-        new level("11_11", 0, 3),
-        new level("9_13", 2, 5),
+        new level("11_11", 0, 3 + 10 * (0 + i)),
+        new level("9_13", 2, 5 + 10 * (0 + i)),
     //i = 1 dek dek test dek
-        new level("9_11_test", 2, 5 + 10, true, [20, 15, 11]),
-        new level("7_9", 7, 2 + 10),
+        new level("9_11_test", 2, 5 + 10 * (1 + i), true, [20, 15, 11]),
+        new level("7_9", 7, 2 + 10 * (1 + i)),
     
-        new level("11_11", 0, 3 + 10),
-        new level("9_13", 5, 0 + 10),
+        new level("11_11", 0, 3 + 10 * (1 + i)),
+        new level("9_13", 5, 0 + 10 * (1 + i)),
     //i = 2 dek wrap cross dek
-        new level("9_11_wrap", 5, 0 + 10 * 2, true, [20, 15, 12]),
-        new level("7_9", 7, 2 + 10 * 2),
+        new level("9_11_wrap", 5, 0 + 10 * (2 + i), true, [20, 15, 12]),
+        new level("7_9", 7, 2 + 10 * (2 + i)),
     
-        new level("11_11", 0, 3 + 10 * 2),
-        new level("9_11_cross", 2, 5 + 10 * 2, true, [20, 15, 13]),
+        new level("11_11", 0, 3 + 10 * (2 + i)),
+        new level("9_11_cross", 2, 5 + 10 * (2 + i), true, [20, 15, 13]),
     //i = 3 dek walls last dek
-        new level("9_11_walls", 5, 0 + 10 * 3, true, [20, 15, 12]),
-        new level("7_9", 7, 2 + 10 * 3),
+        new level("9_11_walls", 5, 0 + 10 * (3 + i), true, [20, 15, 12]),
+        new level("7_9", 7, 2 + 10 * (3 + i)),
     
-        new level("11_11", 0, 3 + 10 * 3),
-        new level("9_13_last", 2, 5 + 10 * 3, true, [25, 20, 17]),
+        new level("11_11", 0, 3 + 10 * (3 + i)),
+        new level("9_13_last", 2, 5 + 10 * (3 + i), true, [25, 20, 17]),
     //i = 4 dek dek dek dek
-        new level("11_11", 0, 3 + 10 * 4),
-        new level("9_13", 2, 5 + 10 * 4),
+        new level("11_11", 0, 3 + 10 * (4 + i)),
+        new level("9_13", 2, 5 + 10 * (4 + i)),
     
-        new level("7_9", 5, 0 + 10 * 4),
-        new level("7_9", 7, 2 + 10 * 4),);
+        new level("7_9", 5, 0 + 10 * (4 + i)),
+        new level("7_9", 7, 2 + 10 * (4 + i)),
+    );
+    
+    i = 6;
+    array_push(global.levels,
+    //-------------------------
+        new level("7_9", 5, 0 + 10 * (0 + i)),
+        new level("7_9", 7, 2 + 10 * (0 + i)),
+    
+        new level("11_11", 0, 3 + 10 * (0 + i)),
+        new level("9_13", 2, 5 + 10 * (0 + i)),
+    //-------------------------
+        new level("9_13_4_3_4_0_4_1_0_1795845498", 2, 5 + 10 * (1 + i), true, [30, 20, 18]),
+        new level("7_9", 7, 2 + 10 * (1 + i)),
+    
+        new level("11_11", 0, 3 + 10 * (1 + i)),
+        new level("9_13", 5, 0 + 10 * (1 + i)),
+    //-------------------------
+        new level("9_13_4_3_4_0_4_1_0_2275901463", 5, 0 + 10 * (2 + i), true, [25, 22, 18]),//Solver zwrócił mi 25 18 18 podbiłem środkową gwiazdkę
+        new level("7_9", 7, 2 + 10 * (2 + i)),
+    
+        new level("11_11", 0, 3 + 10 * (2 + i)),
+        new level("9_13_4_3_1_1_4_1_0_1947235746", 2, 5 + 10 * (2 + i), true, [30, 25, 20]),//Solver zwrócił mi 20 20 30 podbiłem środkową gwiazdkę
+    //-------------------------
+        new level("9_13_4_3_1_1_4_1_0_2578357245", 5, 0 + 10 * (3 + i), true, [25, 19, 16]),
+        new level("7_9", 7, 2 + 10 * (3 + i)),
+    
+        new level("11_11", 0, 3 + 10 * (3 + i)),
+        new level("9_13_4_3_2_2_4_1_1_3943296509", 2, 5 + 10 * (3 + i), true, [30, 25, 21]),//Solver zwrócił mi 30 22 21 podbiłem środkową gwiazdkę
+    //-------------------------
+        new level("11_11", 0, 3 + 10 * (4 + i)),
+        new level("9_13", 2, 5 + 10 * (4 + i)),
+    
+        new level("7_9", 5, 0 + 10 * (4 + i)),
+        new level("7_9", 7, 2 + 10 * (4 + i)),
+    );
+    
     
     array_push(global.bioms, 
     new biom(904, 12),
-    new biom(904 * 2, 40),
+    new biom(904 * 2, 24),
     )
     
     global.choosedLevel = 0;
