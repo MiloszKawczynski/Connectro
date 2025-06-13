@@ -1589,6 +1589,7 @@ function generateGame()
         }	
         else 
         {
+            setSeed(global.levels[global.choosedLevel].seed);
             populateGrid();	
         }
         applayLevelIntro();

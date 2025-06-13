@@ -16,6 +16,7 @@ function initialize()
         movesToStar = _movesToStar;
         hasMural = _hasMural;
         shoutRotation = 0;
+        typeOfLoad = 1;
         
         if (hasMural)
         {
@@ -68,6 +69,7 @@ function initialize()
             if (string_digits(splitSeed[2]) == "")
             {
                 seed = splitSeed[2];
+                typeOfLoad = 2;
             }
         }
     }

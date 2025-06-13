@@ -1,14 +1,17 @@
 global.width = global.levels[global.choosedLevel].width;
 global.height = global.levels[global.choosedLevel].height;
+global.typeOfLoad = global.levels[global.choosedLevel].typeOfLoad;
 
-if (string_digits(global.levels[global.choosedLevel].seed) == "")
+if (!global.isEditorOn)
 {
-    global.typeOfLoad = 2;
-    global.level = global.levels[global.choosedLevel].seed;
-}
-else 
-{
-	global.typeOfLoad = 0;
+    if (string_digits(global.levels[global.choosedLevel].seed) == "")
+    {
+        global.level = global.levels[global.choosedLevel].seed;
+    }
+    else 
+    {
+    	global.level = "";
+    }
 }
 
 event_inherited();
