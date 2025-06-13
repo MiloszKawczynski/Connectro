@@ -370,14 +370,17 @@ function populateGrid()
 	tile = ds_grid_get(grid, floor(global.width / 2), floor(global.height / 2));
 	tile.isRevealed = true;
 	tile.isAvailable = true;
-	
-	enum IntroTypes 
+}
+
+function applayLevelIntro()
+{
+    enum IntroTypes 
 	{
 		horizontalLines,
 		verticalLines,
 	}
-	
-	var introType = choose(IntroTypes.horizontalLines, IntroTypes.verticalLines)
+    
+    var introType = choose(IntroTypes.horizontalLines, IntroTypes.verticalLines)
 	
 	switch(introType)
 	{
@@ -1588,6 +1591,7 @@ function generateGame()
         {
             populateGrid();	
         }
+        applayLevelIntro();
     }
     else 
     {
