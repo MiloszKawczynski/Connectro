@@ -3,7 +3,7 @@ debugManipulation();
 
 if (mouse_check_button_pressed(mb_left))
 {
-    lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
+    lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
 }
 
 if (mouse_check_button(mb_left))
@@ -16,7 +16,7 @@ if (mouse_check_button(mb_left))
 
 if (longPress >= 3)
 {
-    scrollFingerPosition = mouse_y - lastMousePositionPressed;
+    global.scrollFingerPosition = mouse_y - lastMousePositionPressed;
     scrollSpeed = 0;
     scrollPosition = 0;
     isSnapping = false;
@@ -46,11 +46,11 @@ else
     if (checkForSnap)
     {
         checkForSnap = false;
-        if (scrollFingerPosition != 0 or scrollSpeed != 0)
+        if (global.scrollFingerPosition != 0 or scrollSpeed != 0)
         {
-            scrollPosition += scrollFingerPosition;
+            scrollPosition += global.scrollFingerPosition;
             scrollSpeed = 0;
-            scrollFingerPosition = 0;
+            global.scrollFingerPosition = 0;
             
             var negSrollPosition = -scrollPosition;
             
@@ -94,7 +94,7 @@ scrollPosition += scrollSpeed;
 
 lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
-scrollPositionFinal = scrollPosition + scrollFingerPosition;
+scrollPositionFinal = scrollPosition + global.scrollFingerPosition;
 
 if (activeBarier == -1)
 {
@@ -108,9 +108,9 @@ else
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {
     scrollSpeed = 0;
-    scrollFingerPosition = 0;
+    global.scrollFingerPosition = 0;
     scrollPosition = scrollPositionFinal;
-    lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
+    lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
     
     var negSrollPosition = -scrollPosition;
             

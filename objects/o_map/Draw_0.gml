@@ -202,9 +202,9 @@ for (var i = -5; i <= 5; i++)
                     isSnapping = true;
                     scrollSnap = buildingUIId;
                     
-                    scrollPosition += scrollFingerPosition;
+                    scrollPosition += global.scrollFingerPosition;
                     scrollSpeed = 0;
-                    scrollFingerPosition = 0;
+                    global.scrollFingerPosition = 0;
                 }
             }
         }
