@@ -69,8 +69,33 @@ with(ui)
         }
     }
     
-    movesCount = new Text(0, f_base);
-    movesCount.setScale(4, 4);
+    movesCount = new Text(0, f_game);
+    movesCount.setScale(1, 1);
+    
+    with(movesCount)
+    {
+        draw = function() 
+        {
+            draw_set_color(color);
+            draw_set_alpha(alpha);
+            draw_set_font(font);
+            draw_set_halign(horizontalAlign);
+            draw_set_valign(verticalAlign);
+            
+            font_enable_effects(f_game, true, 
+            {
+                outlineEnable: true,
+                outlineDistance: 5,
+                outlineColour: c_black
+            });
+            
+            draw_text_transformed(posX, posY, content, scaleX, scaleY, rotation);
+            
+            draw_set_alpha(1);
+        };
+        
+        state.draw = draw;
+    }
     
     movesBar = new GradientBar(1);
     movesBar.setScale(8, 1);
@@ -185,6 +210,11 @@ with(ui)
         }
     }
     
+    highLight = new Output();
+    highLight.setSprite(s_gameHighlight);
+    highLight.setColor(global.bioms[global.levels[global.choosedLevel].biomImIn].color);
+    
+    mainLayer.addComponent(0, 14, highLight);
     mainLayer.addComponent(1, 13.25, goBackButton);
     mainLayer.addComponent(6, 13.25, restartButton);
     

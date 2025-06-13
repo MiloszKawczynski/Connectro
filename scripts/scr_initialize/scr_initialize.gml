@@ -72,16 +72,33 @@ function initialize()
                 typeOfLoad = 2;
             }
         }
+        
+        biomImIn = 0;
+        for (var i = 0; i < array_length(global.bioms); i++)
+        {
+            biomImIn = i;
+            
+            if (global.bioms[i].y > -y + 1010)
+            {
+                break;
+            }
+        }
     }
     
-    function biom(_y, _limit) constructor 
+    function biom(_y, _limit, _color) constructor 
     {
         y = _y * 2 - 13
         limit = _limit;
+        color = _color;
     }
     
     global.levels = array_create(0);
     global.bioms = array_create(0);
+    
+    array_push(global.bioms, 
+    new biom(904, 12, make_color_rgb(0, 74, 11)),
+    new biom(904 * 2, 24, make_color_rgb(83, 26, 22)),
+    )
     
     var i = 0;
     array_push(global.levels,
@@ -150,12 +167,6 @@ function initialize()
         new level("7_9", 5, 0 + 10 * (4 + i)),
         new level("7_9", 7, 2 + 10 * (4 + i)),
     );
-    
-    
-    array_push(global.bioms, 
-    new biom(904, 12),
-    new biom(904 * 2, 24),
-    )
     
     global.choosedLevel = 0;
     

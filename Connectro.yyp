@@ -201,6 +201,7 @@
     {"id":{"name":"s_blockBrick7_9","path":"sprites/s_blockBrick7_9/s_blockBrick7_9.yy",},},
     {"id":{"name":"s_blockBrick9_11","path":"sprites/s_blockBrick9_11/s_blockBrick9_11.yy",},},
     {"id":{"name":"s_blockBrick9_13","path":"sprites/s_blockBrick9_13/s_blockBrick9_13.yy",},},
+    {"id":{"name":"s_gameHighlight","path":"sprites/s_gameHighlight/s_gameHighlight.yy",},},
     {"id":{"name":"s_icon","path":"sprites/s_icon/s_icon.yy",},},
     {"id":{"name":"s_playButton","path":"sprites/s_playButton/s_playButton.yy",},},
     {"id":{"name":"s_star","path":"sprites/s_star/s_star.yy",},},
