@@ -9,6 +9,7 @@ scrollMin = -1010;
 scrollSnap = 0;
 checkForSnap = false;
 isSnapping = false;
+meetBarier = false;
 
 pressedID = -1;
 

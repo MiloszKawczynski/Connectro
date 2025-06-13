@@ -46,8 +46,9 @@ else
     if (checkForSnap)
     {
         checkForSnap = false;
-        if (scrollFingerPosition != 0 or scrollSpeed != 0)
+        if (scrollFingerPosition != 0 or scrollSpeed != 0 or meetBarier)
         {
+            meetBarier = false;
             scrollPosition += scrollFingerPosition;
             scrollSpeed = 0;
             scrollFingerPosition = 0;
@@ -113,6 +114,7 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
     lastMousePositionPressed = mouse_y - (scrollPosition + scrollFingerPosition);
     
     checkForSnap = true;
+    meetBarier = true;
 }
 
 buildingShout = timer(buildingShout, 0.02);
