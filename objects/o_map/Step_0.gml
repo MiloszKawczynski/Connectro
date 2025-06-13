@@ -1,21 +1,21 @@
 
 debugManipulation();
 
-if (mouse_check_button_pressed(mb_left))
-{
-    lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
-}
-
 if (mouse_check_button(mb_left))
 {
-    if (longPress < 3)
+    if (longPress < 5)
     {
         longPress++;
     }
 }
 
-if (longPress >= 3)
+if (longPress >= 4)
 {
+    if (longPress == 4)
+    {
+        lastMousePositionPressed = mouse_y - (scrollPosition + global.scrollFingerPosition);
+    }
+    
     global.scrollFingerPosition = mouse_y - lastMousePositionPressed;
     scrollSpeed = 0;
     scrollPosition = 0;
