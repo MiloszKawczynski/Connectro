@@ -94,7 +94,7 @@ for (var i = 0; i < array_length(global.levels); i++)
     }
 }
 
-for (var i = -5; i <= 5; i++)
+for (var i = 5; i >= -5; i--)
 {
     if (closestBuilding + i < 0 or closestBuilding + i >= array_length(global.levels))
     {
@@ -180,7 +180,14 @@ for (var i = -5; i <= 5; i++)
         draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale, textScale, 0, c_white, 1);
     }
     
-    if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height))
+    
+    var zoneScale = 1;
+    if (hm != 0)
+    {
+       	zoneScale = 7;
+    }
+    
+    if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height * zoneScale))
     {
         if (mouse_check_button_pressed(mb_left))
         {
