@@ -315,22 +315,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 			}
@@ -341,22 +341,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
+					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.sourceTile.type);
 					break;
 				}
 			}
@@ -398,7 +398,7 @@ function mustPickTargetTileEffect(showPotential = false)
 			audio_play_sound(sn_lvl1, 0, false);
 		}
 		
-		revealDot(hoveredX, hoveredY, tile.sourceTile.color, showPotential, tile.type);
+		revealDot(hoveredX, hoveredY, tile.sourceTile.color, showPotential, tile.sourceTile.type);
 		
 		if (!showPotential)
 		{
