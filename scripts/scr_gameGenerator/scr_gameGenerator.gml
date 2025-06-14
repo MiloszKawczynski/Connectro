@@ -25,6 +25,7 @@ function Tile(_type) constructor
 	isLineDiag = false;
 	sourceTile = noone;
 	color = noone;
+	revealedByType = _type;
 	potential = 0;
 	isTargeted = false;
 	flash = 0;
