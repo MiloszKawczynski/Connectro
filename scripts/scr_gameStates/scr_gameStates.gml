@@ -40,6 +40,8 @@ function gameEnd(showPotential = false)
             global.levels[global.choosedLevel].texture = surfaceTexture;
             global.levels[global.choosedLevel].moves = moves;
         }
+		
+		saveLevel();
         
         room_goto(r_map);
     }

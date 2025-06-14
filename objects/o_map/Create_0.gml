@@ -1,5 +1,11 @@
 camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
 
+if (!global.loadedLevels)
+{
+	loadLevels();
+	global.loadedLevels = true;
+}
+
 longPress = 0;
 scrollPosition = 0;
 scrollFingerPosition = global.positionOnMap;
