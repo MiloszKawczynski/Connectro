@@ -674,6 +674,14 @@ function skipHeaderFromSavedLevel(levelString, iterator)
 	}
 }
 
+function deleteSavedData()
+{
+	if (file_exists(global.savedDataFilename))
+	{
+		file_delete(global.savedDataFilename);
+	}
+}
+
 function saveLevel()
 {
 	var level = "";
