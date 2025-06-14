@@ -26,7 +26,7 @@ if (drawSurface)
 		for(var xx = 0; xx < global.width; xx++)
 		{
 			var tile = ds_grid_get(grid, global.width - xx - 1, yy);
-			tile.drawMural(xx, yy);
+			tile.drawMural(xx, yy, global.cellSize);
 		}
 	}
 	

@@ -631,3 +631,241 @@ function wrapAroundGrid(width, height, xx, yy)
 	
 	return global.mapObjects[xx][yy];
 }
+
+function readNumberFromSavedLevel(levelString, iterator)
+{
+	var value = "";
+	for (; iterator < string_length(levelString); iterator++)
+	{
+		var char = string_char_at(levelString, iterator + 1);
+		
+		if (char == " " or char == "\n")
+		{
+			return { number: real(value), iterator: iterator + 1 };
+		}
+		
+		value += char;
+	}
+}
+
+function skipLineFromSavedLevel(levelString, iterator)
+{
+	for (; iterator < string_length(levelString); iterator++)
+	{
+		var char = string_char_at(levelString, iterator + 1);
+		
+		if (char == "\n")
+		{
+			return iterator + 1;
+		}
+	}
+}
+
+function skipHeaderFromSavedLevel(levelString, iterator)
+{
+	for (; iterator < string_length(levelString); iterator++)
+	{
+		var char = string_char_at(levelString, iterator + 1);
+		
+		if (char == ":")
+		{
+			return iterator + 1;
+		}
+	}
+}
+
+function saveLevel()
+{
+	var level = "";
+	
+	var height = global.height;
+	var width = global.width;
+	
+	level += "l:" + string(global.choosedLevel) + "\n";
+	level += "s:" + string(global.levels[global.choosedLevel].stars) + "\n";
+	level += "m:" + string(global.levels[global.choosedLevel].moves) + "\n";
+	level += string(width) + " " + string(height) + "\n";
+
+	for (var yy = 0; yy < height; yy++)
+	{
+		for (var xx = 0; xx < width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+            
+            level += string(tile.revealedByType);
+			level += " ";
+		}
+	}
+	
+	level += "\n";
+	
+	// Load the buffer if it exists
+	
+	if (file_exists(global.savedDataFilename))
+	{
+		var buffer = buffer_load(global.savedDataFilename);
+		var levelString = buffer_read(buffer, buffer_string);
+		
+		var levelPos = string_pos("l:" + string(global.choosedLevel), levelString);
+			
+		var bufferSize = buffer_get_size(buffer);
+	
+		var newBuffer = buffer_create(bufferSize + string_byte_length(level) + 1, buffer_fixed, 1);
+			
+		if (levelPos == 0)
+		{
+			buffer_seek(newBuffer, buffer_seek_start, 0);
+			buffer_write(newBuffer, buffer_string, levelString + level);
+			buffer_save(newBuffer, global.savedDataFilename);
+			buffer_delete(newBuffer);
+		}
+		else
+		{
+		    // Find the next "l:" occurrence after this one
+		    var offset = levelPos + 1;
+		    var rest = string_copy(levelString, offset, string_length(levelString));
+		    var relativeNextPos = string_pos("l:", rest);
+    
+		    var nextLevelPos;
+		    if (relativeNextPos > 0)
+			{
+		        nextLevelPos = offset + relativeNextPos - 1;
+		    }
+			else
+			{
+		        nextLevelPos = string_length(levelString) + 1;
+		    }
+
+		    // Replace existing level data
+		    var before = string_copy(levelString, 1, levelPos - 1);
+		    var after = string_copy(levelString, nextLevelPos, string_length(levelString));
+		    levelString = before + level + after;
+			
+			buffer_seek(buffer, buffer_seek_start, 0);
+			buffer_write(buffer, buffer_string, levelString);
+			buffer_save(buffer, global.savedDataFilename);
+		}
+		
+		buffer_delete(buffer);
+	}
+	else
+	{
+		var buffer = buffer_create(string_byte_length(level) + 1, buffer_fixed, 1);
+		buffer_write(buffer, buffer_string, level);
+		buffer_save(buffer, global.savedDataFilename);
+		buffer_delete(buffer);
+	}
+}
+
+function loadLevels()
+{
+	var savedDataFilename = global.savedDataFilename;
+	
+	// There is nothing to load.
+	if (!file_exists(savedDataFilename))
+	{
+		return;
+	}
+	
+	var buffer = buffer_load(savedDataFilename);
+	var levelString = buffer_read(buffer, buffer_string);
+	
+	// TODO: We should probably do the reverse - read the file and detect which levels are in.
+	//       But for now that we have a small amount of levels it should be fine...
+	var levelsCount = array_length(global.levels);
+	for (var i = 0; i < levelsCount; i++)
+	{
+		loadLevel(levelString, i);
+	}
+}
+
+function loadLevel(levelString, levelId)
+{
+	// Find the level in the file.
+	var levelPos = string_pos("l:" + string(levelId), levelString);
+	
+	// The level is not saved.
+	if (levelPos == 0)
+	{
+		return;
+	}
+	
+	var iterator = levelPos - 1;
+	
+	iterator = skipLineFromSavedLevel(levelString, iterator);
+	
+	// Skip the star 's:' header.
+	iterator = skipHeaderFromSavedLevel(levelString, iterator);
+	
+	var starsNumber = readNumberFromSavedLevel(levelString, iterator);
+	iterator = starsNumber.iterator;
+	global.levels[levelId].stars = starsNumber.number;
+	
+	// Skip the moves "m:" header.
+	iterator = skipHeaderFromSavedLevel(levelString, iterator);
+	
+	var movesNumber = readNumberFromSavedLevel(levelString, iterator);
+	iterator = movesNumber.iterator;
+	global.levels[levelId].moves = movesNumber.number;
+	
+	var widthNumber = readNumberFromSavedLevel(levelString, iterator);
+	var width = widthNumber.number;
+	iterator = widthNumber.iterator;
+	
+	var heightNumber = readNumberFromSavedLevel(levelString, iterator);
+	var height = heightNumber.number;
+	iterator = heightNumber.iterator;
+	
+	// NOTE: This is hardcoded game room size
+	var cellSize = 400 / width;
+
+	var muralSurface = surface_create(width * cellSize, height * cellSize);
+	
+	surface_set_target(muralSurface);
+	draw_clear_alpha(c_white, 1);
+	
+	var idx = 0;
+	var value = "";
+	for (; iterator < string_length(levelString); iterator++)
+	{
+		var currentValue = string_char_at(levelString, iterator + 1);
+		
+		if (currentValue == "\n")
+		{
+			break;
+		}
+		
+		if (currentValue == " ")
+		{
+			var coords = getXYFromLinearIndex(width, idx);
+			idx += 1;
+			
+			var newTile = new Tile(real(value));
+			newTile.setColorFromType();
+			newTile.drawMural(coords.x, coords.y, cellSize);
+			
+			value = "";
+			continue;
+		}
+		
+		value += currentValue;
+	}
+	
+	surface_reset_target();
+	
+	var buildingSprite = global.levels[levelId].sprite;
+    var spriteWidth = sprite_get_width(buildingSprite);
+    var spriteHeight = sprite_get_height(buildingSprite);
+
+	var blockSurface = surface_create(spriteWidth, spriteHeight);
+	
+	surface_set_target(blockSurface);
+	draw_clear_alpha(c_white, 0);
+	
+	draw_surface_stretched(muralSurface, (width + 2) * 3 * 4 + 3, 3, width * 3, height * 3);
+	draw_sprite(global.levels[levelId].sprite, 0, 0, 0);
+	surface_reset_target();
+	
+	var surfaceTexture = sprite_get_texture(sprite_create_from_surface(blockSurface, 0, 0, spriteWidth, spriteHeight, false, false, 0, 0), 0);
+	global.levels[levelId].texture = surfaceTexture;
+}

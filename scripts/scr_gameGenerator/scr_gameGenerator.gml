@@ -196,7 +196,7 @@ function Tile(_type) constructor
 		}
 	}
 	
-	static drawMural = function(xx, yy) 
+	static drawMural = function(xx, yy, cellSize)
 	{
         if (type == TilesTypes.target)
         {
@@ -206,8 +206,9 @@ function Tile(_type) constructor
         {
         	draw_set_color(color);
         }
+
 		draw_set_alpha(1);	
-		draw_rectangle(xx * global.cellSize, yy * global.cellSize, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize, false);
+		draw_rectangle(xx * cellSize, yy * cellSize, xx * cellSize + cellSize, yy * cellSize + cellSize, false);
 		draw_set_alpha(1);
 	}
 	

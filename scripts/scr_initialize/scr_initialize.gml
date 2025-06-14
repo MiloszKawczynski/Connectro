@@ -6,6 +6,8 @@ function initialize()
     #macro Windows:MOBILE false 
     #macro Android:MOBILE true
 	
+	global.savedDataFilename = "SavedData.save";
+	
 	#macro MAX_MAP_WIDTH_OR_HEIGHT 25
 
 	global.mapKeys = array_create();
@@ -25,6 +27,8 @@ function initialize()
 	    array_push(global.mapKeys, mk);
 	    array_push(global.mapObjects, mo);
 	}
+	
+	global.loadedLevels = false;
     
     function level(_seed, _x, _y, _hasMural = false, _movesToStar = [0, 0, 0]) constructor 
     {
