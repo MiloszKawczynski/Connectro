@@ -121,10 +121,10 @@ function normalTileEffect(showPotential = false)
 		{
 			case(TilesTypes.plus):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
 				
 				if (!showPotential)
 				{
@@ -136,10 +136,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.cross):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY + tile.value, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY + tile.value, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY - tile.value, tile.color, state, showPotential);
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY - tile.value, tile.color, state, showPotential);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
 				
 				if (!showPotential)
 				{
@@ -151,10 +151,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.diamond):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, true);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, true);
+				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
 				
 				if (!showPotential)
 				{
@@ -315,22 +315,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX - 1, hoveredY - 1, hoveredX + tile.sourceTile.value - 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX + 1, hoveredY - 1, hoveredX - tile.sourceTile.value + 1, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX + 1, hoveredY + 1, hoveredX - tile.sourceTile.value + 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX - 1, hoveredY + 1, hoveredX + tile.sourceTile.value - 1, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 			}
@@ -341,22 +341,22 @@ function mustPickDirectionTileEffect(showPotential = false)
 			{
 				case(0):
 				{
-					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX - 1, hoveredY, hoveredX + tile.sourceTile.value - 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(1):
 				{
-					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX, hoveredY - 1, hoveredX, hoveredY + tile.sourceTile.value - 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(2):
 				{
-					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX + 1, hoveredY, hoveredX - tile.sourceTile.value + 1, hoveredY, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 				case(3):
 				{
-					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential);
+					revealLine(hoveredX, hoveredY + 1, hoveredX, hoveredY - tile.sourceTile.value + 1, tile.sourceTile.color, state, showPotential, tile.type);
 					break;
 				}
 			}
@@ -398,7 +398,7 @@ function mustPickTargetTileEffect(showPotential = false)
 			audio_play_sound(sn_lvl1, 0, false);
 		}
 		
-		revealDot(hoveredX, hoveredY, tile.sourceTile.color, showPotential);
+		revealDot(hoveredX, hoveredY, tile.sourceTile.color, showPotential, tile.type);
 		
 		if (!showPotential)
 		{
@@ -412,7 +412,7 @@ function mustPickTargetTileEffect(showPotential = false)
 	}
 }
 
-function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = false)
+function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType, isDiamondRecursion = false)
 {
 	var length = point_distance(x1, y1, x2, y2);
 	
@@ -462,6 +462,7 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = fa
 					{
 						isAvailable = true;
                         setColorFromType();
+						revealedByType = type;
 					}
 				}
 			}
@@ -471,6 +472,7 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = fa
 				if (!showPotential)
 				{
 					color = _color;
+					revealedByType = revealingType;
 				}
 			}
 			
@@ -502,15 +504,15 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, isDiamond = fa
 			}
 		}
 		
-		if (isDiamond)
+		if (!isDiamondRecursion and revealingType == TilesTypes.diamond)
 		{
-			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, state, showPotential);
-			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, state, showPotential);
+			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
+			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
 		}
 	}
 }
 
-function revealDot(xx, yy, _color, showPotential)
+function revealDot(xx, yy, _color, showPotential, revealingType)
 {
 	with(ds_grid_get(grid, xx, yy))
 	{
@@ -528,6 +530,8 @@ function revealDot(xx, yy, _color, showPotential)
 			else 
 			{
 				isAvailable = true;
+				setColorFromType();
+				revealedByType = type;
 			}
 		}
 			
@@ -536,6 +540,7 @@ function revealDot(xx, yy, _color, showPotential)
 			if (!showPotential)
 			{
 				color = _color;
+				revealedByType = revealingType;
 			}
 		}
 		
