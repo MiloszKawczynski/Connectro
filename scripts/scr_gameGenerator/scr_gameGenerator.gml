@@ -1560,23 +1560,11 @@ function getRevealedLine(width, height, gridState, x1, y1, x2, y2, isDiamond = f
 function generateGame()
 {
 	global.decisionString = "Decision";
-    global.mapKeys = array_create();
-    global.mapObjects = array_create();
-    
-    for(var _x = 0; _x < global.width; _x++)
-    {
-        var mk = array_create();
-        var mo = array_create();
-        
-        for(var _y = 0; _y < global.height; _y++)
-        {
-            array_push(mk, string("{0}_{1}", _x, _y));
-            array_push(mo, {x: _x, y: _y});
-        }
-        
-        array_push(global.mapKeys, mk);
-        array_push(global.mapObjects, mo);
-    }
+	
+	if (MAX_MAP_WIDTH_OR_HEIGHT < global.width or MAX_MAP_WIDTH_OR_HEIGHT < global.height)
+	{
+		show_debug_message("ERROR: MAX_MAP_WIDTH_OR_HEIGHT is smaller than current map sizes, we will most likely crash");
+	}
 	
 	maxSearchTime = 0.15; // minutes
 	

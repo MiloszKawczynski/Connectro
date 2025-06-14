@@ -5,6 +5,26 @@ function initialize()
     
     #macro Windows:MOBILE false 
     #macro Android:MOBILE true
+	
+	#macro MAX_MAP_WIDTH_OR_HEIGHT 25
+
+	global.mapKeys = array_create();
+	global.mapObjects = array_create();
+
+	for(var _x = 0; _x < MAX_MAP_WIDTH_OR_HEIGHT; _x++)
+	{
+	    var mk = array_create();
+	    var mo = array_create();
+
+	    for(var _y = 0; _y < MAX_MAP_WIDTH_OR_HEIGHT; _y++)
+	    {
+	        array_push(mk, string("{0}_{1}", _x, _y));
+	        array_push(mo, {x: _x, y: _y});
+	    }
+
+	    array_push(global.mapKeys, mk);
+	    array_push(global.mapObjects, mo);
+	}
     
     function level(_seed, _x, _y, _hasMural = false, _movesToStar = [0, 0, 0]) constructor 
     {
