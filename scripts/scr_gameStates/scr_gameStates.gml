@@ -39,9 +39,8 @@ function gameEnd(showPotential = false)
             global.levels[global.choosedLevel].stars = gainedStars;
             global.levels[global.choosedLevel].texture = surfaceTexture;
             global.levels[global.choosedLevel].moves = moves;
+			saveLevel();
         }
-		
-		saveLevel();
         
         room_goto(r_map);
     }
