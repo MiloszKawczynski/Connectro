@@ -17,8 +17,6 @@ function gameEnd(showPotential = false)
 {
 	if (!showPotential)
 	{
-        audio_stop_all();
-        
         var gainedStars = 3;
         
         if (moves > global.levels[global.choosedLevel].movesToStar[0])
@@ -42,6 +40,8 @@ function gameEnd(showPotential = false)
 			saveLevel();
         }
         
+        audio_stop_sound(sn_score);
+        audio_sound_gain(sn_town, 1, 1000);
         room_goto(r_map);
     }
 }

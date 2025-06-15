@@ -9,8 +9,6 @@ global.typeOfLoad = 0;
 global.isSolverOn = false;
 global.gamesToSolve = 0;
 
-//room_goto(r_map);
-
 event_inherited();
 
 randomize();

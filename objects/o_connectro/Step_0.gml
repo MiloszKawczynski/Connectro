@@ -160,17 +160,18 @@ if (isAllRevealed())
     	gameState = gameEnd;
     	drawState = endScreenTransitionDraw;
     	audio_play_sound(sn_score, 0, true);
+        audio_sound_gain(sn_town, 0, 1000);
     }
 }
 
 if (keyboard_check_pressed(ord("R")))
 {
-	audio_stop_all();
+	audio_stop_sound(sn_score);
 	room_restart();
 }
 
 if (keyboard_check_pressed(vk_escape))
 {
-	audio_stop_all();
+	audio_stop_sound(sn_score);
 	game_restart();
 }

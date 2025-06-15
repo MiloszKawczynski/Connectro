@@ -7,6 +7,7 @@ fadeFunction = undefined;
 goToLevelFade = function()
 {
     room_goto(r_game);
+    audio_sound_gain(sn_town, 0.1, 1000);
 }
 
 goToMenuFade = function()

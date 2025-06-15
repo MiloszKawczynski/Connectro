@@ -33,6 +33,8 @@ goBackFunctionFade = function()
         }
         else 
         {
+            audio_stop_sound(sn_score);
+            audio_sound_gain(sn_town, 1, 1000);
             room_goto(r_map);
         }
     }
@@ -40,7 +42,7 @@ goBackFunctionFade = function()
 
 restartFunctionFade = function()
 { 
-    audio_stop_all();
+    audio_stop_sound(sn_score);
     room_restart();
 }
 
