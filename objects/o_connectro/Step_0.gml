@@ -76,16 +76,19 @@ if (global.isEditorOn)
 }
 else
 {
-    if (mouse_check_button_pressed(mb_left))
+    if (gameState != gameEnd)
     {
-        if (mouse_y < other.gameOffset or mouse_y > other.gameOffset + global.cellSize * global.height)
+        if (mouse_check_button_pressed(mb_left))
         {
-            hoveredX = -1;
-            hoveredY = -1;
-            removeDirections();
-            removePotential();
-            removeTarget();
-            removeHover();
+            if (mouse_y < other.gameOffset or mouse_y > other.gameOffset + global.cellSize * global.height)
+            {
+                hoveredX = -1;
+                hoveredY = -1;
+                removeDirections();
+                removePotential();
+                removeTarget();
+                removeHover();
+            }
         }
     }
     
@@ -148,11 +151,6 @@ else
 
 if (isAllRevealed())
 {
-    if (gameState == gameEnd)
-    {
-        //gameState();
-    }
-    
     if (gameState == normal)
     {
     	drawSurface = true;
