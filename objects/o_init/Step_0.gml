@@ -3,6 +3,39 @@ var barSpeed = 0.5;
 
 with(ui)
 {
+    if (paintButton.press)
+    {
+        paintButton.setScale(1.1, 1.1);
+        paintButtonText.setScale(1.1, 1.1);
+    }
+    else 
+    {
+    	paintButton.setScale(1, 1);
+        paintButtonText.setScale(1, 1);
+    }
+    
+    if (rogueButton.press)
+    {
+        rogueButton.setScale(1.1, 1.1);
+        rogueButtonText.setScale(1.1, 1.1);
+    }
+    else 
+    {
+    	rogueButton.setScale(1, 1);
+        rogueButtonText.setScale(1, 1);
+    }
+    
+    if (resetButton.press)
+    {
+        resetButton.setScale(1.1, 1.1);
+        resetButtonText.setScale(1.1, 1.1);
+    }
+    else 
+    {
+    	resetButton.setScale(1, 1);
+        resetButtonText.setScale(1, 1);
+    }
+    
     if (fade)
     {
         fadeCover.setAlpha(lerp(fadeCover.alpha, 1, 0.2));

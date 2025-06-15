@@ -189,7 +189,15 @@ for (var i = 5; i >= -5; i--)
         {
             draw_text_transformed(xx + 2, yy + 1, string("Paint Me!"), paintMeScale, paintMeScale, global.levels[buildingUIId].shoutRotation);
         }
-        draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale, textScale, 0, c_white, 1);
+        
+        if (pressedID == buildingUIId and mouse_check_button(mb_left))
+        {
+            draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale * 1.5, textScale * 1.5, 0, c_white, 1);
+        }
+        else 
+        {
+        	draw_sprite_ext(s_playButton, 0, xx - 1, yy + 1, textScale, textScale, 0, c_white, 1);
+        }
     }
     
     

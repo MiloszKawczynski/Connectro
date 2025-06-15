@@ -449,13 +449,11 @@ function UI() constructor
 			if (_scaleX != undefined)
 			{
 				scaleX = _scaleX;
-                width *= scaleX;
 			}
 			
 			if (_scaleY != undefined)
 			{
 				scaleY = _scaleY;
-                height *= scaleY;
 			}
 		}
 		

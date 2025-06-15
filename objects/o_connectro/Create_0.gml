@@ -59,7 +59,6 @@ with(ui)
     
     goBackButton = new Button(goBackFunction);
     goBackButton.setSpriteSheet(s_uiGoBack);
-    goBackButton.setScale(4, 4);
     
     var restartFunction = function()
 	{ 
@@ -69,7 +68,6 @@ with(ui)
     
     restartButton = new Button(restartFunction);
     restartButton.setSpriteSheet(s_uiRestart);
-    restartButton.setScale(4, 4);
     
     add = new Output();
     add.setSprite(s_uiAdd);

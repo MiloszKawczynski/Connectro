@@ -1,5 +1,23 @@
 with(ui)
 {
+    if (goBackButton.press)
+    {
+        goBackButton.setScale(1.2, 1.2);
+    }
+    else 
+    {
+    	goBackButton.setScale(1, 1);
+    }
+    
+    if (restartButton.press)
+    {
+        restartButton.setScale(1.2, 1.2);
+    }
+    else 
+    {
+    	restartButton.setScale(1, 1);
+    }
+    
     var numberOfMoves = clamp(1 - (other.moves / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
     var numberOfMovesToFirst = clamp(1 - (global.levels[global.choosedLevel].movesToStar[0] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
     var numberOfMovesToSecond = clamp(1 - (global.levels[global.choosedLevel].movesToStar[1] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
