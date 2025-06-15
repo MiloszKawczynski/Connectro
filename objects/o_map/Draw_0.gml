@@ -201,31 +201,32 @@ for (var i = 5; i >= -5; i--)
     
     if (point_in_rectangle(mouseX, mouseY, xx - width, yy - height, xx + width, yy + height * zoneScale))
     {
-        if (mouse_check_button_pressed(mb_left))
+        if (!fade)
         {
-            pressedID = buildingUIId;
-        }
-        
-        if (mouse_check_button_released(mb_left))
-        {
-            if (buildingUIId == pressedID)
+            if (mouse_check_button_pressed(mb_left))
             {
-                if (hm == 0 and isInRange)
+                pressedID = buildingUIId;
+            }
+            
+            if (mouse_check_button_released(mb_left))
+            {
+                if (buildingUIId == pressedID)
                 {
-                    global.positionOnMap = scrollPositionFinal;
-                    
-                    global.choosedLevel = buildingUIId;
-                    
-                    room_goto(r_game);
-                }
-                else    
-                {
-                    isSnapping = true;
-                    scrollSnap = buildingUIId;
-                    
-                    scrollPosition += scrollFingerPosition;
-                    scrollSpeed = 0;
-                    scrollFingerPosition = 0;
+                    if (hm == 0 and isInRange)
+                    {
+                        global.positionOnMap = scrollPositionFinal;
+                        global.choosedLevel = buildingUIId;
+                        fade = true;
+                    }
+                    else    
+                    {
+                        isSnapping = true;
+                        scrollSnap = buildingUIId;
+                        
+                        scrollPosition += scrollFingerPosition;
+                        scrollSpeed = 0;
+                        scrollFingerPosition = 0;
+                    }
                 }
             }
         }
@@ -254,10 +255,20 @@ matrix_set(matrix_projection, matrix_build_identity());
 if (fade)
 {
     fadeAlpha = lerp(fadeAlpha, 1, 0.2);
+    
+    if (fadeAlpha >= 0.95)
+    {
+        room_goto(r_game);
+    }
 }
 else 
 {
 	fadeAlpha = lerp(fadeAlpha, 0, 0.2);
+    
+    if (fadeAlpha <= 0.05)
+    {
+        fadeAlpha = 0;
+    }
 }
 
 

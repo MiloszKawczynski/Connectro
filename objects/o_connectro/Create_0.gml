@@ -1,3 +1,8 @@
+fade = false;
+fadeAlpha = 1;
+
+fadeFunction = undefined;
+
 global.width = global.levels[global.choosedLevel].width;
 global.height = global.levels[global.choosedLevel].height;
 global.typeOfLoad = global.levels[global.choosedLevel].typeOfLoad;
@@ -18,6 +23,27 @@ event_inherited();
 
 camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
 
+goBackFunctionFade = function()
+{
+    with(o_connectro)
+    {
+        if (gameState == gameEnd)
+        {
+            gameState();
+        }
+        else 
+        {
+            room_goto(r_map);
+        }
+    }
+}
+
+restartFunctionFade = function()
+{ 
+    audio_stop_all();
+    room_restart();
+}
+
 ui = new UI();
 
 with(ui)
@@ -27,17 +53,8 @@ with(ui)
     
     var goBackFunction = function()
 	{
-        with(o_connectro)
-        {
-            if (gameState == gameEnd)
-            {
-                gameState();
-            }
-            else 
-            {
-            	room_goto(r_map);
-            }
-        }
+        o_connectro.fade = true;
+        o_connectro.fadeFunction = o_connectro.goBackFunctionFade;
 	}
     
     goBackButton = new Button(goBackFunction);
@@ -46,8 +63,8 @@ with(ui)
     
     var restartFunction = function()
 	{ 
-        audio_stop_all();
-	    room_restart();
+        o_connectro.fade = true;
+        o_connectro.fadeFunction = o_connectro.restartFunctionFade;
 	}
     
     restartButton = new Button(restartFunction);
