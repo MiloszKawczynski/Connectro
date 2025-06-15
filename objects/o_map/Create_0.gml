@@ -2,6 +2,17 @@ camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect)
 
 fade = false;
 fadeAlpha = 1;
+fadeFunction = undefined;
+
+goToLevelFade = function()
+{
+    room_goto(r_game);
+}
+
+goToMenuFade = function()
+{
+    room_goto(r_init);
+}
 
 if (!global.loadedLevels)
 {

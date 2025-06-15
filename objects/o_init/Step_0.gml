@@ -36,16 +36,6 @@ with(ui)
         resetButtonText.setScale(1, 1);
     }
     
-    if (fade)
-    {
-        fadeCover.setAlpha(lerp(fadeCover.alpha, 1, 0.2));
-        
-        if (fadeCover.alpha >= 0.95)
-        {
-            room_goto(r_map);
-        }
-    }
-    
     if (logoTimer != 0 or init)
     {
         logoTimer = timer(logoTimer, 0.02);

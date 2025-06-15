@@ -17,11 +17,19 @@ randomize();
 
 ui = new UI();
 
+fadeAlpha = 1;
+fade = false;
+fadeFunction = undefined;
+
+paintFunctionFade = function()
+{ 
+    room_goto(r_map);
+}
+
 with(ui)
 {
     logoTimer = 0;
     init = true;
-    fade = false;
     
 	mainLayer = new Layer();
 	mainLayer.setGrid(6, 13);
@@ -75,12 +83,14 @@ with(ui)
     
     var paintFunction = function()
 	{
-        ui.fade = true;
+        o_init.fade = true;
+        o_init.fadeFunction = o_init.paintFunctionFade;
 	}
     
     var rogueFunction = function()
-	{
-		room_goto(r_map);
+	{ 
+        o_init.fade = true;
+        o_init.fadeFunction = o_init.paintFunctionFade;
 	}
     
     var resetFunction = function()
@@ -90,35 +100,21 @@ with(ui)
     
     paintButton = new Button(paintFunction);
     paintButton.setSprites(s_button);
-    paintButtonText = new Text("Paint", f_game);
+    paintButtonText = new Text("Paint", f_menu);
     paintButtonText.setShift(0, 4);
     paintButtonText.setColor(c_black);
     
     rogueButton = new Button(rogueFunction);
     rogueButton.setSprites(s_button);
-    rogueButtonText = new Text("Rogue", f_game);
+    rogueButtonText = new Text("Rogue", f_menu);
     rogueButtonText.setShift(0, 4);
     rogueButtonText.setColor(c_black);
     
     resetButton = new Button(resetFunction);
     resetButton.setSprites(s_button);
-    resetButtonText = new Text("Reset", f_game);
+    resetButtonText = new Text("Reset", f_menu);
     resetButtonText.setShift(0, 4);
     resetButtonText.setColor(c_black);
-    
-    fadeCover = new Output()
-    with(fadeCover)
-    {
-        drawCover = function() 
-        { 
-            draw_set_alpha(alpha);
-            draw_rectangle(posX, posY, room_width, room_height, false);
-            draw_set_alpha(1);
-        };
-        
-        setDrawFunction(drawCover);
-        alpha = 0;
-    }
     
     mainLayer.addComponent(0, 0, vignetteL);
     mainLayer.addComponent(6, 0, vignetteR);
@@ -129,7 +125,6 @@ with(ui)
     mainLayer.addComponent(3, 9.5, paintButtonText);
     mainLayer.addComponent(3, 10.75, rogueButtonText);
     mainLayer.addComponent(3, 12, resetButtonText);
-    mainLayer.addComponent(0, 0, fadeCover);
 	
 	pushLayer(mainLayer);
 }

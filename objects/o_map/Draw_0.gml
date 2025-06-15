@@ -224,6 +224,7 @@ for (var i = 5; i >= -5; i--)
                     {
                         global.positionOnMap = scrollPositionFinal;
                         global.choosedLevel = buildingUIId;
+                        fadeFunction = goToLevelFade;
                         fade = true;
                     }
                     else    
@@ -256,6 +257,30 @@ font_enable_effects(f_game, true,
 });
 draw_text_transformed(-viewWidth / 2 + 40, -viewHeight / 2 + 25, gainedStars, 0.4, 0.4, 0);
 
+
+var arrowX = -viewWidth / 2 + 20;
+var arrowY = viewHeight / 2 - 20;
+var arrowS = 0.5;
+
+if (!fade)
+{
+    if (point_in_rectangle(mouseX, mouseY, arrowX - 10, arrowY - 10, arrowX + 10, arrowY + 10))
+    {
+        if (mouse_check_button(mb_left))
+        {
+            arrowS = 0.65;
+        }
+        
+        if (mouse_check_button_released(mb_left))
+        {
+            fade = true;
+            fadeFunction = goToMenuFade;
+        }
+    } 
+}
+
+draw_sprite_ext(s_uiGoBack, 0, arrowX, arrowY, arrowS, arrowS, 0, c_white, 1);
+
 matrix_set(matrix_world, matrix_build_identity());
 matrix_set(matrix_view, matrix_build_identity());
 matrix_set(matrix_projection, matrix_build_identity());
@@ -266,7 +291,7 @@ if (fade)
     
     if (fadeAlpha >= 0.95)
     {
-        room_goto(r_game);
+        fadeFunction();
     }
 }
 else 

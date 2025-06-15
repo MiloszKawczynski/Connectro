@@ -92,6 +92,7 @@
     {"id":{"name":"atf_smallFont","path":"fonts/atf_smallFont/atf_smallFont.yy",},},
     {"id":{"name":"f_base","path":"fonts/f_base/f_base.yy",},},
     {"id":{"name":"f_game","path":"fonts/f_game/f_game.yy",},},
+    {"id":{"name":"f_menu","path":"fonts/f_menu/f_menu.yy",},},
     {"id":{"name":"ato_ui","path":"objects/ato_ui/ato_ui.yy",},},
     {"id":{"name":"ato_uiExample","path":"objects/ato_uiExample/ato_uiExample.yy",},},
     {"id":{"name":"o_connectro","path":"objects/o_connectro/o_connectro.yy",},},
