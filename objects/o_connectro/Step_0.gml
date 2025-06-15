@@ -128,7 +128,10 @@ else
                         
                         if ((hoveredX == xx and hoveredY == yy))
                         {
-                            gameState();
+                            if (gameState != gameEnd)
+                            {
+                                gameState();
+                            }
                             break;
                         }
                         
