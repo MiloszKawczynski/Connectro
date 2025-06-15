@@ -246,3 +246,22 @@ font_enable_effects(f_game, true,
     outlineColour: c_black
 });
 draw_text_transformed(-viewWidth / 2 + 40, -viewHeight / 2 + 25, gainedStars, 0.4, 0.4, 0);
+
+matrix_set(matrix_world, matrix_build_identity());
+matrix_set(matrix_view, matrix_build_identity());
+matrix_set(matrix_projection, matrix_build_identity());
+
+if (fade)
+{
+    fadeAlpha = lerp(fadeAlpha, 1, 0.2);
+}
+else 
+{
+	fadeAlpha = lerp(fadeAlpha, 0, 0.2);
+}
+
+
+draw_set_alpha(fadeAlpha);
+draw_set_color(c_black);
+draw_rectangle(-room_width, -room_height, room_width, room_height, false);
+draw_set_alpha(1);

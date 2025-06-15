@@ -1,5 +1,8 @@
 camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
 
+fade = false;
+fadeAlpha = 1;
+
 if (!global.loadedLevels)
 {
 	loadLevels();
