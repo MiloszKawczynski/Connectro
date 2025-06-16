@@ -32,6 +32,7 @@ function Tile(_type) constructor
 	flashTimer = -1;
 	flashNext = array_create(0);
     isHovered = false;
+    showScale = 0;
 	
 	switch(type)
 	{
@@ -222,7 +223,7 @@ function Tile(_type) constructor
             float = power(sin(current_time / 500), 2) * 0.25 + 1;
         }
         
-        var scale = global.cellSize * float;
+        var scale = global.cellSize * float * showScale;
         var xPos = xx * global.cellSize - scale / 2 + global.cellSize / 2;
         var yPos = yy * global.cellSize + other.gameOffset - scale / 2 + global.cellSize / 2;
         
@@ -232,6 +233,7 @@ function Tile(_type) constructor
 			draw_set_alpha(0.25);	
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
 			draw_set_alpha(1);
+            showScale = lerp(showScale, 1, 0.2);
             
             if (lineDirection == -1)
             {
@@ -239,9 +241,18 @@ function Tile(_type) constructor
 			    draw_sprite_stretched(s_value, value, xPos, yPos, scale, scale);
             }
 		}
+        else 
+        {
+            if (lineDirection == -1 and !isTargeted)
+		    {
+        	    showScale = 0;
+            }
+        }
 		
 		if (lineDirection != -1)
 		{
+            showScale = lerp(showScale, 1, 0.2);
+            
             if (isHovered)
             {
                 blink = 1;
@@ -271,8 +282,10 @@ function Tile(_type) constructor
 		
 		if (isTargeted)
 		{
+            showScale = lerp(showScale, 1, 0.2);
+            
 			draw_set_color(c_red);
-			draw_sprite_stretched(s_target, 0, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize);
+			draw_sprite_stretched(s_target, 0, xPos, yPos, scale, scale);
 			draw_set_alpha(0.25 + power(sin(current_time / 500), 2) * 0.25);
 			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
 			draw_set_alpha(1);

@@ -46,8 +46,12 @@ function removeTarget()
 		{
 			var tile = ds_grid_get(grid, xx, yy);
 			
-			tile.isTargeted = false;
-			tile.sourceTile = noone;
+            if (tile.isTargeted)
+            {
+    			tile.isTargeted = false;
+                tile.showScale = 0;
+    			tile.sourceTile = noone;
+            }
 		}
 	}
 	
@@ -121,11 +125,11 @@ function normalTileEffect(showPotential = false)
 		{
 			case(TilesTypes.plus):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
+                revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
 				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, tile.type);
 				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
 				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
-				
+                
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
@@ -174,6 +178,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block)
 					{
 						lineDirection = 0;
+                        showScale = 0;
 						sourceTile = tile;
 					}
 				}
@@ -183,6 +188,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 1;
+                        showScale = 0;
 						sourceTile = tile;
 					}
 				}
@@ -192,6 +198,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 2;
+                        showScale = 0;
 						sourceTile = tile;
 					}
 				}
@@ -201,6 +208,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 3;
+                        showScale = 0;
 						sourceTile = tile;
 					}
 				}
@@ -219,6 +227,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 0;
+                        showScale = 0;
 						isLineDiag = true;
 						sourceTile = tile;
 					}
@@ -229,6 +238,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 1;
+                        showScale = 0;
 						isLineDiag = true;
 						sourceTile = tile;
 					}
@@ -239,6 +249,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 2;
+                        showScale = 0;
 						isLineDiag = true;
 						sourceTile = tile;
 					}
@@ -249,6 +260,7 @@ function normalTileEffect(showPotential = false)
 					if (type != TilesTypes.block) 
 					{
 						lineDirection = 3;
+                        showScale = 0;
 						isLineDiag = true;
 						sourceTile = tile;
 					}
