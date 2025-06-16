@@ -115,7 +115,7 @@
     {"id":{"name":"scr_initialize","path":"scripts/scr_initialize/scr_initialize.yy",},},
     {"id":{"name":"scr_map","path":"scripts/scr_map/scr_map.yy",},},
     {"id":{"name":"scr_menu","path":"scripts/scr_menu/scr_menu.yy",},},
-    {"id":{"name":"Shader1","path":"shaders/Shader1/Shader1.yy",},},
+    {"id":{"name":"shd_grayscale","path":"shaders/shd_grayscale/shd_grayscale.yy",},},
     {"id":{"name":"sn_lvl1","path":"sounds/sn_lvl1/sn_lvl1.yy",},},
     {"id":{"name":"sn_lvl2","path":"sounds/sn_lvl2/sn_lvl2.yy",},},
     {"id":{"name":"sn_lvl3","path":"sounds/sn_lvl3/sn_lvl3.yy",},},

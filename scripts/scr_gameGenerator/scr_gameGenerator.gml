@@ -32,6 +32,8 @@ function Tile(_type) constructor
 	flashTimer = -1;
 	flashNext = array_create(0);
     isHovered = false;
+    isUseless = false;
+    uselessAlpha = 1;
     showScale = 0;
 	
 	switch(type)
@@ -224,21 +226,41 @@ function Tile(_type) constructor
         }
         
         var scale = global.cellSize * float * showScale;
+        
+        if (isUseless)
+        {
+            uselessAlpha = lerp(uselessAlpha, 0.35, 0.2);
+        }
+        
         var xPos = xx * global.cellSize - scale / 2 + global.cellSize / 2;
         var yPos = yy * global.cellSize + other.gameOffset - scale / 2 + global.cellSize / 2;
         
 		if (isAvailable)
 		{
-            draw_set_color(color);
-			draw_set_alpha(0.25);	
-			draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
-			draw_set_alpha(1);
             showScale = lerp(showScale, 1, 0.2);
+            
+            if (!isUseless)
+            {
+                draw_set_color(color);
+                draw_set_alpha(0.25);	
+                draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
+                draw_set_alpha(1);
+            }
             
             if (lineDirection == -1)
             {
+                if (isUseless)
+                {
+                    draw_set_alpha(uselessAlpha);	
+                    shader_set(shd_grayscale);
+                }
     			draw_sprite_stretched(s_icon, type, xPos, yPos, scale, scale); 
 			    draw_sprite_stretched(s_value, value, xPos, yPos, scale, scale);
+                if (isUseless)
+                {
+                    shader_reset();
+                    draw_set_alpha(1);
+                }
             }
 		}
         else 
@@ -247,6 +269,11 @@ function Tile(_type) constructor
 		    {
         	    showScale = 0;
             }
+        }
+        
+        if (isUseless)
+        {
+            return;
         }
 		
 		if (lineDirection != -1)

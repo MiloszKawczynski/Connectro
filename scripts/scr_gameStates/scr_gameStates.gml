@@ -1,16 +1,19 @@
 function normal(showPotential = false)
 {
 	normalTileEffect(showPotential);
+    checkForUselessness(showPotential);
 }
 
 function mustPickDirection(showPotential = false)
 {
 	mustPickDirectionTileEffect(showPotential);
+    checkForUselessness(showPotential);
 }
 
 function mustPickTarget(showPotential = false)
 {
 	mustPickTargetTileEffect(showPotential);
+    checkForUselessness(showPotential);
 }
 
 function gameEnd(showPotential = false)

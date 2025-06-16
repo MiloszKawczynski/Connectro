@@ -424,8 +424,86 @@ function mustPickTargetTileEffect(showPotential = false)
 	}
 }
 
+function checkForUselessness(showPotential)
+{
+    if (showPotential)
+    {
+        return;
+    }
+    
+    for(var yy = 0; yy < global.height; yy++)
+	{
+		for(var xx = 0; xx < global.width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+    
+        	if (tile == undefined)
+            {
+                continue;
+            }
+            
+            var state = getState();
+            var potential = 0;
+    
+    		switch(tile.type)
+    		{
+                case(TilesTypes.line):
+    			{
+    			}
+                
+    			case(TilesTypes.plus):
+    			{
+                    potential += revealLine(xx, yy, xx + tile.value, yy, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx - tile.value, yy, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx, yy + tile.value, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx, yy - tile.value, tile.color, state, 2, tile.type);
+    				
+    				break;
+    			}
+                
+                case(TilesTypes.lineDiag):
+    			{
+                }
+                
+    			case(TilesTypes.cross):
+    			{
+    				potential += revealLine(xx, yy, xx + tile.value, yy + tile.value, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx - tile.value, yy + tile.value, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx - tile.value, yy - tile.value, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx + tile.value, yy - tile.value, tile.color, state, 2, tile.type);
+
+    				break;
+    			}
+                
+    			case(TilesTypes.diamond):
+    			{
+    				potential += revealLine(xx, yy, xx + tile.value, yy, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx - tile.value, yy, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx, yy + tile.value, tile.color, state, 2, tile.type);
+    				potential += revealLine(xx, yy, xx, yy - tile.value, tile.color, state, 2, tile.type);
+    				
+    				break;
+    			}
+                
+                case(TilesTypes.target):
+    			{
+    				potential = 1;
+    				
+    				break;
+    			}
+    		}
+            
+            if (potential == 0)
+            {
+                tile.isUseless = true;
+            }
+    	}
+    }
+}
+
 function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType, isDiamondRecursion = false)
 {
+    var sumOfPotential = 0;
 	var length = point_distance(x1, y1, x2, y2);
 	
 	if (frac(length) != 0)
@@ -459,7 +537,7 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType,
 		{
 			if (type == TilesTypes.block)
 			{
-				return;
+				return sumOfPotential;
 			}
 			
 			if (xx = wrappedX2 and yy = wrappedY2)
@@ -468,7 +546,14 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType,
 				{
 					if (showPotential)
 					{
-						potential = 3;
+                        if (showPotential == 2)
+					    {
+                            sumOfPotential = 3;
+                        }
+                        else 
+                        {
+                        	potential = 3;
+                        }
 					}
 					else 
 					{
@@ -492,7 +577,14 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType,
 			{
 				if (potential == 0 and !isRevealed)
 				{
-					potential = 1;
+                    if (showPotential == 2)
+                    {
+                        sumOfPotential = 1;
+                    }
+                    else 
+                    {
+					    potential = 1;
+                    }
 				}
 			}
 			else 
@@ -518,14 +610,17 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType,
 		
 		if (!isDiamondRecursion and revealingType == TilesTypes.diamond)
 		{
-			revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
-			revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
+			sumOfPotential += revealLine(xx, yy, xx + yStep * (length - i - 1), yy + xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
+			sumOfPotential += revealLine(xx, yy, xx - yStep * (length - i - 1), yy - xStep * (length - i - 1), _color, state, showPotential, revealingType, true);
 		}
 	}
+    
+    return sumOfPotential;
 }
 
 function revealDot(xx, yy, _color, showPotential, revealingType)
 {
+    var sumOfPotential = 0;
 	with(ds_grid_get(grid, xx, yy))
 	{
 		if (type == TilesTypes.block)
@@ -537,7 +632,14 @@ function revealDot(xx, yy, _color, showPotential, revealingType)
 		{
 			if (showPotential)
 			{
-				potential = 3;
+                if (showPotential == 2)
+                {
+                    sumOfPotential = 3;
+                }
+                else 
+                {
+				    potential = 3;
+                }
 			}
 			else 
 			{
@@ -560,7 +662,14 @@ function revealDot(xx, yy, _color, showPotential, revealingType)
 		{
 			if (potential == 0 and !isRevealed)
 			{
-				potential = 1;
+                if (showPotential == 2)
+                {
+                    sumOfPotential = 1;
+                }
+                else 
+                {
+				    potential = 1;
+                }
 			}
 		}
 		else 
@@ -579,6 +688,8 @@ function revealDot(xx, yy, _color, showPotential, revealingType)
 			//array_push(flashNext, { _x: 1, _y: -1, _power: 2});
 		}
 	}
+    
+    return sumOfPotential;
 }
 
 #macro MAX_ITERATIONS 100
