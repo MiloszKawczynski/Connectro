@@ -877,3 +877,29 @@ function loadLevel(levelString, levelId)
 	var surfaceTexture = sprite_get_texture(sprite_create_from_surface(blockSurface, 0, 0, spriteWidth, spriteHeight, false, false, 0, 0), 0);
 	global.levels[levelId].texture = surfaceTexture;
 }
+
+function saveProgress()
+{
+    var gainedStars = 3;
+    
+    if (moves > global.levels[global.choosedLevel].movesToStar[0])
+    {
+        gainedStars = 0;
+    }    
+    else if (moves > global.levels[global.choosedLevel].movesToStar[1])
+    {
+        gainedStars = 1;
+    }
+    else if (moves > global.levels[global.choosedLevel].movesToStar[2])
+    {
+        gainedStars = 2;
+    }
+    
+    if (moves <= global.levels[global.choosedLevel].moves)
+    {
+        global.levels[global.choosedLevel].stars = gainedStars;
+        global.levels[global.choosedLevel].texture = surfaceTexture;
+        global.levels[global.choosedLevel].moves = moves;
+        saveLevel();
+    }
+}

@@ -162,6 +162,12 @@ if (isAllRevealed())
     	audio_play_sound(sn_score, 0, true);
         audio_sound_gain(sn_town, 0, 1000);
     }
+    
+    if (gameState == gameEnd and !isDataSaved and !drawSurface)
+    {
+        isDataSaved = true;
+        saveProgress();
+    }
 }
 
 if (keyboard_check_pressed(ord("R")))

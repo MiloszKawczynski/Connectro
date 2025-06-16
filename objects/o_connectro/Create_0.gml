@@ -1,5 +1,6 @@
 fade = false;
 fadeAlpha = 1;
+isDataSaved = false;
 
 fadeFunction = undefined;
 
