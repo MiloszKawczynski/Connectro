@@ -1,3 +1,8 @@
+if (keyboard_check_pressed(vk_f6))
+{
+    moves++;
+}
+
 with(ui)
 {
     if (goBackButton.press)
