@@ -97,14 +97,7 @@ lastMousePosition = lerp(lastMousePosition, mouse_y, 0.5);
 
 scrollPositionFinal = scrollPosition + scrollFingerPosition;
 
-if (activeBarier == -1)
-{
-    scrollPositionFinal = max(scrollPositionFinal, scrollMin);
-}
-else 
-{
-	scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
-}
+scrollPositionFinal = clamp(scrollPositionFinal, scrollMin, scrollMax);
 
 if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 {

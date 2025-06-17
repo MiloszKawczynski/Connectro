@@ -76,6 +76,11 @@ function debugManipulation()
 
 function createBarierSurface()
 {
+    if (activeBarier == -1)
+    {
+        return;
+    }
+    
     if (createBariarSurface)
     {
         createBariarSurface = false;

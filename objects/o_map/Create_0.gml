@@ -27,6 +27,7 @@ scrollFingerPosition = global.positionOnMap;
 scrollPositionFinal = 0;
 scrollSpeed = 0;
 scrollMin = -1010;
+scrollMax = -global.levels[array_length(global.levels) - 1].y;
 scrollSnap = 0;
 checkForSnap = false;
 isSnapping = false;
