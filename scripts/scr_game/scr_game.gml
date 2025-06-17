@@ -133,7 +133,10 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
-					moves++;
+                    if (!tile.isUseless)
+                    {
+					    moves++;
+                    }
 				}
 				
 				break;
@@ -148,7 +151,10 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
-					moves++;
+					if (!tile.isUseless)
+                    {
+					    moves++;
+                    }
 				}
 				
 				break;
@@ -163,7 +169,10 @@ function normalTileEffect(showPotential = false)
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl3, 0, false);
-					moves++;
+					if (!tile.isUseless)
+                    {
+					    moves++;
+                    }
 				}
 				
 				break;
@@ -317,7 +326,10 @@ function mustPickDirectionTileEffect(showPotential = false)
         
 		if (!showPotential)
 		{
-			moves++;
+			if (!tile.sourceTile.isUseless)
+            {
+                moves++;
+            }
 			audio_play_sound(sn_lvl1, 0, false);
 		}
 		
@@ -406,7 +418,10 @@ function mustPickTargetTileEffect(showPotential = false)
 	{
 		if (!showPotential)
 		{
-			moves++;
+			if (!tile.sourceTile.isUseless)
+            {
+                moves++;
+            }
 			audio_play_sound(sn_lvl1, 0, false);
 		}
 		
