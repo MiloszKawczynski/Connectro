@@ -62,32 +62,6 @@ function initialize()
         width = real(splitSeed[0]);
         height = real(splitSeed[1]);
         
-        sprite = s_block1_1;
-        
-        if (width == height)
-        {
-            sprite = choose(s_block1_1, s_blockBrick1_1);
-        }
-        
-        if (width == 7 and height == 9)
-        {
-            sprite = choose(s_blockBrick7_9, s_blockBrick7_9);
-        }
-        
-        if (width == 9 and height == 11)
-        {
-            sprite = choose(s_block9_11, s_blockBrick9_11);
-        }
-        
-        if (width == 9 and height == 13)
-        {
-            sprite = choose(s_block9_13, s_blockBrick9_13);
-        }
-        
-        texture = sprite_get_texture(sprite, 1);
-        
-        model = createWall(width, height, 64);
-        
         if (hasMural)
         {
             if (string_digits(splitSeed[2]) == "")
@@ -102,11 +76,64 @@ function initialize()
         {
             biomImIn = i;
             
-            if (global.bioms[i].y > -y + 1010)
+            if (global.bioms[i].y > -y + 1010 * 1.5)
             {
                 break;
             }
         }
+        
+        sprite = s_block1_1;
+        
+        if (biomImIn == 0)
+        {
+            if (width == height)
+            {
+                sprite = choose(s_block1_1, s_blockBrick1_1);
+            }
+            
+            if (width == 7 and height == 9)
+            {
+                sprite = choose(s_block7_9, s_blockBrick7_9);
+            }
+            
+            if (width == 9 and height == 11)
+            {
+                sprite = choose(s_block9_11, s_blockBrick9_11);
+            }
+            
+            if (width == 9 and height == 13)
+            {
+                sprite = choose(s_block9_13, s_blockBrick9_13);
+            }
+        }
+        
+        if (biomImIn == 1)
+        {
+            if (width == height)
+            {
+                sprite = s_blockCity1_1;
+            }
+            
+            if (width == 7 and height == 9)
+            {
+                sprite = s_blockCity7_9;
+            }
+            
+            if (width == 9 and height == 11)
+            {
+                sprite = s_blockCity9_11;
+            }
+            
+            if (width == 9 and height == 13)
+            {
+                sprite = s_blockCity9_13;
+            }
+        }
+        
+        
+        texture = sprite_get_texture(sprite, 1);
+        
+        model = createWall(width, height, 64);
     }
     
     function biom(_y, _limit, _color) constructor 
