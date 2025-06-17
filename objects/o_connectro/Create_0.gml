@@ -44,6 +44,7 @@ goBackFunctionFade = function()
 restartFunctionFade = function()
 { 
     audio_stop_sound(sn_score);
+    audio_sound_gain(sn_town, 0.1, 1000);
     room_restart();
 }
 
