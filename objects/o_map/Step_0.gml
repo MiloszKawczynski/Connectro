@@ -57,6 +57,7 @@ else
             
             var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
             
+            
             for (var i = 0; i < array_length(global.levels); i++)
             {
                 if (!global.levels[i].hasMural)

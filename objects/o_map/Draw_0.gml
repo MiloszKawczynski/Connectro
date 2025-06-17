@@ -43,8 +43,31 @@ var current_view = matrix_get(matrix_view);
 var current_proj = matrix_get(matrix_projection);
 
 var scale = 1;
+var closestBuilding = 0;        
+var negSrollPosition = -scrollPositionFinal;    
+var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 for (var i = 0; i < array_length(global.levels); i++)
 {
+    if (!global.levels[i].hasMural)
+    {
+        continue;
+    }
+    
+    var lengthToBuilding = abs(negSrollPosition - global.levels[i].y);
+    if (lengthToBuilding < lengthToSnap)
+    {
+        lengthToSnap = lengthToBuilding;
+        closestBuilding = i;
+    }
+}
+
+for (var i = closestBuilding - cullingBlocks; i < closestBuilding + cullingBlocks; i++)
+{
+    if (i < 0 or i >= array_length(global.levels))
+    {
+        continue;
+    }
+    
     var lvl = global.levels[i];
     var zz = 64 / 2 * lvl.height / lvl.width * scale;
     matrix_set(matrix_world, matrix_build(lvl.x, lvl.y + scrollPositionFinal, zz * INVERT, -90, 45 + lvl.rotation, 0, -1 * scale, -1 * scale, -1 * scale * INVERT));
@@ -73,12 +96,12 @@ var proj = matrix_build_projection_ortho(
 matrix_set(matrix_projection, proj);
 
 var negSrollPosition = -scrollPositionFinal;
-var closestBuilding = 0;            
 var lengthToSnap = abs(negSrollPosition - global.levels[0].y);
 
 var mouseX = mouse_x - viewWidth / 2;
 var mouseY = mouse_y - viewHeight / 2;
 
+var closestBuilding = 0;            
 for (var i = 0; i < array_length(global.levels); i++)
 {
     if (!global.levels[i].hasMural)

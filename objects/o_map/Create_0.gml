@@ -32,6 +32,7 @@ scrollSnap = 0;
 checkForSnap = false;
 isSnapping = false;
 meetBarier = false;
+cullingBlocks = 13;
 
 pressedID = -1;
 
