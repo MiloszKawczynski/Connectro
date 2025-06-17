@@ -55,7 +55,6 @@ else
         {
             meetBarier = false;
             scrollPosition += scrollFingerPosition;
-            scrollSpeed = 0;
             scrollFingerPosition = 0;
             
             var negSrollPosition = -scrollPosition;
@@ -82,6 +81,7 @@ else
         if (abs(scrollPosition - -global.levels[scrollSnap].y) < 300)
         {
             isSnapping = true;
+            scrollSpeed = 0;
         }
     }
 }
