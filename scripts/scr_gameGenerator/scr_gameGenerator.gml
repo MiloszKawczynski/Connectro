@@ -270,11 +270,6 @@ function Tile(_type) constructor
         	    showScale = 0;
             }
         }
-        
-        if (isUseless)
-        {
-            return;
-        }
 		
 		if (lineDirection != -1)
 		{
