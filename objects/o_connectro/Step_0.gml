@@ -3,6 +3,14 @@ if (keyboard_check_pressed(vk_f6))
     moves++;
 }
 
+if (keyboard_check_pressed(vk_f7))
+{
+    with(ui)
+    {
+        createPaint(0, 5);
+    }
+}
+
 with(ui)
 {
     if (goBackButton.press)
