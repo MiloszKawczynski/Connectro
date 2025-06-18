@@ -1,5 +1,3 @@
-ui.draw();
-
 draw_set_font(f_base);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
@@ -49,6 +47,7 @@ if (drawSurface)
 }
 
 drawState();
+ui.draw();
 
 if (mouse_check_button_pressed(mb_right))
 {

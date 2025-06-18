@@ -243,9 +243,16 @@ with(ui)
     
     mainLayer.addComponent(0, 14, highLight);
     mainLayer.addComponent(1, 13.25, goBackButton);
-    mainLayer.addComponent(6, 13.25, restartButton);
     
-    mainLayer.addComponent(3.5, 13.25, movesCount);
+    if (global.isRoguelikeMode)
+    {
+        mainLayer.addComponent(6, 13.25, movesCount);
+    }
+    else 
+    {
+    	mainLayer.addComponent(6, 13.25, restartButton);
+        mainLayer.addComponent(3.5, 13.25, movesCount);
+    }
     
     mainLayer.addComponent(3.5, 0.5, add);
     

@@ -103,9 +103,9 @@ function getState()
     return state;
 }
 
-function normalTileEffect(showPotential = false)
+function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hoveredY)
 {
-	var tile = ds_grid_get(grid, hoveredX, hoveredY);
+	var tile = ds_grid_get(grid, tileX, tileY);
 	if (tile == undefined)
     {
         return;
@@ -125,10 +125,10 @@ function normalTileEffect(showPotential = false)
 		{
 			case(TilesTypes.plus):
 			{
-                revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
+                revealLine(tileX, tileY, tileX + tile.value, tileY, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX - tile.value, tileY, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX, tileY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX, tileY - tile.value, tile.color, state, showPotential, tile.type);
                 
 				if (!showPotential)
 				{
@@ -143,10 +143,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.cross):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX + tile.value, tileY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX - tile.value, tileY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX - tile.value, tileY - tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX + tile.value, tileY - tile.value, tile.color, state, showPotential, tile.type);
 				
 				if (!showPotential)
 				{
@@ -161,10 +161,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.diamond):
 			{
-				revealLine(hoveredX, hoveredY, hoveredX + tile.value, hoveredY, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX - tile.value, hoveredY, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY + tile.value, tile.color, state, showPotential, tile.type);
-				revealLine(hoveredX, hoveredY, hoveredX, hoveredY - tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX + tile.value, tileY, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX - tile.value, tileY, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX, tileY + tile.value, tile.color, state, showPotential, tile.type);
+				revealLine(tileX, tileY, tileX, tileY - tile.value, tile.color, state, showPotential, tile.type);
 				
 				if (!showPotential)
 				{
@@ -179,10 +179,10 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.line):
 			{
-				var rightDown = wrapAroundGrid(global.width, global.height, hoveredX + 1, hoveredY + 1);
-				var leftUp = wrapAroundGrid(global.width, global.height, hoveredX - 1, hoveredY - 1);
+				var rightDown = wrapAroundGrid(global.width, global.height, tileX + 1, tileY + 1);
+				var leftUp = wrapAroundGrid(global.width, global.height, tileX - 1, tileY - 1);
 				
-				with(ds_grid_get(grid, rightDown.x, hoveredY))
+				with(ds_grid_get(grid, rightDown.x, tileY))
 				{
 					if (type != TilesTypes.block)
 					{
@@ -192,7 +192,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, hoveredX, rightDown.y))
+				with(ds_grid_get(grid, tileX, rightDown.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -202,7 +202,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, leftUp.x, hoveredY))
+				with(ds_grid_get(grid, leftUp.x, tileY))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -212,7 +212,7 @@ function normalTileEffect(showPotential = false)
 					}
 				}
 				
-				with(ds_grid_get(grid, hoveredX, leftUp.y))
+				with(ds_grid_get(grid, tileX, leftUp.y))
 				{
 					if (type != TilesTypes.block) 
 					{
@@ -228,8 +228,8 @@ function normalTileEffect(showPotential = false)
 			}
 			case(TilesTypes.lineDiag):
 			{
-				var rightDown = wrapAroundGrid(global.width, global.height, hoveredX + 1, hoveredY + 1);
-				var leftUp = wrapAroundGrid(global.width, global.height, hoveredX - 1, hoveredY - 1);
+				var rightDown = wrapAroundGrid(global.width, global.height, tileX + 1, tileY + 1);
+				var leftUp = wrapAroundGrid(global.width, global.height, tileX - 1, tileY - 1);
 				
 				with(ds_grid_get(grid, rightDown.x, rightDown.y))
 				{
