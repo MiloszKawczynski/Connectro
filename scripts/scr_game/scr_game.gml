@@ -604,7 +604,11 @@ function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType,
 			}
 			else 
 			{
-				isRevealed = true; 
+                if (!isRevealed)
+                {
+    				isRevealed = true; 
+                    reavealScale = -power(15, i);
+                }
                 
 				//flashTimer = 0;
 				

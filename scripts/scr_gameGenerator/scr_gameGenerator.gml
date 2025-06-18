@@ -35,6 +35,7 @@ function Tile(_type) constructor
     isUseless = false;
     uselessAlpha = 1;
     showScale = 0;
+    reavealScale = 0;
 	
 	switch(type)
 	{
@@ -143,6 +144,13 @@ function Tile(_type) constructor
 	{
 		if (isRevealed)
 		{
+            reavealScale = lerp(reavealScale, 1, 0.2 * 1.33);
+            var clampScale = max(reavealScale, 0);
+            
+            var scale = global.cellSize * clampScale;
+            var xPos = xx * global.cellSize + global.cellSize * 0.5;
+            var yPos = yy * global.cellSize + global.cellSize * 0.5 + other.gameOffset;
+            
 			if (type == TilesTypes.block)
 			{
 				draw_sprite_stretched(s_icon, type, xx * global.cellSize, yy * global.cellSize + other.gameOffset, global.cellSize, global.cellSize); 
@@ -151,7 +159,7 @@ function Tile(_type) constructor
 			{
 				draw_set_color(color);
 				draw_set_alpha(0.45);	
-				draw_rectangle(xx * global.cellSize, yy * global.cellSize + other.gameOffset, xx * global.cellSize + global.cellSize, yy * global.cellSize + global.cellSize + other.gameOffset, false);
+				draw_rectangle(xPos - scale / 2, yPos - scale / 2, xPos + scale / 2, yPos + scale / 2, false);
 				draw_set_alpha(1);
 			}
 		}
@@ -217,6 +225,11 @@ function Tile(_type) constructor
 	
 	static drawButton = function(xx, yy)
 	{
+        if (reavealScale < 0)
+        {
+            return;
+        }
+        
         var float = 1;
         var blink = 0;
             
