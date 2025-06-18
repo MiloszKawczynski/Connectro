@@ -117,3 +117,9 @@ if (scrollPositionFinal == scrollMin or scrollPositionFinal == scrollMax)
 }
 
 buildingShout = timer(buildingShout, 0.02);
+
+if (keyboard_check_pressed(vk_backspace))
+{
+    fade = true;
+    fadeFunction = goToMenuFade;
+}

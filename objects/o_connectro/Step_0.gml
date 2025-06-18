@@ -186,3 +186,9 @@ if (keyboard_check_pressed(vk_escape))
 	audio_stop_sound(sn_score);
 	game_restart();
 }
+
+if (keyboard_check_pressed(vk_backspace))
+{
+    fade = true;
+    fadeFunction = goBackFunctionFade;
+}
