@@ -1,10 +1,5 @@
-function createPaint(_type, _value)
+function createPaintUI(_type, _value, _paintId)
 {
-    if (array_length(paints) == 3)
-    {
-        return;
-    }
-    
     with(ui)
     {
         var takePaint = function ()  { }
@@ -40,7 +35,7 @@ function createPaint(_type, _value)
                 
                     ds_grid_set(grid, paintX, paintY, paintTile)
                     normalTileEffect(false, paintX, paintY);
-                    array_delete(paints, string_digits(name), 1);
+                    array_delete(global.paints, string_digits(name), 1);
                     moves--;
                 }
                 
@@ -65,25 +60,25 @@ function createPaint(_type, _value)
             swing = 0;
             type = _type;
             value = _value;
-            name = string("paint{0}", array_length(o_connectro.paints));
+            name = string("paint{0}", _paintId);
             paintX = -1;
             paintY = -1;
             hoveredTile = undefined;
             
             var normalFunction = function()
             {
-                draw_sprite_ext(s_paint, type, posX, posY, 4, 4, 0, c_white, 1);
-                draw_sprite_ext(s_valuePaint, value, posX, posY, 4, 4, 0, c_white, 1);
+                draw_sprite_ext(s_paint, type, posX, posY, 3, 3, 0, c_white, 1);
+                draw_sprite_ext(s_valuePaint, value, posX, posY, 3, 3, 0, c_white, 1);
             }
             
             var pressFunction = function()
             {
                 swing++;
-                draw_sprite_ext(s_paint, type, posX, posY, 4, 4, sin(swing / 10) * 15, c_white, 1);
-                draw_sprite_ext(s_valuePaint, value, posX, posY, 4, 4, sin(swing / 10) * 15, c_white, 1);
+                draw_sprite_ext(s_paint, type, posX, posY, 3, 3, sin(swing / 10) * 15, c_white, 1);
+                draw_sprite_ext(s_valuePaint, value, posX, posY, 3, 3, sin(swing / 10) * 15, c_white, 1);
             }
             
-            setDrawFunctions(normalFunction,, pressFunction,, 15 * 4, 15 * 4);
+            setDrawFunctions(normalFunction,, pressFunction,, 15 * 3, 15 * 3);
             
             step = function()
     		{
@@ -195,8 +190,20 @@ function createPaint(_type, _value)
     		}
         }
         
-        mainLayer.addComponent(2.2 + array_length(other.paints) * 1.2, 13.25, paint);
+        mainLayer.addComponent(2.25 + _paintId * 1.25, 13.25, paint);
+    }
+}
+
+function createPaint(_type, _value)
+{
+    var paintId = array_length(global.paints);
+    
+    if (array_length(global.paints) == 3)
+    {
+        return;
     }
     
-    array_push(paints, { t: _type, v: _value });
+    createPaintUI(_type, _value, paintId);
+    
+    array_push(global.paints, { t: _type, v: _value, _paintId: paintId});
 }
