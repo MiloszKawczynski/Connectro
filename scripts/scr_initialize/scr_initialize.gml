@@ -30,37 +30,17 @@ function initialize()
 	
 	global.loadedLevels = false;
     
-    function level(_seed, _x, _y, _hasMural = false, _movesToStar = [0, 0, 0]) constructor 
+    function level(_seed, _x = 0, _y = 0, _hasMural = false, _movesToStar = [0, 0, 0], _roguelike = false) constructor 
     {
         seed = _seed;
-        x = 32 * (_x - 7 / 2);
-        y = (-_y + 47) * 32 - 15;
         stars = 0;
-        moves = 999;
         movesToStar = _movesToStar;
-        hasMural = _hasMural;
-        shoutRotation = 0;
         typeOfLoad = 1;
-        
-        if (hasMural)
-        {
-            if (_x == 2)
-            {
-                rotation = 0;
-            }
-            else 
-            {
-            	rotation = 270;
-            }
-        }
-        else 
-        {
-        	rotation = choose(180, 90);
-        }
-        
+        hasMural = _hasMural;
         splitSeed = string_split(seed, "_");
         width = real(splitSeed[0]);
         height = real(splitSeed[1]);
+        color = c_aqua;
         
         if (hasMural)
         {
@@ -71,69 +51,95 @@ function initialize()
             }
         }
         
-        biomImIn = 0;
-        for (var i = 0; i < array_length(global.bioms); i++)
+        if (!_roguelike)
         {
-            biomImIn = i;
+            x = 32 * (_x - 7 / 2);
+            y = (-_y + 47) * 32 - 15;
+            moves = 999;
+            shoutRotation = 0;
             
-            if (global.bioms[i].y > -y + 1010 * 1.5)
+            if (hasMural)
             {
-                break;
+                if (_x == 2)
+                {
+                    rotation = 0;
+                }
+                else 
+                {
+                	rotation = 270;
+                }
             }
+            else 
+            {
+            	rotation = choose(180, 90);
+            }
+            
+            biomImIn = 0;
+            for (var i = 0; i < array_length(global.bioms); i++)
+            {
+                biomImIn = i;
+                
+                if (global.bioms[i].y > -y + 1010 * 1.5)
+                {
+                    break;
+                }
+            }
+            
+            color = global.bioms[biomImIn].color;
+            
+            sprite = s_block1_1;
+            
+            if (biomImIn == 0)
+            {
+                if (width == height)
+                {
+                    sprite = choose(s_block1_1, s_blockBrick1_1);
+                }
+                
+                if (width == 7 and height == 9)
+                {
+                    sprite = choose(s_block7_9, s_blockBrick7_9);
+                }
+                
+                if (width == 9 and height == 11)
+                {
+                    sprite = choose(s_block9_11, s_blockBrick9_11);
+                }
+                
+                if (width == 9 and height == 13)
+                {
+                    sprite = choose(s_block9_13, s_blockBrick9_13);
+                }
+            }
+            
+            if (biomImIn == 1)
+            {
+                if (width == height)
+                {
+                    sprite = s_blockCity1_1;
+                }
+                
+                if (width == 7 and height == 9)
+                {
+                    sprite = s_blockCity7_9;
+                }
+                
+                if (width == 9 and height == 11)
+                {
+                    sprite = s_blockCity9_11;
+                }
+                
+                if (width == 9 and height == 13)
+                {
+                    sprite = s_blockCity9_13;
+                }
+            }
+        
+        
+            texture = sprite_get_texture(sprite, 1);
+            
+            model = createWall(width, height, 64);
         }
-        
-        sprite = s_block1_1;
-        
-        if (biomImIn == 0)
-        {
-            if (width == height)
-            {
-                sprite = choose(s_block1_1, s_blockBrick1_1);
-            }
-            
-            if (width == 7 and height == 9)
-            {
-                sprite = choose(s_block7_9, s_blockBrick7_9);
-            }
-            
-            if (width == 9 and height == 11)
-            {
-                sprite = choose(s_block9_11, s_blockBrick9_11);
-            }
-            
-            if (width == 9 and height == 13)
-            {
-                sprite = choose(s_block9_13, s_blockBrick9_13);
-            }
-        }
-        
-        if (biomImIn == 1)
-        {
-            if (width == height)
-            {
-                sprite = s_blockCity1_1;
-            }
-            
-            if (width == 7 and height == 9)
-            {
-                sprite = s_blockCity7_9;
-            }
-            
-            if (width == 9 and height == 11)
-            {
-                sprite = s_blockCity9_11;
-            }
-            
-            if (width == 9 and height == 13)
-            {
-                sprite = s_blockCity9_13;
-            }
-        }
-        
-        
-        texture = sprite_get_texture(sprite, 1);
-        
-        model = createWall(width, height, 64);
     }
     
     function biom(_y, _limit, _color) constructor 
@@ -145,6 +151,7 @@ function initialize()
     
     global.levels = array_create(0);
     global.bioms = array_create(0);
+    global.rogelikeLevels = array_create(0);
     
     array_push(global.bioms, 
     new biom(904, 12, make_color_rgb(0, 74, 11)),
@@ -220,6 +227,14 @@ function initialize()
     );
     
     global.choosedLevel = 0;
+    
+    array_push(global.rogelikeLevels,
+        new level("9_13_4_3_4_0_4_1_0_1795845498",,, true, [30, 20, 18], true),
+        new level("9_13_4_3_4_0_4_1_0_2275901463",,, true, [25, 22, 18], true),
+        new level("9_13_4_3_1_1_4_1_0_1947235746",,, true, [30, 25, 20], true),
+        new level("9_13_4_3_1_1_4_1_0_2578357245",,, true, [25, 19, 16], true),
+        new level("9_13_4_3_2_2_4_1_1_3943296509",,, true, [30, 25, 21], true),
+    )
     
     global.aspect = 9 / 20;
     global.positionOnMap = -1010;
