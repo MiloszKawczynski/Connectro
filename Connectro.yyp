@@ -217,6 +217,7 @@
     {"id":{"name":"s_menuIconBar","path":"sprites/s_menuIconBar/s_menuIconBar.yy",},},
     {"id":{"name":"s_menuVignette","path":"sprites/s_menuVignette/s_menuVignette.yy",},},
     {"id":{"name":"s_paint","path":"sprites/s_paint/s_paint.yy",},},
+    {"id":{"name":"s_paintSlot","path":"sprites/s_paintSlot/s_paintSlot.yy",},},
     {"id":{"name":"s_playButton","path":"sprites/s_playButton/s_playButton.yy",},},
     {"id":{"name":"s_star","path":"sprites/s_star/s_star.yy",},},
     {"id":{"name":"s_target","path":"sprites/s_target/s_target.yy",},},

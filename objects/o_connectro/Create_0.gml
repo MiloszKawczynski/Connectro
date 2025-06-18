@@ -10,7 +10,10 @@ if (global.isRoguelikeMode)
 {
     randomize();
     levelToPlay = global.rogelikeLevels[random(array_length(global.rogelikeLevels))];
-    paints = [];
+    if (!variable_global_exists("paints"))
+    {
+        global.paints = [];
+    }
 }
 
 global.width = levelToPlay.width;
@@ -255,6 +258,14 @@ with(ui)
         mainLayer.addComponent(3.5, 13.25, movesCount);
     }
     
+    for(var i = 0; i < 3; i++)
+    {
+        var slot = new Output();
+        slot.setSprite(s_paintSlot);
+        slot.setScale(3, 3);
+        mainLayer.addComponent(2.25 + 1.25 * i, 13.25, slot);
+    }
+    
     mainLayer.addComponent(3.5, 0.5, add);
     
     mainLayer.addComponent(3.5, 2.25, movesBar);
@@ -311,6 +322,15 @@ if (!global.isRoguelikeMode)
     buildingRotationSpeed = 1;
     buildingScale = 1;
     buildingTilt = 0;
+}
+else 
+{
+    for(var i = 0; i < array_length(global.paints); i++)
+    {
+        createPaintUI(global.paints[i].t, global.paints[i].v, i);
+    }
+    
+	createPaint(0, 5);
 }
 
 lastMousePosition = mouse_x;
