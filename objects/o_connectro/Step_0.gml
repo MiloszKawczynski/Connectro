@@ -23,10 +23,10 @@ with(ui)
     	restartButton.setScale(1, 1);
     }
     
-    var numberOfMoves = clamp(1 - (other.moves / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
-    var numberOfMovesToFirst = clamp(1 - (global.levels[global.choosedLevel].movesToStar[0] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
-    var numberOfMovesToSecond = clamp(1 - (global.levels[global.choosedLevel].movesToStar[1] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
-    var numberOfMovesToThird = clamp(1 - (global.levels[global.choosedLevel].movesToStar[2] / global.levels[global.choosedLevel].movesToStar[0]), 0, 1);
+    var numberOfMoves = clamp(1 - (other.moves / other.levelToPlay.movesToStar[0]), 0, 1);
+    var numberOfMovesToFirst = clamp(1 - (other.levelToPlay.movesToStar[0] / other.levelToPlay.movesToStar[0]), 0, 1);
+    var numberOfMovesToSecond = clamp(1 - (other.levelToPlay.movesToStar[1] / other.levelToPlay.movesToStar[0]), 0, 1);
+    var numberOfMovesToThird = clamp(1 - (other.levelToPlay.movesToStar[2] / other.levelToPlay.movesToStar[0]), 0, 1);
     
     movesCount.setContent(string(other.moves));
     movesBar.setValue(numberOfMoves);
@@ -39,19 +39,19 @@ with(ui)
     movesToSecondStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToSecond * movesBar.scaleX * movesBar.width - 5, 12);
     movesToThirdStar.setShift(-movesBar.scaleX * movesBar.width / 2 + numberOfMovesToThird * movesBar.scaleX * movesBar.width - 5, 12);
     
-    if (other.moves > global.levels[global.choosedLevel].movesToStar[0])
+    if (other.moves > other.levelToPlay.movesToStar[0])
     {
         firstStarRing.setSprite(s_uiLimit);
         firstStar.isGold = false;
     }
     
-    if (other.moves > global.levels[global.choosedLevel].movesToStar[1])
+    if (other.moves > other.levelToPlay.movesToStar[1])
     {
         secondStarRing.setSprite(s_uiLimit);
         secondStar.isGold = false;
     }
     
-    if (other.moves > global.levels[global.choosedLevel].movesToStar[2])
+    if (other.moves > other.levelToPlay.movesToStar[2])
     {
         thirdStarRing.setSprite(s_uiLimit);
         thirdStar.isGold = false;
@@ -161,11 +161,18 @@ if (isAllRevealed())
 {
     if (gameState == normal)
     {
-    	drawSurface = true;
-    	gameState = gameEnd;
-    	drawState = endScreenTransitionDraw;
-    	audio_play_sound(sn_score, 0, true);
-        audio_sound_gain(sn_town, 0, 1000);
+        if (!global.isRoguelikeMode)
+        {
+        	drawSurface = true;
+    	    gameState = gameEnd;
+    	    drawState = endScreenTransitionDraw;
+            audio_play_sound(sn_score, 0, true);
+            audio_sound_gain(sn_town, 0, 1000);
+        }
+        else 
+        {
+        	room_restart();
+        }
     }
     
     if (gameState == gameEnd and !isDataSaved and !drawSurface)

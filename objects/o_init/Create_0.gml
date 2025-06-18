@@ -12,6 +12,8 @@ global.debugStars = 0;
 
 debugPress = 0;
 
+global.isRoguelikeMode = false;
+
 event_inherited();
 
 randomize();
@@ -25,6 +27,12 @@ fadeFunction = undefined;
 paintFunctionFade = function()
 { 
     room_goto(r_map);
+}
+
+rogueFunctionFade = function()
+{ 
+    global.isRoguelikeMode = true;
+    room_goto(r_game);
 }
 
 with(ui)
@@ -91,7 +99,7 @@ with(ui)
     var rogueFunction = function()
 	{ 
         o_init.fade = true;
-        o_init.fadeFunction = o_init.paintFunctionFade;
+        o_init.fadeFunction = o_init.rogueFunctionFade;
 	}
     
     var resetFunction = function()

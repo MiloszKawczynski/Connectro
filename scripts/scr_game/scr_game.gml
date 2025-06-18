@@ -1024,24 +1024,24 @@ function saveProgress()
 {
     var gainedStars = 3;
     
-    if (moves > global.levels[global.choosedLevel].movesToStar[0])
+    if (moves > levelToPlay.movesToStar[0])
     {
         gainedStars = 0;
     }    
-    else if (moves > global.levels[global.choosedLevel].movesToStar[1])
+    else if (moves > levelToPlay.movesToStar[1])
     {
         gainedStars = 1;
     }
-    else if (moves > global.levels[global.choosedLevel].movesToStar[2])
+    else if (moves > levelToPlay.movesToStar[2])
     {
         gainedStars = 2;
     }
     
-    if (moves <= global.levels[global.choosedLevel].moves)
+    if (moves <= levelToPlay.moves)
     {
-        global.levels[global.choosedLevel].stars = gainedStars;
-        global.levels[global.choosedLevel].texture = surfaceTexture;
-        global.levels[global.choosedLevel].moves = moves;
+        levelToPlay.stars = gainedStars;
+        levelToPlay.texture = surfaceTexture;
+        levelToPlay.moves = moves;
         saveLevel();
     }
 }

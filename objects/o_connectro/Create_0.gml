@@ -4,15 +4,23 @@ isDataSaved = false;
 
 fadeFunction = undefined;
 
-global.width = global.levels[global.choosedLevel].width;
-global.height = global.levels[global.choosedLevel].height;
-global.typeOfLoad = global.levels[global.choosedLevel].typeOfLoad;
+levelToPlay = global.levels[global.choosedLevel];
+
+if (global.isRoguelikeMode)
+{
+    randomize();
+    levelToPlay = global.rogelikeLevels[random(array_length(global.rogelikeLevels))];
+}
+
+global.width = levelToPlay.width;
+global.height = levelToPlay.height;
+global.typeOfLoad = levelToPlay.typeOfLoad;
 
 if (!global.isEditorOn)
 {
-    if (string_digits(global.levels[global.choosedLevel].seed) == "")
+    if (string_digits(levelToPlay.seed) == "")
     {
-        global.level = global.levels[global.choosedLevel].seed;
+        global.level = levelToPlay.seed;
     }
     else 
     {
@@ -131,13 +139,13 @@ with(ui)
     thirdStarRing.setSprite(s_uiLimitGold);
     thirdStarRing.setScale(4, 4);
     
-    movesToFirstStar = new Text(global.levels[global.choosedLevel].movesToStar[0], f_game);
+    movesToFirstStar = new Text(other.levelToPlay.movesToStar[0], f_game);
     movesToFirstStar.setScale(0.55, 0.55);
     
-    movesToSecondStar = new Text(global.levels[global.choosedLevel].movesToStar[1], f_game);
+    movesToSecondStar = new Text(other.levelToPlay.movesToStar[1], f_game);
     movesToSecondStar.setScale(0.55, 0.55);
     
-    movesToThirdStar = new Text(global.levels[global.choosedLevel].movesToStar[2], f_game);
+    movesToThirdStar = new Text(other.levelToPlay.movesToStar[2], f_game);
     movesToThirdStar.setScale(0.55, 0.55);
     
     firstStar = new Output();
@@ -231,7 +239,7 @@ with(ui)
     
     highLight = new Output();
     highLight.setSprite(s_gameHighlight);
-    highLight.setColor(global.bioms[global.levels[global.choosedLevel].biomImIn].color);
+    highLight.setColor(other.levelToPlay.color);
     
     mainLayer.addComponent(0, 14, highLight);
     mainLayer.addComponent(1, 13.25, goBackButton);
@@ -281,18 +289,21 @@ moves = 0;
 drawSurface = false;
 is3DCreated = false;
 
-var buildingSprite = global.levels[global.choosedLevel].sprite;
-var spriteWidth = sprite_get_width(buildingSprite);
-var spriteHeight = sprite_get_height(buildingSprite);
-
-muralSurface = surface_create(global.width * global.cellSize, global.height * global.cellSize);
-blockSurface = surface_create(spriteWidth, spriteHeight);
-
-buildingRotation = 0;
-buildingFingerRotation = 0;
-buildingRotationSpeed = 1;
-buildingScale = 1;
-buildingTilt = 0;
+if (!global.isRoguelikeMode)
+{
+    var buildingSprite = global.levels[global.choosedLevel].sprite;
+    var spriteWidth = sprite_get_width(buildingSprite);
+    var spriteHeight = sprite_get_height(buildingSprite);
+    
+    muralSurface = surface_create(global.width * global.cellSize, global.height * global.cellSize);
+    blockSurface = surface_create(spriteWidth, spriteHeight);
+    
+    buildingRotation = 0;
+    buildingFingerRotation = 0;
+    buildingRotationSpeed = 1;
+    buildingScale = 1;
+    buildingTilt = 0;
+}
 
 lastMousePosition = mouse_x;
 lastMousePositionPressed = mouse_x;
