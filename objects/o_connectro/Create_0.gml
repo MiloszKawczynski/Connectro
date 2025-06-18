@@ -10,6 +10,7 @@ if (global.isRoguelikeMode)
 {
     randomize();
     levelToPlay = global.rogelikeLevels[random(array_length(global.rogelikeLevels))];
+    paints = [];
 }
 
 global.width = levelToPlay.width;
