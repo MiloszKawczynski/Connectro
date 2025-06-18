@@ -1,5 +1,10 @@
 function createPaint(_type, _value)
 {
+    if (array_length(paints) == 3)
+    {
+        return;
+    }
+    
     with(ui)
     {
         var takePaint = function ()  { }
@@ -25,6 +30,7 @@ function createPaint(_type, _value)
                 var paintValue = other.value;
                 var paintX = other.paintX;
                 var paintY = other.paintY;
+                var name = other.name;
                 
                 with(o_connectro)
                 {
@@ -34,6 +40,7 @@ function createPaint(_type, _value)
                 
                     ds_grid_set(grid, paintX, paintY, paintTile)
                     normalTileEffect(false, paintX, paintY);
+                    array_delete(paints, string_digits(name), 1);
                     moves--;
                 }
                 
@@ -41,7 +48,7 @@ function createPaint(_type, _value)
                 {
                     for(var i = 0; i < ds_list_size(components); i++)
                     {
-                        if (ds_list_find_value(components, i).name == "paint0")
+                        if (ds_list_find_value(components, i).name == name)
                         {
                             ds_list_delete(components, i);
                             break;
@@ -58,7 +65,7 @@ function createPaint(_type, _value)
             swing = 0;
             type = _type;
             value = _value;
-            name = "paint0";
+            name = string("paint{0}", array_length(o_connectro.paints));
             paintX = -1;
             paintY = -1;
             hoveredTile = undefined;
