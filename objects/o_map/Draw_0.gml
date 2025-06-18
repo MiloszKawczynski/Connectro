@@ -179,7 +179,7 @@ for (var i = 5; i >= -5; i--)
     draw_triangle(xx - 4, yy + height, xx + 4, yy + height, xx, yy + pinTail, false);
     draw_roundrect(xx - width, yy - height, xx + width, yy + height, false);
     
-    if (global.levels[buildingUIId].stars != 0)
+    if (global.levels[buildingUIId].moves != 999)
     {
         for (var s = -1; s <= 1; s++)
         {
