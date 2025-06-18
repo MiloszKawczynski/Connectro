@@ -22,7 +22,10 @@ if (!global.isEditorOn)
 
 event_inherited();
 
-camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
+if (global.aspect <= 0.48)
+{
+    camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
+}
 
 goBackFunctionFade = function()
 {
