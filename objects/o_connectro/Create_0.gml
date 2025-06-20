@@ -251,19 +251,19 @@ with(ui)
     if (global.isRoguelikeMode)
     {
         mainLayer.addComponent(6, 13.25, movesCount);
+        
+        for(var i = 0; i < 3; i++)
+        {
+            var slot = new Output();
+            slot.setSprite(s_paintSlot);
+            slot.setScale(3, 3);
+            mainLayer.addComponent(2.25 + 1.25 * i, 13.25, slot);
+        }
     }
     else 
     {
     	mainLayer.addComponent(6, 13.25, restartButton);
         mainLayer.addComponent(3.5, 13.25, movesCount);
-    }
-    
-    for(var i = 0; i < 3; i++)
-    {
-        var slot = new Output();
-        slot.setSprite(s_paintSlot);
-        slot.setScale(3, 3);
-        mainLayer.addComponent(2.25 + 1.25 * i, 13.25, slot);
     }
     
     mainLayer.addComponent(3.5, 0.5, add);
@@ -283,6 +283,59 @@ with(ui)
     mainLayer.addComponent(5.5, 1.35, thirdStar);
 
     pushLayer(mainLayer);
+    
+    if (global.isRoguelikeMode)
+    {
+        paintsLayer = new Layer();
+        paintsLayer.setGrid(4, 4);
+        
+        var pickPaint = function()
+        {
+            createPaint(other.type, other.value);
+            popLayer();
+        }
+        
+        for(var i = 0; i < 3; i++)
+        {
+            var paintCard = new Button(pickPaint);
+            paintCard.setSprites(s_paintCard);
+            paintCard.setScale(8, 8);
+            
+            with(paintCard)
+            {
+                type = irandom(3);
+                value = irandom(3);
+                
+                var normalFunction = function()
+                {
+                    draw_sprite_ext(s_paintCard, 0, posX, posY, 4, 4, 0, c_white, 1);
+                    draw_sprite_ext(s_paintCardTile, type, posX, posY, 4, 4, 0, c_white, 1);
+                    draw_sprite_ext(s_valuePaintCard, value, posX, posY, 4, 4, 0, c_white, 1);
+                }
+                
+                setDrawFunctions(normalFunction,,,, 15 * 8, 15 * 8);
+            }
+            
+            switch(i)
+            {
+                case(0):
+                {
+                    paintsLayer.addComponent(2, 1.375, paintCard);
+                    break;
+                }
+                case(1):
+                {
+                    paintsLayer.addComponent(2, 2.125, paintCard);
+                    break;
+                }
+                case(2):
+                {
+                    paintsLayer.addComponent(2, 2.875, paintCard);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 if (global.seed == 0)
