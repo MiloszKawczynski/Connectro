@@ -289,52 +289,7 @@ with(ui)
         paintsLayer = new Layer();
         paintsLayer.setGrid(4, 4);
         
-        var pickPaint = function()
-        {
-            createPaint(other.type, other.value);
-            popLayer();
-        }
-        
-        for(var i = 0; i < 3; i++)
-        {
-            var paintCard = new Button(pickPaint);
-            paintCard.setSprites(s_paintCard);
-            paintCard.setScale(8, 8);
-            
-            with(paintCard)
-            {
-                type = irandom(3);
-                value = irandom(3);
-                
-                var normalFunction = function()
-                {
-                    draw_sprite_ext(s_paintCard, 0, posX, posY, 4, 4, 0, c_white, 1);
-                    draw_sprite_ext(s_paintCardTile, type, posX, posY, 4, 4, 0, c_white, 1);
-                    draw_sprite_ext(s_valuePaintCard, value, posX, posY, 4, 4, 0, c_white, 1);
-                }
-                
-                setDrawFunctions(normalFunction,,,, 15 * 8, 15 * 8);
-            }
-            
-            switch(i)
-            {
-                case(0):
-                {
-                    paintsLayer.addComponent(2, 1.375, paintCard);
-                    break;
-                }
-                case(1):
-                {
-                    paintsLayer.addComponent(2, 2.125, paintCard);
-                    break;
-                }
-                case(2):
-                {
-                    paintsLayer.addComponent(2, 2.875, paintCard);
-                    break;
-                }
-            }
-        }
+        createPaintsCards();
     }
 }
 
