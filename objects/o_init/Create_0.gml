@@ -8,6 +8,7 @@ global.typeOfLoad = 0;
 
 global.isSolverOn = false;
 global.gamesToSolve = 0;
+global.debugStars = 0;
 
 event_inherited();
 
@@ -96,6 +97,11 @@ with(ui)
 		deleteSavedData();
 	}
     
+    var unlockFunction = function()
+	{
+		global.debugStars = 100;
+	}
+    
     paintButton = new Button(paintFunction);
     paintButton.setSprites(s_button);
     paintButtonText = new Text("Paint", f_menu);
@@ -109,20 +115,42 @@ with(ui)
     rogueButtonText.setColor(c_black);
     
     resetButton = new Button(resetFunction);
-    resetButton.setSprites(s_button);
+    resetButton.setSprites(s_buttonMini);
     resetButtonText = new Text("Reset", f_menu);
     resetButtonText.setShift(0, 4);
     resetButtonText.setColor(c_black);
+    
+    resetButton = new Button(resetFunction);
+    resetButton.setSprites(s_buttonMini);
+    resetButtonText = new Text("R", f_menu);
+    resetButtonText.setShift(0, 4);
+    resetButtonText.setColor(c_black);
+    
+    resetAllButton = new Button(resetFunction);
+    resetAllButton.setSprites(s_buttonMini);
+    resetAllButtonText = new Text("rall", f_menu);
+    resetAllButtonText.setShift(0, 4);
+    resetAllButtonText.setColor(c_black);
+    
+    unlockAllButton = new Button(unlockFunction);
+    unlockAllButton.setSprites(s_buttonMini);
+    unlockAllButtonText = new Text("uall", f_menu);
+    unlockAllButtonText.setShift(0, 4);
+    unlockAllButtonText.setColor(c_black);
     
     mainLayer.addComponent(0, 0, vignetteL);
     mainLayer.addComponent(6, 0, vignetteR);
     mainLayer.addComponent(0, -5, logo);
     mainLayer.addComponent(3, 9.5, paintButton);
     mainLayer.addComponent(3, 10.75, rogueButton);
-    mainLayer.addComponent(3, 12, resetButton);
+    mainLayer.addComponent(1.5, 12, resetButton);
+    mainLayer.addComponent(3, 12, resetAllButton);
+    mainLayer.addComponent(4.5, 12, unlockAllButton);
     mainLayer.addComponent(3, 9.5, paintButtonText);
     mainLayer.addComponent(3, 10.75, rogueButtonText);
-    mainLayer.addComponent(3, 12, resetButtonText);
+    mainLayer.addComponent(1.5, 12, resetButtonText);
+    mainLayer.addComponent(3, 12, resetAllButtonText);
+    mainLayer.addComponent(4.5, 12, unlockAllButtonText);
 	
 	pushLayer(mainLayer);
 }

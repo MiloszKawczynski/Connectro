@@ -36,6 +36,28 @@ with(ui)
         resetButtonText.setScale(1, 1);
     }
     
+    if (resetAllButton.press)
+    {
+        resetAllButton.setScale(1.1, 1.1);
+        resetAllButtonText.setScale(1.1, 1.1);
+    }
+    else 
+    {
+    	resetAllButton.setScale(1, 1);
+        resetAllButtonText.setScale(1, 1);
+    }
+    
+    if (unlockAllButton.press)
+    {
+        unlockAllButton.setScale(1.1, 1.1);
+        unlockAllButtonText.setScale(1.1, 1.1);
+    }
+    else 
+    {
+    	unlockAllButton.setScale(1, 1);
+        unlockAllButtonText.setScale(1, 1);
+    }
+    
     if (logoTimer != 0 or init)
     {
         logoTimer = timer(logoTimer, 0.02);

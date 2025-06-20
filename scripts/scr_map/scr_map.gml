@@ -1,6 +1,6 @@
 function calculateGainedStars()
 {
-    gainedStars = 0;
+    gainedStars = global.debugStars;
     for (var i = 0; i < array_length(global.levels); i++)
     {
         if (!global.levels[i].hasMural)
