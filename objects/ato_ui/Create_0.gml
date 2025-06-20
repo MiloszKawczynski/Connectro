@@ -515,6 +515,11 @@ function UI() constructor
 			posY = containerImIn.posY + shiftY + posInGridY * containerImIn.grid.verticalGridSize;
 			isActive = containerImIn.isActive;
 		}	
+        
+        static setActiveStatus = function()
+		{					
+			isActive = containerImIn.isActive;
+		}	
 	}
 	
 	function Input(_x = 0, _y = 0) : Component(_x, _y) constructor
