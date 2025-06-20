@@ -30,11 +30,22 @@ function createPaintUI(_type, _value, _paintId)
                 with(o_connectro)
                 {
                     var paintTile = new Tile(paintType);
-                    paintTile.isAvailable = true;
-                    paintTile.value = paintValue;
-                
-                    ds_grid_set(grid, paintX, paintY, paintTile)
-                    normalTileEffect(false, paintX, paintY);
+                    
+                    if (paintType == 0 or paintType == 1 or paintType == 10)
+                    { 
+                        paintTile.isAvailable = true;
+                        paintTile.value = paintValue;
+                    
+                        ds_grid_set(grid, paintX, paintY, paintTile)
+                        normalTileEffect(false, paintX, paintY);
+                    }
+                    if (paintType == 11)
+                    {
+                        var tile = ds_grid_get(grid, paintX, paintY);
+                        tile.isTargeted = true;
+                        tile.sourceTile = paintTile;
+                        mustPickTargetTileEffect(false, paintX, paintY);
+                    }
                     array_delete(global.paints, string_digits(name), 1);
                     moves--;
                 }
@@ -131,7 +142,6 @@ function createPaintUI(_type, _value, _paintId)
                         originalTile = ds_grid_get(grid, other.paintX, other.paintY);
                     }
                     
-                    
                     if (paintX != -1 and paintY != -1 and !originalTile.isAvailable and !originalTile.isRevealed)
                     {
                         var paintType = other.type;
@@ -141,28 +151,42 @@ function createPaintUI(_type, _value, _paintId)
                         {
                             if (tileWasChanged)
                             {
-                                if (other.hoveredTile != undefined)
+                                if (other.hoveredTile != undefined)  
                                 {
                                     ds_grid_set(grid, paintBeforeX, paintBeforeY, other.hoveredTile)
                                 }
                                 other.hoveredTile = originalTile;
                                 
-                                var paintTile = new Tile(paintType);
-                                paintTile.isAvailable = true;
-                                paintTile.value = paintValue;
+                                if (paintType == 11)
+                                {
+                                    other.hoveredTile.potential = 1;
+                                }
+                                else 
+                                {
+                                    var paintTile = new Tile(paintType);
                                 
-                                ds_grid_set(grid, other.paintX, other.paintY, paintTile)
-                                normalTileEffect(true, other.paintX, other.paintY);
-                                paintTile.isAvailable = false;
-                                paintTile.potential = 1;
+                                    ds_grid_set(grid, other.paintX, other.paintY, paintTile)
+                                    paintTile.isAvailable = true;
+                                    paintTile.value = paintValue;
+                                	    normalTileEffect(true, other.paintX, other.paintY);
+                                    paintTile.isAvailable = false;
+                                    paintTile.potential = 1;
+                                }
                             }
                             else 
                             {
-                                var tile = ds_grid_get(grid, other.paintX, other.paintY);
-                                tile.isAvailable = true;
-                                normalTileEffect(true, other.paintX, other.paintY);
-                                tile.isAvailable = false;
-                                tile.potential = 1;
+                                if (paintType == 11)
+                                {
+                                    other.hoveredTile.potential = 1;
+                                }
+                                else 
+                                {
+                                    var tile = ds_grid_get(grid, other.paintX, other.paintY);
+                                    tile.isAvailable = true;
+                                	    normalTileEffect(true, other.paintX, other.paintY);
+                                    tile.isAvailable = false;
+                                    tile.potential = 1;
+                                }
                             }
                         }
                     }
@@ -171,11 +195,13 @@ function createPaintUI(_type, _value, _paintId)
                     	hoveredTile = undefined;
                     }
                     
+                    
                     if (paintPosY < o_connectro.gameOffset or paintPosY > o_connectro.gameOffset + global.cellSize * global.height)
                     {
                         with(o_connectro)
                         {
                             removePotential();
+                            removeTarget();
                         }
                     }
     			}	
@@ -208,7 +234,7 @@ function createPaint(_type, _value)
     array_push(global.paints, { t: _type, v: _value, _paintId: paintId});
 }
 
-function createPaintsCards()
+function createPaintsCards(_tier)
 {
     var pickPaint = function()
     {
@@ -226,8 +252,103 @@ function createPaintsCards()
         
         with(paintCard)
         {
-            type = irandom(3);
-            value = irandom(3);
+            //0 - plus
+            //1 - diamond
+            //2 [2 - 5] - lines
+            //3 [6 - 9] - diagonals
+            //4 - cross
+            //5 - target
+            switch(_tier)
+            {
+                case(1):
+                {
+                    type = choose(2, 3, 5);
+                    switch(type)
+                    {
+                        case(2):
+                        {
+                            type = choose(2, 3, 4, 5);
+                            value = 3;
+                            break;
+                        }
+                        case(3):
+                        {
+                            type = choose(6, 7, 8, 9);
+                            value = choose(2, 3);
+                            break;
+                        }
+                        case(5):
+                        {
+                            type = 11;
+                            value = 1;
+                            break;
+                        }
+                    }
+                    break;
+                }
+                
+                case(2):
+                {
+                    type = choose(0, 1, 2, 3, 4);
+                    switch(type)
+                    {
+                        case(0):
+                        {
+                            value = choose(2, 3);
+                            break;
+                        }
+                        case(1):
+                        {
+                            value = choose(1, 2);
+                            break;
+                        }
+                        case(2):
+                        {
+                            type = choose(2, 3, 4, 5);
+                            value = choose(4, 5);
+                            break;
+                        }
+                        case(3):
+                        {
+                            type = choose(6, 7, 8, 9);
+                            value = 4;
+                            break;
+                        }
+                        case(4):
+                        {
+                            type = 10;
+                            value = choose(2, 3);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                
+                case(3):
+                {
+                    type = choose(0, 1, 4);
+                    switch(type)
+                    {
+                        case(0):
+                        {
+                            value = choose(4, 5);
+                            break;
+                        }
+                        case(1):
+                        {
+                            value = 3;
+                            break;
+                        }
+                        case(4):
+                        {
+                            type = 10;
+                            value = choose(4, 5);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
             isPick = false;
             
             var normalFunction = function()
@@ -262,6 +383,8 @@ function createPaintsCards()
                                 createPaint(other.type, other.value);
                                 popLayer();
                             }
+                            
+                            ds_list_clear(containerImIn.components);
                         }
                     }
                     else 
