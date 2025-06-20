@@ -26,6 +26,7 @@ fadeFunction = undefined;
 
 paintFunctionFade = function()
 { 
+    global.isRoguelikeMode = false;
     room_goto(r_map);
 }
 

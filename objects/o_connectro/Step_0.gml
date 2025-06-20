@@ -5,7 +5,11 @@ if (keyboard_check_pressed(vk_f6))
 
 if (keyboard_check_pressed(vk_f7))
 {
-    createPaint(0, 5);
+    //createPaint(0, 5);
+    with(ui)
+    {
+        pushLayer(paintsLayer);
+    }
 }
 
 with(ui)
