@@ -106,13 +106,13 @@ with(ui)
     
     paintButton = new Button(paintFunction);
     paintButton.setSprites(s_button);
-    paintButtonText = new Text("Paint", f_menu);
+    paintButtonText = new Text("City", f_menu);
     paintButtonText.setShift(0, 4);
     paintButtonText.setColor(c_black);
     
     rogueButton = new Button(rogueFunction);
     rogueButton.setSprites(s_button);
-    rogueButtonText = new Text("Rogue", f_menu);
+    rogueButtonText = new Text("Roguelike", f_menu);
     rogueButtonText.setShift(0, 4);
     rogueButtonText.setColor(c_black);
     
