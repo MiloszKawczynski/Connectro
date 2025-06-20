@@ -107,6 +107,27 @@ with(ui)
     }
 }
 
+if (mouse_check_button(mb_left))
+{
+    debugPress++;
+}
+else 
+{
+    if (debugPress >= 60 * 3)
+    {
+        with(ui)
+        {
+            mainLayer.addComponent(1.5, 12, resetButton);
+            mainLayer.addComponent(3, 12, resetAllButton);
+            mainLayer.addComponent(4.5, 12, unlockAllButton);
+            mainLayer.addComponent(1.5, 12, resetButtonText);
+            mainLayer.addComponent(3, 12, resetAllButtonText);
+            mainLayer.addComponent(4.5, 12, unlockAllButtonText);
+        }
+    }
+	debugPress = 0;
+}
+
 if (keyboard_check_pressed(vk_backspace))
 {
     game_end();

@@ -10,6 +10,8 @@ global.isSolverOn = false;
 global.gamesToSolve = 0;
 global.debugStars = 0;
 
+debugPress = 0;
+
 event_inherited();
 
 randomize();
@@ -141,16 +143,10 @@ with(ui)
     mainLayer.addComponent(0, 0, vignetteL);
     mainLayer.addComponent(6, 0, vignetteR);
     mainLayer.addComponent(0, -5, logo);
-    mainLayer.addComponent(3, 9.5, paintButton);
-    mainLayer.addComponent(3, 10.75, rogueButton);
-    mainLayer.addComponent(1.5, 12, resetButton);
-    mainLayer.addComponent(3, 12, resetAllButton);
-    mainLayer.addComponent(4.5, 12, unlockAllButton);
-    mainLayer.addComponent(3, 9.5, paintButtonText);
-    mainLayer.addComponent(3, 10.75, rogueButtonText);
-    mainLayer.addComponent(1.5, 12, resetButtonText);
-    mainLayer.addComponent(3, 12, resetAllButtonText);
-    mainLayer.addComponent(4.5, 12, unlockAllButtonText);
+    mainLayer.addComponent(3, 9.75, paintButton);
+    mainLayer.addComponent(3, 11, rogueButton);
+    mainLayer.addComponent(3, 9.75, paintButtonText);
+    mainLayer.addComponent(3, 11, rogueButtonText);
 	
 	pushLayer(mainLayer);
 }
