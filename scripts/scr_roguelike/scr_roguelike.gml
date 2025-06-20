@@ -212,9 +212,11 @@ function createPaintsCards()
 {
     var pickPaint = function()
     {
-        createPaint(other.type, other.value);
-        popLayer();
+        other.isPick = true;
+        other.ui.isAnyPick = true;
     }
+    
+    isAnyPick = false;
     
     for(var i = 0; i < 3; i++)
     {
@@ -226,6 +228,7 @@ function createPaintsCards()
         {
             type = irandom(3);
             value = irandom(3);
+            isPick = false;
             
             var normalFunction = function()
             {
@@ -240,7 +243,32 @@ function createPaintsCards()
     			{
     				onClick(); 
     			}
-                setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
+                
+                if (!ui.isAnyPick)
+                {
+                    setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
+                }
+                else 
+                {
+                	if (isPick)
+                    {
+                        setScale(lerp(scaleX, 1.5, 0.2), lerp(scaleY, 1.5, 0.2));
+                        setPositionInGrid(lerp(posInGridX, 2.25 + 1.25 * array_length(global.paints), 0.2), lerp(posInGridY, 13.25, 0.2));
+                        
+                        if (scaleX < 1.51)
+                        {
+                            with(ui)
+                            {
+                                createPaint(other.type, other.value);
+                                popLayer();
+                            }
+                        }
+                    }
+                    else 
+                    {
+                    	setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                    }
+                }
             }
             
             setDrawFunctions(normalFunction,,,, 15 * 8, 15 * 8);
@@ -250,17 +278,17 @@ function createPaintsCards()
         {
             case(0):
             {
-                paintsLayer.addComponent(2, 1.375, paintCard);
+                paintsLayer.addComponent(3.5, 4.5, paintCard);
                 break;
             }
             case(1):
             {
-                paintsLayer.addComponent(2, 2.125, paintCard);
+                paintsLayer.addComponent(3.5, 7.375, paintCard);
                 break;
             }
             case(2):
             {
-                paintsLayer.addComponent(2, 2.875, paintCard);
+                paintsLayer.addComponent(3.5, 10.25, paintCard);
                 break;
             }
         }
