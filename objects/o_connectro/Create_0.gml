@@ -287,7 +287,7 @@ with(ui)
     if (global.isRoguelikeMode)
     {
         paintsLayer = new Layer();
-        paintsLayer.setGrid(4, 4);
+        paintsLayer.setGrid(7, 14);
         
         createPaintsCards();
     }
