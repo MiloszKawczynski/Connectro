@@ -1,7 +1,4 @@
-if (global.aspect <= 0.48)
-{
-    camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
-}
+adjustCamera();
 
 fade = false;
 fadeAlpha = 1;

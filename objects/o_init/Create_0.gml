@@ -1,5 +1,3 @@
-initialize();
-
 global.seed = 0;
 
 global.isEditorOn = false;
@@ -8,7 +6,6 @@ global.typeOfLoad = 0;
 
 global.isSolverOn = false;
 global.gamesToSolve = 0;
-global.debugStars = 0;
 
 debugPress = 0;
 
