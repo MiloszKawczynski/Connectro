@@ -288,8 +288,6 @@ with(ui)
     {
         paintsLayer = new Layer();
         paintsLayer.setGrid(7, 14);
-        
-        createPaintsCards();
     }
 }
 

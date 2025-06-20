@@ -398,9 +398,9 @@ function mustPickDirectionTileEffect(showPotential = false)
 	}
 }
 
-function mustPickTargetTileEffect(showPotential = false)
+function mustPickTargetTileEffect(showPotential = false, tileX = hoveredX, tileY = hoveredY)
 {
-	var tile = ds_grid_get(grid, hoveredX, hoveredY);
+	var tile = ds_grid_get(grid, tileX, tileY);
 	if (tile == undefined)
     {
         return;
@@ -425,7 +425,7 @@ function mustPickTargetTileEffect(showPotential = false)
 			audio_play_sound(sn_lvl1, 0, false);
 		}
 		
-		revealDot(hoveredX, hoveredY, tile.sourceTile.color, showPotential, tile.sourceTile.type);
+		revealDot(tileX, tileY, tile.sourceTile.color, showPotential, tile.sourceTile.type);
 		
 		if (!showPotential)
 		{
