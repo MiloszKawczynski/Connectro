@@ -348,230 +348,322 @@ function createPaint(_type, _value)
 
 function createPaintsCards(_tier)
 {
-    cardsSlot = new Output();
-    cardsSlot.setSprite(s_paintCardSlot);
-    cardsSlot.setScale(0, 0);
-    
-    with(cardsSlot)
+    with(ui)
     {
-        step = function()
+        isAnyPick = false;
+        levelProgress = false;
+        
+        background = new Output();
+        with(background)
         {
-            if (!ui.isAnyPick)
+            isShow = false;
+            draw = function()
             {
-                setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
-            }
-            else 
-            {
-                setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                if (!isShow)
+                {
+                    isShow = true;
+                    o_connectro.fade = false;
+                    o_connectro.fadeAlpha = 0;
+                }
+                draw_set_color(c_black);
+                draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
             }
         }
-    }
-
-    paintsLayer.addComponent(3.5, 6.5, cardsSlot);
-    
-    var pickPaint = function()
-    {
-        other.isPick = true;
-        other.ui.isAnyPick = true;
-    }
-    
-    isAnyPick = false;
-    
-    for(var i = 0; i < 3; i++)
-    {
-        var paintCard = new Button(pickPaint);
-        paintCard.setSprites(s_paintCard);
-        paintCard.setScale(0, 0);
         
-        with(paintCard)
+        paintsLayer.addComponent(3.5, 6.5, background);
+        
+        gameNumber = new Text(string(global.roguelikeLevelNumber - 1), f_menu);
+        gameNumber.setScale(3, 3);
+        
+        newGameNumber = new Text(string(global.roguelikeLevelNumber), f_menu);
+        newGameNumber.setScale(3, 3);
+        
+        with(gameNumber)
         {
-            firstEmpty = findEmptySpot();
-            
-            //0 - plus
-            //1 - diamond
-            //2 [2 - 5] - lines
-            //3 [6 - 9] - diagonals
-            //4 - cross
-            //5 - target
-            switch(_tier)
-            {
-                case(1):
-                {
-                    type = choose(2, 3, 5);
-                    switch(type)
-                    {
-                        case(2):
-                        {
-                            type = choose(2, 3, 4, 5);
-                            value = 3;
-                            break;
-                        }
-                        case(3):
-                        {
-                            type = choose(6, 7, 8, 9);
-                            value = choose(2, 3);
-                            break;
-                        }
-                        case(5):
-                        {
-                            type = 11;
-                            value = 1;
-                            break;
-                        }
-                    }
-                    break;
-                }
-                
-                case(2):
-                {
-                    type = choose(0, 1, 2, 3, 4);
-                    switch(type)
-                    {
-                        case(0):
-                        {
-                            value = choose(2, 3);
-                            break;
-                        }
-                        case(1):
-                        {
-                            value = choose(1, 2);
-                            break;
-                        }
-                        case(2):
-                        {
-                            type = choose(2, 3, 4, 5);
-                            value = choose(4, 5);
-                            break;
-                        }
-                        case(3):
-                        {
-                            type = choose(6, 7, 8, 9);
-                            value = 4;
-                            break;
-                        }
-                        case(4):
-                        {
-                            type = 10;
-                            value = choose(2, 3);
-                            break;
-                        }
-                    }
-                    break;
-                }
-                
-                case(3):
-                {
-                    type = choose(0, 1, 4);
-                    switch(type)
-                    {
-                        case(0):
-                        {
-                            value = choose(4, 5);
-                            break;
-                        }
-                        case(1):
-                        {
-                            value = 3;
-                            break;
-                        }
-                        case(4):
-                        {
-                            type = 10;
-                            value = choose(4, 5);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            isPick = false;
-            
-            var normalFunction = function()
-            {
-                draw_sprite_ext(s_paintCard, 0, posX, posY, scaleX, scaleY, 0, c_white, 1);
-                draw_sprite_ext(s_paintCardTile, type, posX, posY, scaleX, scaleY, 0, c_white, 1);
-                draw_sprite_ext(s_valuePaintCard, value, posX, posY, scaleX, scaleY, 0, c_white, 1);
-            }
-            
+            wait = 0;
             step = function()
-    		{
-    			if (click)
-    			{
-    				onClick(); 
-    			}
-                
-                if (!ui.isAnyPick)
+            {
+                if (ui.levelProgress)
                 {
-                    setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
-                }
-                else 
-                {
-                	if (isPick)
+                    wait++;
+                    if (wait > 30)
                     {
-                        setScale(lerp(scaleX, 1.5, 0.2), lerp(scaleY, 1.5, 0.2));
-                        setPositionInGrid(lerp(posInGridX, 2.25 + 1.25 * firstEmpty, 0.2), lerp(posInGridY, 13.25, 0.2));
+                        setPositionInGrid(lerp(posInGridX, -3.7 * 2, 0.02), posInGridY);
+                    }
+                }
+            }
+        }
+        
+        with(newGameNumber)
+        {
+            wait = 0;
+            step = function()
+            {
+                if (ui.levelProgress)
+                {
+                    wait++;
+                    if (wait > 30)
+                    {
+                        setPositionInGrid(lerp(posInGridX, 3.7, 0.02), posInGridY);
                         
-                        if (scaleX < 1.51)
+                        if (posInGridX < 3.8)
                         {
-                            with(ui)
+                            with(o_connectro)
                             {
-                                createPaint(other.type, other.value);
-                                popLayer();
+                                fadeFunction = goToNextLevelFade;
+                                fade = true;
                             }
-                            
-                            ds_list_clear(containerImIn.components);
                         }
+                    }
+                }
+            }
+        }
+        
+        paintsLayer.addComponent(3.7, 6.5, gameNumber);
+        paintsLayer.addComponent(3.7 * 3, 6.5, newGameNumber);
+        
+        if (_tier > 0)
+        {
+            cardsSlot = new Output();
+            cardsSlot.setSprite(s_paintCardSlot);
+            cardsSlot.setScale(0, 0);
+            
+            with(cardsSlot)
+            {
+                step = function()
+                {
+                    if (!ui.isAnyPick)
+                    {
+                        setScale(lerp(scaleX, 5, 0.2), lerp(scaleY, 4.2, 0.2));
                     }
                     else 
                     {
-                    	setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
-                        setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
+                        setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
                     }
                 }
             }
+        
+            paintsLayer.addComponent(3.5, 6.5, cardsSlot);
+        
+            var pickPaint = function()
+            {
+                other.isPick = true;
+                other.ui.isAnyPick = true;
+            }
             
-            setDrawFunctions(normalFunction,,,, 15 * 8, 15 * 8);
+            for(var i = 0; i < 3; i++)
+            {
+                var paintCard = new Button(pickPaint);
+                paintCard.setSprites(s_paintCard);
+                paintCard.setScale(0, 0);
+                
+                with(paintCard)
+                {
+                    firstEmpty = findEmptySpot();
+                    
+                    //0 - plus
+                    //1 - diamond
+                    //2 [2 - 5] - lines
+                    //3 [6 - 9] - diagonals
+                    //4 - cross
+                    //5 - target
+                    switch(_tier)
+                    {
+                        case(1):
+                        {
+                            type = choose(2, 3, 5);
+                            switch(type)
+                            {
+                                case(2):
+                                {
+                                    type = choose(2, 3, 4, 5);
+                                    value = 3;
+                                    break;
+                                }
+                                case(3):
+                                {
+                                    type = choose(6, 7, 8, 9);
+                                    value = choose(2, 3);
+                                    break;
+                                }
+                                case(5):
+                                {
+                                    type = 11;
+                                    value = 1;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        
+                        case(2):
+                        {
+                            type = choose(0, 1, 2, 3, 4);
+                            switch(type)
+                            {
+                                case(0):
+                                {
+                                    value = choose(2, 3);
+                                    break;
+                                }
+                                case(1):
+                                {
+                                    value = choose(1, 2);
+                                    break;
+                                }
+                                case(2):
+                                {
+                                    type = choose(2, 3, 4, 5);
+                                    value = choose(4, 5);
+                                    break;
+                                }
+                                case(3):
+                                {
+                                    type = choose(6, 7, 8, 9);
+                                    value = 4;
+                                    break;
+                                }
+                                case(4):
+                                {
+                                    type = 10;
+                                    value = choose(2, 3);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        
+                        case(3):
+                        {
+                            type = choose(0, 1, 4);
+                            switch(type)
+                            {
+                                case(0):
+                                {
+                                    value = choose(4, 5);
+                                    break;
+                                }
+                                case(1):
+                                {
+                                    value = 3;
+                                    break;
+                                }
+                                case(4):
+                                {
+                                    type = 10;
+                                    value = choose(4, 5);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    isPick = false;
+                    
+                    var normalFunction = function()
+                    {
+                        draw_sprite_ext(s_paintCard, 0, posX, posY, scaleX, scaleY, 0, c_white, 1);
+                        draw_sprite_ext(s_paintCardTile, type, posX, posY, scaleX, scaleY, 0, c_white, 1);
+                        draw_sprite_ext(s_valuePaintCard, value, posX, posY, scaleX, scaleY, 0, c_white, 1);
+                    }
+                    
+                    step = function()
+            		{
+            			if (click)
+            			{
+            				onClick(); 
+            			}
+                        
+                        if (!ui.isAnyPick)
+                        {
+                            setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
+                        }
+                        else 
+                        {
+                        	if (isPick)
+                            {
+                                setScale(lerp(scaleX, 1.5, 0.2), lerp(scaleY, 1.5, 0.2));
+                                setPositionInGrid(lerp(posInGridX, 2.25 + 1.25 * firstEmpty, 0.2), lerp(posInGridY, 13.25, 0.2));
+                                
+                                if (scaleX < 1.51 and !ui.levelProgress)
+                                {
+                                    with(ui)
+                                    {
+                                        levelProgress = true;
+                                        createPaint(other.type, other.value);
+                                    }
+                                }
+                            }
+                            else 
+                            {
+                            	setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                                setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
+                            }
+                        }
+                    }
+                    
+                    setDrawFunctions(normalFunction,,,, 15 * 8, 15 * 8);
+                }
+                
+                switch(i)
+                {
+                    case(0):
+                    {
+                        paintsLayer.addComponent(3.5, 4.5 - 0.5, paintCard);
+                        break;
+                    }
+                    case(1):
+                    {
+                        paintsLayer.addComponent(3.5, 7.375 - 0.5, paintCard);
+                        break;
+                    }
+                    case(2):
+                    {
+                        paintsLayer.addComponent(3.5, 10.25 - 0.5, paintCard);
+                        break;
+                    }
+                }
+            }
         }
         
-        switch(i)
+        chooseText = new Text(string("{0} stars prize\nChoose", _tier), f_game);
+        
+        if (_tier == 1)
         {
-            case(0):
+            chooseText.setContent("1 star prize\nChoose");
+        }
+        chooseText.setScale(0, 0);
+        
+        if (_tier == 0)
+        {
+            chooseText.setContent("0 stars\nNo prize\nfor you");
+        }
+        
+        with(chooseText)
+        {
+            tier = _tier;
+            step = function()
             {
-                paintsLayer.addComponent(3.5, 4.5 - 0.5, paintCard);
-                break;
-            }
-            case(1):
-            {
-                paintsLayer.addComponent(3.5, 7.375 - 0.5, paintCard);
-                break;
-            }
-            case(2):
-            {
-                paintsLayer.addComponent(3.5, 10.25 - 0.5, paintCard);
-                break;
+                if (!ui.isAnyPick)
+                {
+                    setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
+                    setPositionInGrid(3.5, lerp(posInGridY, 2, 0.2));
+                    
+                    if (tier == 0 and scaleX > 0.99)
+                    {
+                        ui.levelProgress = true;
+                    }
+                }
+                else 
+                {
+                    setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                    setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
+                }
             }
         }
+        
+        paintsLayer.addComponent(3.5, 6.5, chooseText);
+        
+        pushLayer(paintsLayer);
     }
-    
-    chooseText = new Text("Choose", f_game);
-    chooseText.setScale(0, 0);
-    
-    with(chooseText)
-    {
-        step = function()
-        {
-            if (!ui.isAnyPick)
-            {
-                setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
-                setPositionInGrid(3.5, lerp(posInGridY, 2, 0.2));
-            }
-            else 
-            {
-                setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
-                setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
-            }
-        }
-    }
-    
-    paintsLayer.addComponent(3.5, 6.5, chooseText);
 }

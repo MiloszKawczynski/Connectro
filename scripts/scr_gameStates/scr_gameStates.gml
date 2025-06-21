@@ -26,6 +26,10 @@ function gameEnd(showPotential = false)
     }
 }
 
+function pickCard()
+{
+}
+
 function editor()
 {
 	if (mouse_check_button_pressed(mb_left))

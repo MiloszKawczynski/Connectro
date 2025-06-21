@@ -14,6 +14,11 @@ if (global.isRoguelikeMode)
     {
         global.paints = [undefined, undefined, undefined];
     }
+    
+    if (!variable_global_exists("roguelikeLevelNumber"))
+    {
+        global.roguelikeLevelNumber = 0;
+    }
 }
 
 global.width = levelToPlay.width;
@@ -57,6 +62,23 @@ restartFunctionFade = function()
 { 
     audio_stop_sound(sn_score);
     audio_sound_gain(sn_town, 0.3, 1000);
+    room_restart();
+}
+
+choosePaintFade = function()
+{
+    global.roguelikeLevelNumber++;
+    createPaintsCards(calculateStars());
+}
+
+goToNextLevelFade = function()
+{
+    with(ui)
+    {
+        ds_list_clear(getMainGroup().components);
+        popLayer();
+    }
+    
     room_restart();
 }
 
