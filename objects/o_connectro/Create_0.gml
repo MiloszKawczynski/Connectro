@@ -52,6 +52,13 @@ else
 camera_set_view_border(view_get_camera(0), view_w / 2, view_h / 2);
 camera_set_view_size(view_get_camera(0), view_w, view_h);
 
+// Calculate offset to center the base area.
+var offset_x = (view_w - base_width) / 2;
+var offset_y = (view_h - base_height) / 2;
+
+// Set the camera position to center the base area.
+camera_set_view_pos(view_get_camera(0), -offset_x, -offset_y);
+
 goBackFunctionFade = function()
 {
     with(o_connectro)
