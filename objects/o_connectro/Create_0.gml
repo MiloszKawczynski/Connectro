@@ -271,12 +271,28 @@ gameOffset = camera_get_view_height(view_camera[0]) / 14 * 2.9;
 
 grid = ds_grid_create(global.width, global.height);
 
-generateGame();
+var loadedGame = undefined;
 
-hoveredX = 0;
-hoveredY = 0;
+if (file_exists(global.savedRoguelikeFilename))
+{
+	loadedGame = loadGame();
 
-moves = 0;
+	global.typeOfLoad = 3;
+	
+	moves = loadedGame.moves;
+}
+else
+{
+	moves = 0;
+}
+
+generateGame(loadedGame);
+
+checkForUselessness(false);
+
+hoveredX = -1;
+hoveredY = -1;
+
 
 drawSurface = false;
 is3DCreated = false;

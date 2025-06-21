@@ -3,6 +3,11 @@ if (keyboard_check_pressed(vk_f6))
     moves++;
 }
 
+if (keyboard_check_pressed(vk_f7))
+{
+    saveGame(moves);
+}
+
 with(ui)
 {
     if (goBackButton.press)

@@ -7,6 +7,7 @@ function initialize()
     #macro Android:MOBILE true
 	
 	global.savedDataFilename = "SavedData.save";
+	global.savedRoguelikeFilename = "SavedRoguelike.save";
 	
 	#macro MAX_MAP_WIDTH_OR_HEIGHT 25
 
