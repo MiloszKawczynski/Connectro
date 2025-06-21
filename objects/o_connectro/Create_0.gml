@@ -22,7 +22,35 @@ if (!global.isEditorOn)
 
 event_inherited();
 
-camera_set_view_size(view_get_camera(0), room_width, room_width / global.aspect);
+var base_width = 400;
+var base_height = 889;
+
+// Get device size in pixels
+var device_w = display_get_width();
+var device_h = display_get_height();
+
+show_debug_message(device_w);
+
+var base_aspect = base_width / base_height;
+var device_aspect = device_w / device_h;
+
+var view_w, view_h;
+
+if (device_aspect > base_aspect)
+{
+	// Device is wider - extend horizontally.
+	view_h = base_height;
+	view_w = round(base_height * device_aspect);
+}
+else
+{
+	// Device is taller - extend vertically.
+	view_w = base_width;
+	view_h = round(base_width / device_aspect);
+}
+
+camera_set_view_border(view_get_camera(0), view_w / 2, view_h / 2);
+camera_set_view_size(view_get_camera(0), view_w, view_h);
 
 goBackFunctionFade = function()
 {
