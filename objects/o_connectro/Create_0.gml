@@ -12,7 +12,7 @@ if (global.isRoguelikeMode)
     levelToPlay = global.rogelikeLevels[random(array_length(global.rogelikeLevels))];
     if (!variable_global_exists("paints"))
     {
-        global.paints = [];
+        global.paints = [undefined, undefined, undefined];
     }
 }
 
@@ -288,6 +288,8 @@ with(ui)
     {
         paintsLayer = new Layer();
         paintsLayer.setGrid(7, 14);
+        
+        isAnyPick = false;
     }
 }
 
@@ -333,10 +335,13 @@ else
 {
     for(var i = 0; i < array_length(global.paints); i++)
     {
-        createPaintUI(global.paints[i].t, global.paints[i].v, i);
+        if (global.paints[i] != undefined)
+        {
+            createPaintUI(global.paints[i].t, global.paints[i].v, i);
+        }
     }
     
-	createPaint(0, 5);
+	//createPaint(0, 5);
 }
 
 lastMousePosition = mouse_x;

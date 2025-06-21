@@ -218,6 +218,7 @@
     {"id":{"name":"s_menuVignette","path":"sprites/s_menuVignette/s_menuVignette.yy",},},
     {"id":{"name":"s_paint","path":"sprites/s_paint/s_paint.yy",},},
     {"id":{"name":"s_paintCard","path":"sprites/s_paintCard/s_paintCard.yy",},},
+    {"id":{"name":"s_paintCardSlot","path":"sprites/s_paintCardSlot/s_paintCardSlot.yy",},},
     {"id":{"name":"s_paintCardTile","path":"sprites/s_paintCardTile/s_paintCardTile.yy",},},
     {"id":{"name":"s_paintSlot","path":"sprites/s_paintSlot/s_paintSlot.yy",},},
     {"id":{"name":"s_playButton","path":"sprites/s_playButton/s_playButton.yy",},},

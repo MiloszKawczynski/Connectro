@@ -7,7 +7,7 @@ if (keyboard_check_pressed(vk_f7))
 {
     with(ui)
     {
-        createPaintsCards(1);
+        createPaintsCards(3);
         pushLayer(paintsLayer);
     }
 }
