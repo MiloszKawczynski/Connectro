@@ -81,7 +81,7 @@ function createPaintUI(_type, _value, _paintId)
                         tile.sourceTile = paintTile;
                         mustPickTargetTileEffect(false, paintX, paintY);
                     }
-                    array_delete(global.paints, string_digits(name), 1);
+                    global.paints[string_digits(name)] = undefined;
                     moves--;
                 }
                 
@@ -107,6 +107,7 @@ function createPaintUI(_type, _value, _paintId)
             type = _type;
             value = _value;
             name = string("paint{0}", _paintId);
+            show_debug_message(name);
             paintX = -1;
             paintY = -1;
             hoveredTile = undefined;
@@ -315,22 +316,59 @@ function createPaintUI(_type, _value, _paintId)
     }
 }
 
+function findEmptySpot()
+{
+    var firstEmpty = array_length(global.paints);
+    
+    for(var i = 0; i < array_length(global.paints); i++)
+    {
+        if (global.paints[i] == undefined)
+        {
+            firstEmpty = i;
+            break;
+        }
+    }
+    
+    return firstEmpty;
+}
+
 function createPaint(_type, _value)
 {
-    var paintId = array_length(global.paints);
+    var paintId = findEmptySpot();
     
-    if (array_length(global.paints) == 3)
+    if (paintId == 3)
     {
         return;
     }
     
     createPaintUI(_type, _value, paintId);
     
-    array_push(global.paints, { t: _type, v: _value, _paintId: paintId});
+    global.paints[paintId] = { t: _type, v: _value, paintId: paintId};
 }
 
 function createPaintsCards(_tier)
 {
+    cardsSlot = new Output();
+    cardsSlot.setSprite(s_paintCardSlot);
+    cardsSlot.setScale(0, 0);
+    
+    with(cardsSlot)
+    {
+        step = function()
+        {
+            if (!ui.isAnyPick)
+            {
+                setScale(lerp(scaleX, 4, 0.2), lerp(scaleY, 4, 0.2));
+            }
+            else 
+            {
+                setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+            }
+        }
+    }
+
+    paintsLayer.addComponent(3.5, 6.5, cardsSlot);
+    
     var pickPaint = function()
     {
         other.isPick = true;
@@ -347,6 +385,8 @@ function createPaintsCards(_tier)
         
         with(paintCard)
         {
+            firstEmpty = findEmptySpot();
+            
             //0 - plus
             //1 - diamond
             //2 [2 - 5] - lines
@@ -469,7 +509,7 @@ function createPaintsCards(_tier)
                 	if (isPick)
                     {
                         setScale(lerp(scaleX, 1.5, 0.2), lerp(scaleY, 1.5, 0.2));
-                        setPositionInGrid(lerp(posInGridX, 2.25 + 1.25 * array_length(global.paints), 0.2), lerp(posInGridY, 13.25, 0.2));
+                        setPositionInGrid(lerp(posInGridX, 2.25 + 1.25 * firstEmpty, 0.2), lerp(posInGridY, 13.25, 0.2));
                         
                         if (scaleX < 1.51)
                         {
@@ -485,6 +525,7 @@ function createPaintsCards(_tier)
                     else 
                     {
                     	setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                        setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
                     }
                 }
             }
@@ -496,19 +537,41 @@ function createPaintsCards(_tier)
         {
             case(0):
             {
-                paintsLayer.addComponent(3.5, 4.5, paintCard);
+                paintsLayer.addComponent(3.5, 4.5 - 0.5, paintCard);
                 break;
             }
             case(1):
             {
-                paintsLayer.addComponent(3.5, 7.375, paintCard);
+                paintsLayer.addComponent(3.5, 7.375 - 0.5, paintCard);
                 break;
             }
             case(2):
             {
-                paintsLayer.addComponent(3.5, 10.25, paintCard);
+                paintsLayer.addComponent(3.5, 10.25 - 0.5, paintCard);
                 break;
             }
         }
     }
+    
+    chooseText = new Text("Choose", f_game);
+    chooseText.setScale(0, 0);
+    
+    with(chooseText)
+    {
+        step = function()
+        {
+            if (!ui.isAnyPick)
+            {
+                setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
+                setPositionInGrid(3.5, lerp(posInGridY, 2, 0.2));
+            }
+            else 
+            {
+                setScale(lerp(scaleX, 0, 0.2), lerp(scaleY, 0, 0.2));
+                setPositionInGrid(3.5, lerp(posInGridY, 6.5, 0.2));
+            }
+        }
+    }
+    
+    paintsLayer.addComponent(3.5, 6.5, chooseText);
 }
