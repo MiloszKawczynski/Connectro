@@ -35,13 +35,48 @@ function createPaintUI(_type, _value, _paintId)
                     { 
                         paintTile.isAvailable = true;
                         paintTile.value = paintValue;
+                        
+                        if (paintType == 10)
+                        {
+                            paintTile.type = 4;
+                            paintTile.setColorFromType();
+                        }
                     
                         ds_grid_set(grid, paintX, paintY, paintTile)
                         normalTileEffect(false, paintX, paintY);
                     }
+                    
+                    if (paintType >= 2 and paintType <= 5)
+                    {
+                        var tile = ds_grid_get(grid, paintX, paintY);
+                        paintTile.type = 2;
+                        paintTile.value = paintValue + 1;
+                        paintTile.setColorFromType();
+                        
+                        tile.lineDirection = paintType - 2;
+                        tile.sourceTile = paintTile;
+                        tile.isLineDiag = false;
+                        mustPickDirectionTileEffect(false, paintX, paintY);
+                    }
+                    
+                    if (paintType >= 6 and paintType <= 9)
+                    {
+                        var tile = ds_grid_get(grid, paintX, paintY);
+                        paintTile.type = 3;
+                        paintTile.value = paintValue + 1;
+                        paintTile.setColorFromType();
+                        
+                        tile.lineDirection = paintType - 6;
+                        tile.sourceTile = paintTile;
+                        tile.isLineDiag = true;
+                        mustPickDirectionTileEffect(false, paintX, paintY);
+                    }
+                    
                     if (paintType == 11)
                     {
                         var tile = ds_grid_get(grid, paintX, paintY);
+                        paintTile.type = 4;
+                        
                         tile.isTargeted = true;
                         tile.sourceTile = paintTile;
                         mustPickTargetTileEffect(false, paintX, paintY);
@@ -161,13 +196,50 @@ function createPaintUI(_type, _value, _paintId)
                                 {
                                     other.hoveredTile.potential = 1;
                                 }
+                                else if (paintType >= 2 and paintType <= 5)
+                                {
+                                    var parentTile = new Tile(2);
+                                    parentTile.value = paintValue + 1;
+                                    
+                                    var paintTile = new Tile(0);
+                                    ds_grid_set(grid, other.paintX, other.paintY, paintTile)
+                                    paintTile.lineDirection = paintType - 2;
+                                    paintTile.sourceTile = parentTile;
+                                    paintTile.isAvailable = true; 
+                                	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
+                                    paintTile.isAvailable = false;
+                                    paintTile.potential = 1;
+                                    paintTile.lineDirection = -1;
+                                }
+                                else if (paintType >= 6 and paintType <= 9)
+                                {
+                                    var parentTile = new Tile(3);
+                                    parentTile.value = paintValue + 1;
+                                    
+                                    var paintTile = new Tile(0);
+                                    ds_grid_set(grid, other.paintX, other.paintY, paintTile)
+                                    paintTile.lineDirection = paintType - 6;
+                                    paintTile.sourceTile = parentTile;
+                                    paintTile.isLineDiag = true; 
+                                    paintTile.isAvailable = true; 
+                                	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
+                                    paintTile.isAvailable = false;
+                                    paintTile.isLineDiag = false; 
+                                    paintTile.potential = 1;
+                                    paintTile.lineDirection = -1;
+                                }
                                 else 
                                 {
                                     var paintTile = new Tile(paintType);
+                                    
+                                    if (paintType == 10)
+                                    {
+                                        paintTile.type = 4;
+                                    }
                                 
                                     ds_grid_set(grid, other.paintX, other.paintY, paintTile)
-                                    paintTile.isAvailable = true;
                                     paintTile.value = paintValue;
+                                    paintTile.isAvailable = true;
                                 	    normalTileEffect(true, other.paintX, other.paintY);
                                     paintTile.isAvailable = false;
                                     paintTile.potential = 1;
@@ -178,6 +250,28 @@ function createPaintUI(_type, _value, _paintId)
                                 if (paintType == 11)
                                 {
                                     other.hoveredTile.potential = 1;
+                                }
+                                else if (paintType >= 2 and paintType <= 5)
+                                { 
+                                    var tile = ds_grid_get(grid, other.paintX, other.paintY);
+                                    tile.lineDirection = paintType - 2;
+                                    tile.isAvailable = true;
+                                	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
+                                    tile.isAvailable = false;
+                                    tile.potential = 1;
+                                    tile.lineDirection = -1;
+                                }
+                                else if (paintType >= 6 and paintType <= 9)
+                                {
+                                    var tile = ds_grid_get(grid, other.paintX, other.paintY);
+                                    tile.lineDirection = paintType - 6;
+                                    tile.isLineDiag = true;
+                                    tile.isAvailable = true;
+                                	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
+                                    tile.isAvailable = false;
+                                    tile.isLineDiag = false;
+                                    tile.potential = 1;
+                                    tile.lineDirection = -1;
                                 }
                                 else 
                                 {
@@ -202,6 +296,7 @@ function createPaintUI(_type, _value, _paintId)
                         {
                             removePotential();
                             removeTarget();
+                            removeDirections();
                         }
                     }
     			}	
