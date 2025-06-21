@@ -241,8 +241,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"r_init","path":"rooms/r_init/r_init.yy",},},
     {"roomId":{"name":"r_menu","path":"rooms/r_menu/r_menu.yy",},},
+    {"roomId":{"name":"r_init","path":"rooms/r_init/r_init.yy",},},
     {"roomId":{"name":"r_map","path":"rooms/r_map/r_map.yy",},},
     {"roomId":{"name":"r_game","path":"rooms/r_game/r_game.yy",},},
     {"roomId":{"name":"atr_example","path":"rooms/atr_example/atr_example.yy",},},

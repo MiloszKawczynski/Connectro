@@ -3,5 +3,5 @@ array_push(global.levels,
 
 global.choosedLevel = array_length(global.levels) - 1 ;
 
-//room_goto(r_game);
-room_goto(r_map);
+room_goto(r_game);
+//room_goto(r_map);

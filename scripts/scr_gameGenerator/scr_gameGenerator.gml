@@ -1,5 +1,5 @@
-#macro SOLUTION_PRINT_PATH true
-#macro SOLUTION_PRINT_STARS false
+#macro SOLUTION_PRINT_PATH false
+#macro SOLUTION_PRINT_STARS true
 
 function defineTiles()
 {
@@ -970,7 +970,7 @@ function runAStar(heuristic)
 		{
 			var msg = string("SEARCH FOR OVER {0} MINUTES\n", maxSearchTime);
 			msg += "\n---\n";
-			file_text_write_string(global.solutionFile, msg);
+			//file_text_write_string(global.solutionFile, msg);
 			show_debug_message(msg);
 			// TODO: Clear buffers
 			ds_priority_destroy(queue);
@@ -1615,7 +1615,7 @@ function generateGame()
 		show_debug_message("ERROR: MAX_MAP_WIDTH_OR_HEIGHT is smaller than current map sizes, we will most likely crash");
 	}
 	
-	maxSearchTime = 0.15; // minutes
+	maxSearchTime = 1; // minutes
 	
 	defineTiles();
     

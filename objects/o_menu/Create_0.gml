@@ -2,6 +2,8 @@ event_inherited();
 
 ui = new UI();
 
+global.isRoguelikeMode = false;
+
 global.width = 11;
 global.height = 11;
 global.cellSize = 30;
