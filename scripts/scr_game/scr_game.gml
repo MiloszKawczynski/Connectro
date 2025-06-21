@@ -1020,7 +1020,7 @@ function loadLevel(levelString, levelId)
 	global.levels[levelId].texture = surfaceTexture;
 }
 
-function saveProgress()
+function calculateStars()
 {
     var gainedStars = 3;
     
@@ -1037,9 +1037,14 @@ function saveProgress()
         gainedStars = 2;
     }
     
+    return gainedStars;
+}
+
+function saveProgress()
+{
     if (moves <= levelToPlay.moves)
     {
-        levelToPlay.stars = gainedStars;
+        levelToPlay.stars = calculateStars();
         levelToPlay.texture = surfaceTexture;
         levelToPlay.moves = moves;
         saveLevel();

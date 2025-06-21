@@ -5,11 +5,7 @@ if (keyboard_check_pressed(vk_f6))
 
 if (keyboard_check_pressed(vk_f7))
 {
-    with(ui)
-    {
-        createPaintsCards(3);
-        pushLayer(paintsLayer);
-    }
+    createPaintsCards(calculateStars());
 }
 
 with(ui)
@@ -180,7 +176,9 @@ if (isAllRevealed())
         }
         else 
         {
-        	room_restart();
+            gameState = pickCard;
+            fade = true;
+            fadeFunction = choosePaintFade;
         }
     }
     
