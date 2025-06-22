@@ -434,7 +434,7 @@ function createPaintsCards(_tier)
                 {
                     if (!ui.isAnyPick)
                     {
-                        setScale(lerp(scaleX, 5, 0.2), lerp(scaleY, 4.2, 0.2));
+                        setScale(lerp(scaleX, 5.2, 0.2), lerp(scaleY, 4.4, 0.2));
                     }
                     else 
                     {
@@ -609,34 +609,34 @@ function createPaintsCards(_tier)
                 {
                     case(0):
                     {
-                        paintsLayer.addComponent(3.5, 4.5 - 0.5, paintCard);
+                        paintsLayer.addComponent(3.5, 4.5, paintCard);
                         break;
                     }
                     case(1):
                     {
-                        paintsLayer.addComponent(3.5, 7.375 - 0.5, paintCard);
+                        paintsLayer.addComponent(3.5, 7.375, paintCard);
                         break;
                     }
                     case(2):
                     {
-                        paintsLayer.addComponent(3.5, 10.25 - 0.5, paintCard);
+                        paintsLayer.addComponent(3.5, 10.25, paintCard);
                         break;
                     }
                 }
             }
         }
         
-        chooseText = new Text(string("{0} stars prize\nChoose", _tier), f_game);
+        chooseText = new Text(string("{0} stars prize\n\nChoose one", _tier), f_game);
         
         if (_tier == 1)
         {
-            chooseText.setContent("1 star prize\nChoose");
+            chooseText.setContent("1 star prize\n\nChoose one");
         }
         chooseText.setScale(0, 0);
         
         if (_tier == 0)
         {
-            chooseText.setContent("0 stars\nNo prize\nfor you");
+            chooseText.setContent("0 stars\n\nNo prize\n\nfor you");
         }
         
         with(chooseText)
