@@ -86,7 +86,7 @@ if (global.isEditorOn)
 }
 else
 {
-    if (gameState != gameEnd)
+    if (gameState != gameEnd and gameState != pickCard)
     {
         if (mouse_check_button_pressed(mb_left))
         {
@@ -102,58 +102,61 @@ else
         }
     }
     
-    for(var yy = 0; yy < global.height; yy++)
+    if (gameState != pickCard)
     {
-        for(var xx = 0; xx < global.width; xx++)
+        for(var yy = 0; yy < global.height; yy++)
         {
-            if (mouse_x > xx * global.cellSize and mouse_x < xx * global.cellSize + global.cellSize)
+            for(var xx = 0; xx < global.width; xx++)
             {
-                if (mouse_y - other.gameOffset > yy * global.cellSize and mouse_y - other.gameOffset < yy * global.cellSize + global.cellSize)
+                if (mouse_x > xx * global.cellSize and mouse_x < xx * global.cellSize + global.cellSize)
                 {
-                    var newHoverTile = ds_grid_get(grid, xx, yy);
-                    var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
-                    
-                    if (gameState == mustPickDirection)
+                    if (mouse_y - other.gameOffset > yy * global.cellSize and mouse_y - other.gameOffset < yy * global.cellSize + global.cellSize)
                     {
-                        if (hoverTile == undefined or newHoverTile == hoverTile.sourceTile)
+                        var newHoverTile = ds_grid_get(grid, xx, yy);
+                        var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
+                        
+                        if (gameState == mustPickDirection)
                         {
-                            break;
-                        }
-                    }
-                    
-                    if (mouse_check_button_pressed(mb_left))
-                    {
-                        if (newHoverTile != hoverTile)
-                        {
-                            if (gameState == mustPickDirection and newHoverTile.lineDirection == -1)
+                            if (hoverTile == undefined or newHoverTile == hoverTile.sourceTile)
                             {
-                                removeDirections();
+                                break;
+                            }
+                        }
+                        
+                        if (mouse_check_button_pressed(mb_left))
+                        {
+                            if (newHoverTile != hoverTile)
+                            {
+                                if (gameState == mustPickDirection and newHoverTile.lineDirection == -1)
+                                {
+                                    removeDirections();
+                                }
+                                
+                                if (gameState == mustPickTarget and newHoverTile.isTargeted == false)
+                                {
+                                    removeTarget();
+                                }
+                            }   
+                            
+                            if ((hoveredX == xx and hoveredY == yy))
+                            {
+                                if (gameState != gameEnd)
+                                {
+                                    gameState();
+                                }
+                                break;
                             }
                             
-                            if (gameState == mustPickTarget and newHoverTile.isTargeted == false)
-                            {
-                                removeTarget();
-                            }
-                        }   
-                        
-                        if ((hoveredX == xx and hoveredY == yy))
-                        {
-                            if (gameState != gameEnd)
+                            removeHover();
+                            hoveredX = xx;
+                            hoveredY = yy;
+                            
+                            var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
+                            hoverTile.isHovered = true;
+                            if (gameState == mustPickTarget and hoverTile.isTargeted)
                             {
                                 gameState();
                             }
-                            break;
-                        }
-                        
-                        removeHover();
-                        hoveredX = xx;
-                        hoveredY = yy;
-                        
-                        var hoverTile = ds_grid_get(grid, hoveredX, hoveredY);
-                        hoverTile.isHovered = true;
-                        if (gameState == mustPickTarget and hoverTile.isTargeted)
-                        {
-                            gameState();
                         }
                     }
                 }

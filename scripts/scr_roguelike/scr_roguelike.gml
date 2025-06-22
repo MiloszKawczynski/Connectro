@@ -143,6 +143,11 @@ function createPaintUI(_type, _value, _paintId)
     			
     			if (press)
     			{
+                    if (o_connectro.gameState == pickCard)
+                    {
+                        return;
+                    }
+                    
     				shiftX = device_mouse_x_to_gui(0) - lastPosX;
     				shiftY = device_mouse_y_to_gui(0) - lastPosY;
                     ui.getMainGroup().update();
@@ -456,8 +461,11 @@ function createPaintsCards(_tier)
         
             var pickPaint = function()
             {
-                other.isPick = true;
-                other.ui.isAnyPick = true;
+                if (!other.ui.isAnyPick)
+                {
+                    other.isPick = true;
+                    other.ui.isAnyPick = true;
+                }
             }
             
             for(var i = 0; i < 3; i++)
