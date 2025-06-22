@@ -255,8 +255,12 @@ function createPaintUI(_type, _value, _paintId)
                                 }
                                 else if (paintType >= 2 and paintType <= 5)
                                 { 
+                                    var parentTile = new Tile(2);
+                                    parentTile.value = paintValue + 1;
+                                    
                                     var tile = ds_grid_get(grid, other.paintX, other.paintY);
                                     tile.lineDirection = paintType - 2;
+                                    tile.sourceTile = parentTile;
                                     tile.isAvailable = true;
                                 	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
                                     tile.isAvailable = false;
@@ -265,8 +269,12 @@ function createPaintUI(_type, _value, _paintId)
                                 }
                                 else if (paintType >= 6 and paintType <= 9)
                                 {
+                                    var parentTile = new Tile(3);
+                                    parentTile.value = paintValue + 1;
+                                    
                                     var tile = ds_grid_get(grid, other.paintX, other.paintY);
                                     tile.lineDirection = paintType - 6;
+                                    tile.sourceTile = parentTile;
                                     tile.isLineDiag = true;
                                     tile.isAvailable = true;
                                 	    mustPickDirectionTileEffect(true, other.paintX, other.paintY);
