@@ -1625,7 +1625,15 @@ function generateGame(savedGame = undefined)
         }	
         else 
         {
-            setSeed(levelToPlay.seed);
+            if (global.seed == 0)
+            {
+               	randomize();
+            }
+            else 
+            {
+            	setSeed(levelToPlay.seed);
+            }
+            
             populateGrid();	
         }
 		
