@@ -371,7 +371,10 @@ else
         }
     }
     
-	//createPaint(0, 5);
+    if (global.roguelikeLevelNumber == 0)
+    {
+	    createPaint(11, 1);
+    }
 }
 
 lastMousePosition = mouse_x;
