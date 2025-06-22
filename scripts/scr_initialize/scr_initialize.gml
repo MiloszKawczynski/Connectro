@@ -40,7 +40,7 @@ function initialize()
         splitSeed = string_split(seed, "_");
         width = real(splitSeed[0]);
         height = real(splitSeed[1]);
-        color = c_aqua;
+        color = make_color_rgb(60, 190, 125);
         
         if (hasMural)
         {
