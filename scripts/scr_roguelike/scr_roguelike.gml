@@ -195,7 +195,7 @@ function createPaintUI(_type, _value, _paintId)
                                 
                                 if (paintType == 11)
                                 {
-                                    other.hoveredTile.potential = 1;
+                                    other.hoveredTile.potential = 3;
                                 }
                                 else if (paintType >= 2 and paintType <= 5)
                                 {
@@ -250,7 +250,7 @@ function createPaintUI(_type, _value, _paintId)
                             {
                                 if (paintType == 11)
                                 {
-                                    other.hoveredTile.potential = 1;
+                                    other.hoveredTile.potential = 3;
                                 }
                                 else if (paintType >= 2 and paintType <= 5)
                                 { 
