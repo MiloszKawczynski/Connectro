@@ -338,13 +338,18 @@ grid = ds_grid_create(global.width, global.height);
 
 var loadedGame = undefined;
 
-if (global.isRoguelikeMode and file_exists(global.savedRoguelikeFilename))
+var wasRoguelikeLoaded = false;
+
+if (global.isRoguelikeMode and global.shouldLoadRoguelike and file_exists(global.savedRoguelikeFilename))
 {
 	loadedGame = loadGame();
 
 	global.typeOfLoad = 3;
 	
 	moves = loadedGame.moves;
+	
+	global.shouldLoadRoguelike = false;
+	wasRoguelikeLoaded = true;
 }
 else
 {
@@ -387,7 +392,7 @@ else
         }
     }
     
-    if (global.roguelikeLevelNumber == 0 and global.paints[0] == undefined)
+    if (global.roguelikeLevelNumber == 0 and !wasRoguelikeLoaded)
     {
 	    createPaint(11, 1);
     }
