@@ -304,6 +304,8 @@ function UI() constructor
 		
 		static setActiveStatus = function(_isActive)
 		{
+            isActive = _isActive;
+            
 			var numberOfComponents = ds_list_size(components);
 			for(var i = 0; i < numberOfComponents; i++)
 			{
