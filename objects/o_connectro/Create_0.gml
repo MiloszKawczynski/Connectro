@@ -355,8 +355,8 @@ generateGame(loadedGame);
 
 checkForUselessness(false);
 
-hoveredX = 0;
-hoveredY = 0;
+hoveredX = -1;
+hoveredY = -1;
 
 
 drawSurface = false;
