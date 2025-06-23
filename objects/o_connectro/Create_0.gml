@@ -340,16 +340,23 @@ var loadedGame = undefined;
 
 var wasRoguelikeLoaded = false;
 
-if (global.isRoguelikeMode and global.shouldLoadRoguelike and file_exists(global.savedRoguelikeFilename))
+if (global.isRoguelikeMode and global.shouldLoadRoguelike)
 {
-	loadedGame = loadGame();
+	if (file_exists(global.savedRoguelikeFilename))
+	{
+		loadedGame = loadGame();
 
-	global.typeOfLoad = 3;
+		global.typeOfLoad = 3;
 	
-	moves = loadedGame.moves;
+		moves = loadedGame.moves;
+		wasRoguelikeLoaded = true;
+	}
+	else
+	{
+		moves = 0;
+	}
 	
 	global.shouldLoadRoguelike = false;
-	wasRoguelikeLoaded = true;
 }
 else
 {
