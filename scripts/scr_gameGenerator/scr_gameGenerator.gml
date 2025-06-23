@@ -91,53 +91,51 @@ function Tile(_type) constructor
 	}
     
     setColorFromType();
-    
-    static setColorFromType = function()
-    { 
-        switch(type)
+	
+	static getColorFromType = function(givenType)
+	{
+		switch(givenType)
     	{
     		case(TilesTypes.plus):
     		{
-    			color = make_color_rgb(115, 74, 219);
-    			break;
+    			return make_color_rgb(115, 74, 219);
     		}
     		
     		case(TilesTypes.cross):
     		{
-    			color = make_color_rgb(136, 203, 237);
-    			break;
+    			return make_color_rgb(136, 203, 237);
     		}
     		
     		case(TilesTypes.diamond):
     		{
-    			color = make_color_rgb(222, 98, 172);
-    			break;
+    			return make_color_rgb(222, 98, 172);
     		}
     		
     		case(TilesTypes.line):
     		{
-    			color = make_color_rgb(255, 205, 17);
-    			break;
+    			return make_color_rgb(255, 205, 17);
     		}
     		
     		case(TilesTypes.lineDiag):
     		{
-    			color = make_color_rgb(191, 245, 56);
-    			break;
+    			return make_color_rgb(191, 245, 56);
     		}
     		
     		case(TilesTypes.target):
     		{
-    			color = make_color_rgb(255, 0, 0);
-    			break;
+    			return make_color_rgb(255, 0, 0);
     		}
     		
     		case(TilesTypes.block):
     		{
-    			color = c_black;
-    			break;
+    			return c_black;
     		}
     	}
+	}
+    
+    static setColorFromType = function()
+    {
+		color = getColorFromType(type);
     }
 	
 	static drawColor = function(xx, yy) 
@@ -1606,7 +1604,7 @@ function getRevealedLine(width, height, gridState, x1, y1, x2, y2, isDiamond = f
 	}
 }
 
-function generateGame()
+function generateGame(savedGame = undefined)
 {
 	global.decisionString = "Decision";
 	
@@ -1630,6 +1628,23 @@ function generateGame()
             setSeed(levelToPlay.seed);
             populateGrid();	
         }
+		
+		if (global.typeOfLoad == 3 and savedGame != undefined)
+		{
+            for(var yy = 0; yy < global.height; yy++)
+	        {
+		        for(var xx = 0; xx < global.width; xx++)
+		        {
+			        var tile = ds_grid_get(grid, xx, yy);
+                    tile.type = ds_grid_get(savedGame.grid, xx, yy).type;
+					tile.isRevealed = ds_grid_get(savedGame.grid, xx, yy).isRevealed;
+                    tile.isAvailable = ds_grid_get(savedGame.grid, xx, yy).isAvailable;
+                    tile.revealedByType = ds_grid_get(savedGame.grid, xx, yy).revealedByType;
+					tile.color = Tile.getColorFromType(tile.revealedByType);
+                }
+            }
+		}
+		
         applayLevelIntro();
     }
     else 

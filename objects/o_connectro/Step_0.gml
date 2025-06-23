@@ -8,6 +8,11 @@ if (keyboard_check_pressed(vk_f7))
     createPaintsCards(calculateStars());
 }
 
+if (keyboard_check_pressed(vk_f8))
+{
+	saveGame(moves);
+}
+
 with(ui)
 {
     if (goBackButton.press)
