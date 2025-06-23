@@ -353,6 +353,8 @@ else
 
 generateGame(loadedGame);
 
+checkForUselessness(false);
+
 hoveredX = 0;
 hoveredY = 0;
 
