@@ -9,6 +9,8 @@
       "option_android_texture_page":"4096x4096",
       "option_android_orient_landscape_flipped":"false",
       "option_android_orient_landscape":"false",
+      "option_android_package_product":"connectro",
+      "option_android_package_company":"mimimi",
     },
   },
   "name":"Android",

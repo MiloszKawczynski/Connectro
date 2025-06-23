@@ -1,5 +1,24 @@
 initialize();
 
+LootLockerInitialize("dev_4b98ea0634db46dc9241a22ca7cb012a", "0.0.0.1", "true", "31457")
+LootLockerTurnOffAutoRefresh();
+
+if (!file_exists("playerId.ini"))
+{
+    var guid = generateUniquePlayerId();
+    ini_open("playerId.ini");
+    ini_write_string("player", "id", guid);
+    ini_close();
+}
+
+{
+	ini_open("playerId.ini");
+	var playerId = ini_read_string("player", "id", "UNKNOWN");
+	ini_close();
+	
+	LootLockerSetPlayerName(playerId);
+}
+
 global.seed = 0;
 
 global.isEditorOn = false;

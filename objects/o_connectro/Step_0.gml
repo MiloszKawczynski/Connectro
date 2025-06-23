@@ -190,11 +190,16 @@ if (isAllRevealed())
         }
     }
     
-    if (gameState == gameEnd and !isDataSaved and !drawSurface)
+    if (gameState == gameEnd and !isDataSaved and !global.isRoguelikeMode)
     {
         isDataSaved = true;
         saveProgress();
     }
+	else if (!isDataSaved and global.isRoguelikeMode)
+	{
+		isDataSaved = true;
+		LootLockerSubmitScore("31457", global.roguelikeLevelNumber + 1);
+	}
 }
 
 if (keyboard_check_pressed(ord("R")))
