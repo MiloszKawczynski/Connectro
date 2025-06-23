@@ -1640,6 +1640,7 @@ function generateGame(savedGame = undefined)
 					tile.isRevealed = ds_grid_get(savedGame.grid, xx, yy).isRevealed;
                     tile.isAvailable = ds_grid_get(savedGame.grid, xx, yy).isAvailable;
                     tile.revealedByType = ds_grid_get(savedGame.grid, xx, yy).revealedByType;
+					tile.value = ds_grid_get(savedGame.grid, xx, yy).value;
 					tile.color = Tile.getColorFromType(tile.revealedByType);
                 }
             }

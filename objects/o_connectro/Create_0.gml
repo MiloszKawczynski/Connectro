@@ -387,7 +387,7 @@ else
         }
     }
     
-    if (global.roguelikeLevelNumber == 0)
+    if (global.roguelikeLevelNumber == 0 and global.paints[0] == undefined)
     {
 	    createPaint(11, 1);
     }
