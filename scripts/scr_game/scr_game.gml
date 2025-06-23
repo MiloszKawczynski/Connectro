@@ -781,7 +781,7 @@ function readNumberFromSavedLevel(levelString, iterator)
 	{
 		var char = string_char_at(levelString, iterator + 1);
 		
-		if (char == " " or char == "\n")
+		if (char == " " or char == "\n" or char == ",")
 		{
 			return { number: real(value), iterator: iterator + 1 };
 		}
@@ -1028,6 +1028,16 @@ function deleteSavedRoguelike()
 	}
 }
 
+function getPaintSaveString(paint)
+{
+	if (paint == undefined)
+	{
+		return "-1";
+	}
+	
+	return string(paint.t) + "," + string(paint.v) + "," + string(paint.paintId);
+}
+
 function saveGame(moves)
 {
 	var level = "";
@@ -1037,6 +1047,8 @@ function saveGame(moves)
 	
 	//level += "s:" + string(global.levels[global.choosedLevel].stars) + "\n";
 	level += "m:" + string(moves) + "\n";
+	level += "p:" + getPaintSaveString(global.paints[0]) + "," + getPaintSaveString(global.paints[1]) + "," + getPaintSaveString(global.paints[2]) + "\n";
+	level += "n:" + string(global.roguelikeLevelNumber) + "\n";
 	level += string(width) + " " + string(height) + "\n";
 
 	for (var yy = 0; yy < height; yy++)
@@ -1045,18 +1057,14 @@ function saveGame(moves)
 		{
 			var tile = ds_grid_get(grid, xx, yy);
 
-			// Format of tiles: 0,1,2,3 4,5,6,7 8,9,10,11
+			// Format of tiles: 0,1,2,3,4 5,6,7,8,9 10,11,12,13,14
 			level += string(tile.type) + ",";
 			level += string(tile.isRevealed) + ",";
 			level += string(tile.isAvailable) + ",";
-            level += string(tile.revealedByType);
+            level += string(tile.revealedByType) + ",";
+			level += string(tile.value);
 			
-			show_debug_message(tile.revealedByType);
-			
-			if (yy != height - 1 or xx != width - 1)
-			{
-				level += " ";
-			}
+			level += " ";
 		}
 	}
 	
@@ -1074,6 +1082,33 @@ enum ExpectedData
 	IsRevealed,
 	IsAvailable,
 	RevealedByType,
+	Value,
+}
+
+function loadSavedPaint(levelString, iterator)
+{
+	var paint = { t: undefined, v: undefined, paintId: undefined };
+	paint.t = readNumberFromSavedLevel(levelString, iterator);
+	iterator = paint.t.iterator;
+	
+	if (real(paint.t.number) != -1)
+	{
+		paint.v = readNumberFromSavedLevel(levelString, iterator);
+		iterator = paint.v.iterator;
+		paint.v = paint.v.number;
+		
+		paint.paintId = readNumberFromSavedLevel(levelString, iterator);
+		iterator = paint.paintId.iterator;
+		paint.paintId = paint.paintId.number;
+		
+		paint.t = paint.t.number;
+	}
+	else
+	{
+		paint = undefined;
+	}
+	
+	return { paint: paint, iterator: iterator };
 }
 
 function loadGame()
@@ -1097,6 +1132,30 @@ function loadGame()
 	var movesNumber = readNumberFromSavedLevel(levelString, iterator);
 	iterator = movesNumber.iterator;
 	var moves = movesNumber.number;
+	
+	// SKip the paints "p:" header.
+	iterator = skipHeaderFromSavedLevel(levelString, iterator);
+	
+	var paint0 = loadSavedPaint(levelString, iterator);
+	iterator = paint0.iterator;
+	paint0 = paint0.paint;
+	
+	var paint1 = loadSavedPaint(levelString, iterator);
+	iterator = paint1.iterator;
+	paint1 = paint1.paint;
+	
+	var paint2 = loadSavedPaint(levelString, iterator);
+	iterator = paint2.iterator;
+	paint2 = paint2.paint;
+	
+	global.paints = [paint0, paint1, paint2];
+	
+	// Skip the roguelike map number "n:" header.
+	iterator = skipHeaderFromSavedLevel(levelString, iterator);
+	
+	var mapNumber = readNumberFromSavedLevel(levelString, iterator);
+	iterator = mapNumber.iterator;
+	global.roguelikeLevelNumber = mapNumber.number;
 	
 	var widthNumber = readNumberFromSavedLevel(levelString, iterator);
 	var width = widthNumber.number;
@@ -1146,10 +1205,13 @@ function loadGame()
 			else if (expected == ExpectedData.RevealedByType)
 			{
 				var tile = ds_grid_get(savedGrid, coords.x, coords.y);
-				
-				show_debug_message("val: {0}, real: {1}", value, real(value));
-				
 				tile.revealedByType = real(value);
+				expected = ExpectedData.Value;
+			}
+			else if (expected == ExpectedData.Value)
+			{
+				var tile = ds_grid_get(savedGrid, coords.x, coords.y);
+				tile.value = real(value);
 				expected = ExpectedData.Type;
 			}
 			
