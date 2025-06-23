@@ -108,6 +108,12 @@ with(ui)
 	{
 		deleteSavedData();
 	}
+	
+	var resetAllFunction = function()
+	{
+		deleteSavedData();
+		deleteSavedRoguelike();
+	}
     
     var unlockFunction = function()
 	{
@@ -138,7 +144,7 @@ with(ui)
     resetButtonText.setShift(0, 4);
     resetButtonText.setColor(c_black);
     
-    resetAllButton = new Button(resetFunction);
+    resetAllButton = new Button(resetAllFunction);
     resetAllButton.setSprites(s_buttonMini);
     resetAllButtonText = new Text("rall", f_menu);
     resetAllButtonText.setShift(0, 4);
