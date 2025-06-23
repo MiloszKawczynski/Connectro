@@ -13,6 +13,19 @@ global.debugStars = 0;
 debugPress = 0;
 
 global.isRoguelikeMode = false;
+if (file_exists(global.savedRoguelikeFilename))
+{
+    loadGame();
+}
+else 
+{
+    global.roguelikeLevelNumber = 0;
+}
+
+if (!variable_global_exists("roguelikeBest"))
+{
+    global.roguelikeBest = 0;
+}
 
 event_inherited();
 
@@ -132,6 +145,17 @@ with(ui)
     rogueButtonText.setShift(0, 4);
     rogueButtonText.setColor(c_black);
     
+    var scoreText = string("Current: {0}     Best: {1}", global.roguelikeLevelNumber, global.roguelikeBest);
+    
+    if (global.roguelikeLevelNumber == 0)
+    {
+        scoreText = string("Best: {0}", global.roguelikeBest);
+    }
+    
+    rogueScoreText = new Text(scoreText, f_menu);
+    rogueScoreText.setColor(c_white);
+    rogueScoreText.setScale(0.65, 0.65);
+    
     resetButton = new Button(resetFunction);
     resetButton.setSprites(s_buttonMini);
     resetButtonText = new Text("Reset", f_menu);
@@ -161,6 +185,7 @@ with(ui)
     mainLayer.addComponent(0, -5, logo);
     mainLayer.addComponent(3, 9.75, paintButton);
     mainLayer.addComponent(3, 11, rogueButton);
+    mainLayer.addComponent(3, 12, rogueScoreText);
     mainLayer.addComponent(3, 9.75, paintButtonText);
     mainLayer.addComponent(3, 11, rogueButtonText);
 	

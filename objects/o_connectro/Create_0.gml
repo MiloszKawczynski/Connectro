@@ -14,11 +14,6 @@ if (global.isRoguelikeMode)
     {
         global.paints = [undefined, undefined, undefined];
     }
-    
-    if (!variable_global_exists("roguelikeLevelNumber"))
-    {
-        global.roguelikeLevelNumber = 0;
-    }
 }
 
 global.width = levelToPlay.width;
@@ -76,6 +71,12 @@ restartFunctionFade = function()
 choosePaintFade = function()
 {
     global.roguelikeLevelNumber++;
+    
+    if (global.roguelikeLevelNumber > global.roguelikeBest)
+    {
+        global.roguelikeBest = global.roguelikeLevelNumber;
+    }
+    
     createPaintsCards(calculateStars());
 }
 
