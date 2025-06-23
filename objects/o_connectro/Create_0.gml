@@ -367,6 +367,12 @@ generateGame(loadedGame);
 
 checkForUselessness(false);
 
+// Save a game on level enter.
+if (global.isRoguelikeMode)
+{
+	saveGame(moves);
+}
+
 hoveredX = -1;
 hoveredY = -1;
 

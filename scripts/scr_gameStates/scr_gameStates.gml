@@ -3,7 +3,7 @@ function normal(showPotential = false)
 	normalTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	if (global.isRoguelikeMode)
+	if (global.isRoguelikeMode and !showPotential)
 	{
 		with(o_connectro)
 	    {
@@ -17,7 +17,7 @@ function mustPickDirection(showPotential = false)
 	mustPickDirectionTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	if (global.isRoguelikeMode)
+	if (global.isRoguelikeMode and !showPotential)
 	{
 		with(o_connectro)
 	    {
@@ -31,7 +31,7 @@ function mustPickTarget(showPotential = false)
 	mustPickTargetTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	if (global.isRoguelikeMode)
+	if (global.isRoguelikeMode and !showPotential)
 	{
 		with(o_connectro)
 	    {
