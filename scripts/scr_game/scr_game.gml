@@ -1299,3 +1299,20 @@ function saveProgress()
         saveLevel();
     }
 }
+
+function generateUniquePlayerId() {
+    var timestamp = current_time; // High-res time in milliseconds
+    var random_part = random_get_seed(); // Random value
+
+    var base_string = string(timestamp) + "|" + string(random_part);
+
+    // Optional: hash it to make it compact and fixed-length
+    var hashed = sha1_string_unicode(base_string); // Requires GameMaker's SHA1 function
+
+    // Return as GUID-style format
+    return string_copy(hashed, 1, 8) + "-" +
+           string_copy(hashed, 9, 4) + "-" +
+           string_copy(hashed, 13, 4) + "-" +
+           string_copy(hashed, 17, 4) + "-" +
+           string_copy(hashed, 21, 12);
+}
