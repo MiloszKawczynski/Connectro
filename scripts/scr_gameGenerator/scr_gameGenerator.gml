@@ -1645,8 +1645,10 @@ function generateGame(savedGame = undefined)
                 }
             }
 		}
-		
-        applayLevelIntro();
+		else
+		{
+			applayLevelIntro();
+		}
     }
     else 
     {
