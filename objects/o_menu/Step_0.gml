@@ -1,6 +1,6 @@
 ui.step();
 
-if (mouse_check_button_pressed(mb_right))
+if (!MOBILE and mouse_check_button_pressed(mb_right))
 {
 	if (clipboard_has_text())
 	{

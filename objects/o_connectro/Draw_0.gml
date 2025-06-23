@@ -49,7 +49,7 @@ if (drawSurface)
 drawState();
 ui.draw();
 
-if (mouse_check_button_pressed(mb_right))
+if (!MOBILE and mouse_check_button_pressed(mb_right))
 {
 	getSeed();
 }

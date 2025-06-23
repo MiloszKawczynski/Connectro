@@ -81,7 +81,7 @@ function editor()
         }
     }
     
-    if (mouse_check_button_pressed(mb_right))
+    if (!MOBILE and mouse_check_button_pressed(mb_right))
     {
         ds_grid_set(grid, hoveredX, hoveredY, 0);
     }
