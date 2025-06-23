@@ -122,6 +122,7 @@
     {"id":{"name":"sn_lvl3","path":"sounds/sn_lvl3/sn_lvl3.yy",},},
     {"id":{"name":"sn_score","path":"sounds/sn_score/sn_score.yy",},},
     {"id":{"name":"sn_town","path":"sounds/sn_town/sn_town.yy",},},
+    {"id":{"name":"sn_usellessPop","path":"sounds/sn_usellessPop/sn_usellessPop.yy",},},
     {"id":{"name":"ats_button","path":"sprites/ats_button/ats_button.yy",},},
     {"id":{"name":"ats_buttonFocus","path":"sprites/ats_buttonFocus/ats_buttonFocus.yy",},},
     {"id":{"name":"ats_buttonHover","path":"sprites/ats_buttonHover/ats_buttonHover.yy",},},

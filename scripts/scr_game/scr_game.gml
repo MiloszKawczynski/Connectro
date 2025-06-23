@@ -113,6 +113,13 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
     
 	if (tile.isAvailable)
 	{
+        if (tile.isUseless)
+        {
+            audio_play_sound(sn_usellessPop, 0, false);
+            tile.isAvailable = false;
+            return;
+        }
+        
         var state = getState();
         
 		if (!showPotential)
@@ -133,10 +140,6 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
-                    if (!tile.isUseless)
-                    {
-					    moves++;
-                    }
 				}
 				
 				break;
@@ -151,10 +154,6 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl2, 0, false);
-					if (!tile.isUseless)
-                    {
-					    moves++;
-                    }
 				}
 				
 				break;
@@ -169,10 +168,6 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				if (!showPotential)
 				{
 					audio_play_sound(sn_lvl3, 0, false);
-					if (!tile.isUseless)
-                    {
-					    moves++;
-                    }
 				}
 				
 				break;
