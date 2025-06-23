@@ -123,11 +123,13 @@ with(ui)
     
     with(add)
     {
+        addID = irandom(sprite_get_number(s_uiAdd));
+        
         with(state)
         {
             draw = function()
             {
-                draw_sprite_ext(s_uiAdd, 1, component.posX, component.posY, component.scaleX, component.scaleY, component.rotation, c_white, component.alpha);
+                draw_sprite_ext(s_uiAdd, component.addID, component.posX, component.posY, component.scaleX, component.scaleY, component.rotation, c_white, component.alpha);
             }
         }
     }
