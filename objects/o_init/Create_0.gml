@@ -33,6 +33,7 @@ paintFunctionFade = function()
 rogueFunctionFade = function()
 { 
     global.isRoguelikeMode = true;
+	global.shouldLoadRoguelike = true;
     room_goto(r_game);
 }
 
