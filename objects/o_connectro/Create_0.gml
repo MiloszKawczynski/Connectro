@@ -82,6 +82,7 @@ choosePaintFade = function()
 
 goToNextLevelFade = function()
 {
+    audio_sound_gain(sn_town, 1, 100);
     with(ui)
     {
         ds_list_clear(getMainGroup().components);

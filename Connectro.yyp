@@ -120,6 +120,8 @@
     {"id":{"name":"sn_lvl1","path":"sounds/sn_lvl1/sn_lvl1.yy",},},
     {"id":{"name":"sn_lvl2","path":"sounds/sn_lvl2/sn_lvl2.yy",},},
     {"id":{"name":"sn_lvl3","path":"sounds/sn_lvl3/sn_lvl3.yy",},},
+    {"id":{"name":"sn_paintIsPicked","path":"sounds/sn_paintIsPicked/sn_paintIsPicked.yy",},},
+    {"id":{"name":"sn_roguelikeProgress","path":"sounds/sn_roguelikeProgress/sn_roguelikeProgress.yy",},},
     {"id":{"name":"sn_score","path":"sounds/sn_score/sn_score.yy",},},
     {"id":{"name":"sn_town","path":"sounds/sn_town/sn_town.yy",},},
     {"id":{"name":"sn_usellessPop","path":"sounds/sn_usellessPop/sn_usellessPop.yy",},},

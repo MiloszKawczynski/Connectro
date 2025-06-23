@@ -394,12 +394,18 @@ function createPaintsCards(_tier)
         
         with(gameNumber)
         {
+            audio_sound_gain(sn_town, 0.1, 100);
+            
             wait = 0;
             step = function()
             {
                 if (ui.levelProgress)
                 {
                     wait++;
+                    if (wait == 30)
+                    {
+                        audio_play_sound(sn_roguelikeProgress, 0, false);
+                    }
                     if (wait > 30)
                     {
                         setPositionInGrid(lerp(posInGridX, -3.7 * 2, 0.02), posInGridY);
@@ -463,6 +469,7 @@ function createPaintsCards(_tier)
             {
                 if (!other.ui.isAnyPick)
                 {
+                    audio_play_sound(sn_paintIsPicked, 0, false);
                     other.isPick = true;
                     other.ui.isAnyPick = true;
                 }
