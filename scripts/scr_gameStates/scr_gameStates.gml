@@ -3,9 +3,12 @@ function normal(showPotential = false)
 	normalTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	with(o_connectro)
-    {
-		saveGame(moves);
+	if (global.isRoguelikeMode)
+	{
+		with(o_connectro)
+	    {
+			saveGame(moves);
+		}
 	}
 }
 
@@ -14,9 +17,12 @@ function mustPickDirection(showPotential = false)
 	mustPickDirectionTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	with(o_connectro)
-    {
-		saveGame(moves);
+	if (global.isRoguelikeMode)
+	{
+		with(o_connectro)
+	    {
+			saveGame(moves);
+		}
 	}
 }
 
@@ -25,9 +31,12 @@ function mustPickTarget(showPotential = false)
 	mustPickTargetTileEffect(showPotential);
     checkForUselessness(showPotential);
 	
-	with(o_connectro)
-    {
-		saveGame(moves);
+	if (global.isRoguelikeMode)
+	{
+		with(o_connectro)
+	    {
+			saveGame(moves);
+		}
 	}
 }
 
