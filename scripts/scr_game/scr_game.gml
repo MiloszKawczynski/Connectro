@@ -1020,6 +1020,154 @@ function loadLevel(levelString, levelId)
 	global.levels[levelId].texture = surfaceTexture;
 }
 
+function deleteSavedRoguelike()
+{
+	if (file_exists(global.savedRoguelikeFilename))
+	{
+		file_delete(global.savedRoguelikeFilename);
+	}
+}
+
+function saveGame(moves)
+{
+	var level = "";
+	
+	var height = global.height;
+	var width = global.width;
+	
+	//level += "s:" + string(global.levels[global.choosedLevel].stars) + "\n";
+	level += "m:" + string(moves) + "\n";
+	level += string(width) + " " + string(height) + "\n";
+
+	for (var yy = 0; yy < height; yy++)
+	{
+		for (var xx = 0; xx < width; xx++)
+		{
+			var tile = ds_grid_get(grid, xx, yy);
+
+			// Format of tiles: 0,1,2,3 4,5,6,7 8,9,10,11
+			level += string(tile.type) + ",";
+			level += string(tile.isRevealed) + ",";
+			level += string(tile.isAvailable) + ",";
+            level += string(tile.revealedByType);
+			
+			show_debug_message(tile.revealedByType);
+			
+			if (yy != height - 1 or xx != width - 1)
+			{
+				level += " ";
+			}
+		}
+	}
+	
+	level += "\n";
+	
+	var buffer = buffer_create(string_byte_length(level) + 1, buffer_fixed, 1);
+	buffer_write(buffer, buffer_string, level);
+	buffer_save(buffer, global.savedRoguelikeFilename);
+	buffer_delete(buffer);
+}
+
+enum ExpectedData
+{
+	Type,
+	IsRevealed,
+	IsAvailable,
+	RevealedByType,
+}
+
+function loadGame()
+{
+	var savedGameFilename = global.savedRoguelikeFilename;
+	
+	// There is nothing to load.
+	if (!file_exists(savedGameFilename))
+	{
+		return;
+	}
+	
+	var buffer = buffer_load(savedGameFilename);
+	var levelString = buffer_read(buffer, buffer_string);
+
+	var iterator = 0;
+	
+	// Skip the moves "m:" header.
+	iterator = skipHeaderFromSavedLevel(levelString, iterator);
+	
+	var movesNumber = readNumberFromSavedLevel(levelString, iterator);
+	iterator = movesNumber.iterator;
+	var moves = movesNumber.number;
+	
+	var widthNumber = readNumberFromSavedLevel(levelString, iterator);
+	var width = widthNumber.number;
+	iterator = widthNumber.iterator;
+	
+	var heightNumber = readNumberFromSavedLevel(levelString, iterator);
+	var height = heightNumber.number;
+	iterator = heightNumber.iterator;
+	
+	var savedGrid = ds_grid_create(width, height);
+	
+	var expected = ExpectedData.Type;
+	
+	var idx = 0;
+	var value = "";
+	for (; iterator < string_length(levelString); iterator++)
+	{
+		var currentValue = string_char_at(levelString, iterator + 1);
+		
+		if (currentValue == "\n")
+		{
+			break;
+		}
+		
+		if (currentValue == " " or currentValue == ",")
+		{
+			var coords = getXYFromLinearIndex(width, idx);
+			
+			if (expected == ExpectedData.Type)
+			{
+				var newTile = { type: real(value), isRevealed: false, isAvailable: false, revealedByType: real(value) };
+				ds_grid_add(savedGrid, coords.x, coords.y, newTile);
+				expected = ExpectedData.IsRevealed;
+			}
+			else if (expected == ExpectedData.IsRevealed)
+			{
+				var tile = ds_grid_get(savedGrid, coords.x, coords.y);
+				tile.isRevealed = bool(value);
+				expected = ExpectedData.IsAvailable;
+			}
+			else if (expected == ExpectedData.IsAvailable)
+			{
+				var tile = ds_grid_get(savedGrid, coords.x, coords.y);
+				tile.isAvailable = bool(value);
+				expected = ExpectedData.RevealedByType;
+			}
+			else if (expected == ExpectedData.RevealedByType)
+			{
+				var tile = ds_grid_get(savedGrid, coords.x, coords.y);
+				
+				show_debug_message("val: {0}, real: {1}", value, real(value));
+				
+				tile.revealedByType = real(value);
+				expected = ExpectedData.Type;
+			}
+			
+			if (currentValue == " ")
+			{
+				idx += 1;
+			}
+			
+			value = "";
+			continue;
+		}
+		
+		value += currentValue;
+	}
+
+	return { grid: savedGrid, width: width, height: height, moves: moves };
+}
+
 function calculateStars()
 {
     var gainedStars = 3;
