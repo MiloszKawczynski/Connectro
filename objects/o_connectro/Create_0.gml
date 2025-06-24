@@ -72,11 +72,6 @@ choosePaintFade = function()
 {
     global.roguelikeLevelNumber++;
     
-    if (global.roguelikeLevelNumber > global.roguelikeBest)
-    {
-        global.roguelikeBest = global.roguelikeLevelNumber;
-    }
-    
     createPaintsCards(calculateStars());
 }
 
@@ -325,6 +320,76 @@ with(ui)
         
         isAnyPick = false;
     }
+    
+    gameOverLayer = new Layer();
+    gameOverLayer.setGrid(7, 14);
+    
+    gameOverBorder = new Output();
+    gameOverBorder.setSprite(s_paintCardSlot);
+    gameOverBorder.setScale(0, 0);
+    
+    with(gameOverBorder)
+    {
+        crop = 0;
+        step = function()
+        {
+            setScale(lerp(scaleX, 1.25, 0.2), lerp(scaleY, 0.7 - crop, 0.2));
+        }
+    }
+
+    gameOverText = new Text(string("Game Over"), f_game);
+    gameOverNoMoreMovesText = new Text(string("No more\nmoves available"), f_game);
+    gameOverScoreText = new Text(string("Score: -\n\nBest: -"), f_game);
+    gameOverRecordText = new Text(string("New Record!"), f_game);
+    
+    with(gameOverText)
+    {
+        center = 0;
+        setScale(0, 0);
+        step = function()
+        {
+            setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
+            setPositionInGrid(3.5, lerp(posInGridY, 5 + center, 0.2));
+        }
+    }
+    
+    with(gameOverNoMoreMovesText)
+    {
+        center = 0;
+        setScale(0, 0);
+        step = function()
+        {
+            setScale(lerp(scaleX, 0.75, 0.2), lerp(scaleY, 0.75, 0.2));
+            setPositionInGrid(3.5, lerp(posInGridY, 6 + center, 0.2));
+        }
+    }
+    
+    with(gameOverScoreText)
+    {
+        center = 0;
+        setScale(0, 0);
+        step = function()
+        {
+            setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
+            setPositionInGrid(3.5, lerp(posInGridY, 8 + center, 0.2));
+        }
+    }
+    
+    with(gameOverRecordText)
+    {
+        setColor(c_yellow);
+        setScale(0, 0);
+        step = function()
+        {
+            setScale(lerp(scaleX, 1 + abs(sin(current_time / 200)) * 0.15, 0.2), lerp(scaleY, 1 + abs(sin(current_time / 200)) * 0.15, 0.2));
+            setPositionInGrid(3.5, lerp(posInGridY, 10, 0.2));
+        }
+    }
+    
+    gameOverLayer.addComponent(3.5, 7.5, gameOverBorder);
+    gameOverLayer.addComponent(3.5, 7.5, gameOverText);
+    gameOverLayer.addComponent(3.5, 7.5, gameOverNoMoreMovesText);
+    gameOverLayer.addComponent(3.5, 7.5, gameOverScoreText);
 }
 
 if (global.seed == 0)

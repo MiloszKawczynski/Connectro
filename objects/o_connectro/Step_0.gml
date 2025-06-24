@@ -91,7 +91,7 @@ if (global.isEditorOn)
 }
 else
 {
-    if (gameState != gameEnd and gameState != pickCard)
+    if (gameState != gameEnd and gameState != pickCard and gameState != gameOver)
     {
         if (mouse_check_button_pressed(mb_left))
         {
@@ -107,7 +107,7 @@ else
         }
     }
     
-    if (gameState != pickCard)
+    if (gameState != pickCard and gameState != gameOver)
     {
         for(var yy = 0; yy < global.height; yy++)
         {

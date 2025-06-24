@@ -141,6 +141,10 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				{
 					audio_play_sound(sn_lvl2, 0, false);
                     moves++;
+                    if (checkForUselessness(showPotential) and isPaintInventoryEmpty())
+                    {
+                        gameOverScreen();
+                    }
 				}
 				
 				break;
@@ -156,6 +160,10 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				{
 					audio_play_sound(sn_lvl2, 0, false);
                     moves++;
+                    if (checkForUselessness(showPotential) and isPaintInventoryEmpty())
+                    {
+                        gameOverScreen();
+                    }
 				}
 				
 				break;
@@ -171,6 +179,10 @@ function normalTileEffect(showPotential = false, tileX = hoveredX, tileY = hover
 				{
 					audio_play_sound(sn_lvl3, 0, false);
                     moves++;
+                    if (checkForUselessness(showPotential) and isPaintInventoryEmpty())
+                    {
+                        gameOverScreen();
+                    }
 				}
 				
 				break;
@@ -390,6 +402,11 @@ function mustPickDirectionTileEffect(showPotential = false, tileX = hoveredX, ti
 		
 			removeDirections();
             removeHover();
+            
+            if (checkForUselessness(showPotential) and isPaintInventoryEmpty())
+            {
+                gameOverScreen();
+            }
 		}
 		
 		return;
@@ -431,6 +448,11 @@ function mustPickTargetTileEffect(showPotential = false, tileX = hoveredX, tileY
 			
 			removeTarget();
             removeHover();
+            
+            if (checkForUselessness(showPotential) and isPaintInventoryEmpty())
+            {
+                gameOverScreen();
+            }
 		}
 		
 		return;
@@ -439,6 +461,8 @@ function mustPickTargetTileEffect(showPotential = false, tileX = hoveredX, tileY
 
 function checkForUselessness(showPotential)
 {
+    isEveryUselless = true;
+    
     if (showPotential)
     {
         return;
@@ -510,8 +534,17 @@ function checkForUselessness(showPotential)
             {
                 tile.isUseless = true;
             }
+            else 
+            {
+                if (tile.isAvailable and tile.type != TilesTypes.block)
+                {
+            	    isEveryUselless = false;
+                }
+            }
     	}
     }
+    
+    return isEveryUselless;
 }
 
 function revealLine(x1, y1, x2, y2, _color, state, showPotential, revealingType, isDiamondRecursion = false)

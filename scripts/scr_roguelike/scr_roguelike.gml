@@ -454,7 +454,7 @@ function createPaintsCards(_tier)
                 {
                     if (!ui.isAnyPick)
                     {
-                        setScale(lerp(scaleX, 5.2, 0.2), lerp(scaleY, 4.4, 0.2));
+                        setScale(lerp(scaleX, 5.2 / 4, 0.2), lerp(scaleY, 1.1, 0.2));
                     }
                     else 
                     {
@@ -690,4 +690,54 @@ function createPaintsCards(_tier)
         
         pushLayer(paintsLayer);
     }
+}
+
+function isPaintInventoryEmpty()
+{
+    if (!global.isRoguelikeMode)
+    {
+        return false;
+    }
+    
+    for (var i = 0; i < array_length(global.paints); i++)
+    {
+        if (global.paints[i] != undefined)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+function gameOverScreen()
+{
+    if (!global.isRoguelikeMode or isAllRevealed())
+    {
+        return;
+    }
+    
+    with(ui)
+    {
+        if (global.roguelikeLevelNumber > global.roguelikeBest)
+        {
+            global.roguelikeBest = global.roguelikeLevelNumber;
+            gameOverLayer.addComponent(3.5, 6.5, gameOverRecordText);
+        }
+        else 
+        {
+            gameOverBorder.crop = 0.1;
+        	gameOverText.center = 0.75;
+        	gameOverNoMoreMovesText.center = 0.75;
+        	gameOverScoreText.center = 0.75;
+        }
+        
+        var scoreContent = string("Score: {0}\n\nBest: {1}", global.roguelikeLevelNumber, global.roguelikeBest)
+        global.roguelikeLevelNumber = 0;
+        
+        gameOverScoreText.setContent(scoreContent);
+        pushLayer(gameOverLayer);
+    }
+    
+    mouse_clear(mb_left);
+    gameState = gameOver;
 }

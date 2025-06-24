@@ -1,7 +1,6 @@
 function normal(showPotential = false)
 {
 	normalTileEffect(showPotential);
-    checkForUselessness(showPotential);
 	
 	if (global.isRoguelikeMode and !showPotential)
 	{
@@ -15,7 +14,6 @@ function normal(showPotential = false)
 function mustPickDirection(showPotential = false)
 {
 	mustPickDirectionTileEffect(showPotential);
-    checkForUselessness(showPotential);
 	
 	if (global.isRoguelikeMode and !showPotential)
 	{
@@ -29,7 +27,6 @@ function mustPickDirection(showPotential = false)
 function mustPickTarget(showPotential = false)
 {
 	mustPickTargetTileEffect(showPotential);
-    checkForUselessness(showPotential);
 	
 	if (global.isRoguelikeMode and !showPotential)
 	{
@@ -52,6 +49,19 @@ function gameEnd(showPotential = false)
 
 function pickCard()
 {
+}
+
+function gameOver()
+{
+    if (mouse_check_button_pressed(mb_left))
+    {
+        deleteSavedRoguelike();
+        global.roguelikeLevelNumber = 0;
+        global.paints = [undefined, undefined, undefined];
+        
+        fadeFunction = goBackFunctionFade;
+        fade = true;
+    }
 }
 
 function editor()
