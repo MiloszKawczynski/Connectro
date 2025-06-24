@@ -198,7 +198,11 @@ if (isAllRevealed())
 	else if (!isDataSaved and global.isRoguelikeMode)
 	{
 		isDataSaved = true;
-		LootLockerSubmitScore("31457", global.roguelikeLevelNumber + 1);
+		
+		if (global.LootLockerInitialized)
+		{
+			LootLockerSubmitScore("31457", global.roguelikeLevelNumber + 1);
+		}
 	}
 }
 
