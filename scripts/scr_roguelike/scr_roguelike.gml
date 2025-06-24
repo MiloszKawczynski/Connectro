@@ -446,7 +446,7 @@ function createPaintsCards(_tier)
         paintsLayer.addComponent(3.7, 6.5, gameNumber);
         paintsLayer.addComponent(3.7 * 3, 6.5, newGameNumber);
         
-        if (_tier > 0)
+        if (_tier > 0 and findEmptySpot() < 3)
         {
             cardsSlot = new Output();
             cardsSlot.setSprite(s_paintCardSlot);
@@ -667,6 +667,16 @@ function createPaintsCards(_tier)
             chooseText.setContent("0 stars\n\nNo prize\n\nfor you");
         }
         
+        if (findEmptySpot() >= 3)
+        {
+            chooseText.setContent(string("{0} stars\n\nbut no place for\n\nanother prize", _tier));
+            
+            if (_tier == 1)
+            {
+                chooseText.setContent("1 star\n\nbut no place\n\nfor another\n\nprize");
+            }
+        }
+        
         with(chooseText)
         {
             tier = _tier;
@@ -677,7 +687,7 @@ function createPaintsCards(_tier)
                     setScale(lerp(scaleX, 1, 0.2), lerp(scaleY, 1, 0.2));
                     setPositionInGrid(3.5, lerp(posInGridY, 2, 0.2));
                     
-                    if (tier == 0 and scaleX > 0.99)
+                    if ((tier == 0 or findEmptySpot() >= 3) and scaleX > 0.99)
                     {
                         ui.levelProgress = true;
                     }
