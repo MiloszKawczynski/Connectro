@@ -99,6 +99,7 @@
     {"id":{"name":"ato_uiExample","path":"objects/ato_uiExample/ato_uiExample.yy",},},
     {"id":{"name":"o_connectro","path":"objects/o_connectro/o_connectro.yy",},},
     {"id":{"name":"o_init","path":"objects/o_init/o_init.yy",},},
+    {"id":{"name":"o_leaderboard","path":"objects/o_leaderboard/o_leaderboard.yy",},},
     {"id":{"name":"o_map","path":"objects/o_map/o_map.yy",},},
     {"id":{"name":"o_menu","path":"objects/o_menu/o_menu.yy",},},
     {"id":{"name":"atpth_circle","path":"paths/atpth_circle/atpth_circle.yy",},},
@@ -106,6 +107,7 @@
     {"id":{"name":"atr_example","path":"rooms/atr_example/atr_example.yy",},},
     {"id":{"name":"r_game","path":"rooms/r_game/r_game.yy",},},
     {"id":{"name":"r_init","path":"rooms/r_init/r_init.yy",},},
+    {"id":{"name":"r_leaderboard","path":"rooms/r_leaderboard/r_leaderboard.yy",},},
     {"id":{"name":"r_map","path":"rooms/r_map/r_map.yy",},},
     {"id":{"name":"r_menu","path":"rooms/r_menu/r_menu.yy",},},
     {"id":{"name":"atscr_toolbox","path":"scripts/atscr_toolbox/atscr_toolbox.yy",},},
@@ -251,6 +253,7 @@
     {"roomId":{"name":"r_map","path":"rooms/r_map/r_map.yy",},},
     {"roomId":{"name":"r_game","path":"rooms/r_game/r_game.yy",},},
     {"roomId":{"name":"atr_example","path":"rooms/atr_example/atr_example.yy",},},
+    {"roomId":{"name":"r_leaderboard","path":"rooms/r_leaderboard/r_leaderboard.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
