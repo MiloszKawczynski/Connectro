@@ -73,20 +73,20 @@ with(ui)
 			break;
 		}
 		
-		leaderboard[i] = new Text(highscoresArray[i], f_base);
-		leaderboard[i].setScale(2, 2);
+		leaderboard[i] = new Text(highscoresArray[i], f_game);
+		leaderboard[i].setScale(0.5, 0.5);
 		mainLayer.addComponent(3, 3.5 + i, leaderboard[i]);
 	}
 	
 	var myScoreString = string(playerRank) + ". " + "YOU" + "     " + LLPlayerScore();
 
-	var myScore = new Text(myScoreString, f_base);
-	myScore.setScale(2, 2);
+	var myScore = new Text(myScoreString, f_game);
+	myScore.setScale(0.5, 0.5);
 	myScore.setColor(c_lime);
 	mainLayer.addComponent(3, 3.5 + 6, myScore);
 	
-	var notification = new Text("Your rank may take some\ntime to update.", f_base);
-	notification.setScale(2, 2);
+	var notification = new Text("Your rank may take some\ntime to update.", f_game);
+	notification.setScale(0.5, 0.5);
 	mainLayer.addComponent(3, 3.5 + 6.8, notification);
 
     mainLayer.addComponent(0, 0, vignetteL);
