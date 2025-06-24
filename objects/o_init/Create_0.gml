@@ -126,6 +126,8 @@ with(ui)
 	{
 		deleteSavedData();
 		deleteSavedRoguelike();
+		global.roguelikeLevelNumber = 0;
+		global.paints = [undefined, undefined, undefined];
 	}
     
     var unlockFunction = function()
