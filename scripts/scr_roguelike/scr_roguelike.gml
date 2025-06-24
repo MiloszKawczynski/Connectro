@@ -84,6 +84,7 @@ function createPaintUI(_type, _value, _paintId)
                     global.paints[string_digits(name)] = undefined;
                     moves--;
                     checkForUselessness(false);
+                    saveGame(moves);
                 }
                 
                 with(other.containerImIn)
