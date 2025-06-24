@@ -282,7 +282,7 @@ function initialize()
     global.aspect = 9 / 20;
     global.positionOnMap = -1010;
     
-    if (MOBILE)
+    if (MOBILE and display_get_width() / display_get_height() < 0.48)
     {
         global.aspect = display_get_width() / display_get_height();
         surface_resize(application_surface, display_get_width(), display_get_height());
