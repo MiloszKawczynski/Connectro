@@ -51,7 +51,7 @@ else
     if (checkForSnap)
     {
         checkForSnap = false;
-        if (scrollFingerPosition != 0 or scrollSpeed != 0 or meetBarier)
+        if (scrollFingerPosition != 0 or abs(scrollSpeed) > 10 or meetBarier)
         {
             meetBarier = false;
             scrollPosition += scrollFingerPosition;
