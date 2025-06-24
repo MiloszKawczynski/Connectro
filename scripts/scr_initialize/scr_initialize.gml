@@ -168,29 +168,29 @@ function initialize()
         new level("11_11", 0, 3 + 10 * (0 + i)),
         new level("9_13", 2, 5 + 10 * (0 + i)),
     //i = 1 dek dek test dek
-        new level("9_11_test", 2, 5 + 10 * (1 + i), true, [20, 15, 11]),
+        new level("11_11", 2, 5 + 10 * (1 + i)),
         new level("7_9", 7, 2 + 10 * (1 + i)),
     
         new level("11_11", 0, 3 + 10 * (1 + i)),
         new level("9_13", 5, 0 + 10 * (1 + i)),
     //i = 2 dek wrap cross dek
-        new level("9_11_wrap", 5, 0 + 10 * (2 + i), true, [20, 15, 12]),
+        new level("9_11_test", 5, 0 + 10 * (2 + i), true, [20, 15, 11]),
         new level("7_9", 7, 2 + 10 * (2 + i)),
     
         new level("11_11", 0, 3 + 10 * (2 + i)),
-        new level("9_11_cross", 2, 5 + 10 * (2 + i), true, [20, 15, 13]),
+        new level("9_11_wrap", 2, 5 + 10 * (2 + i), true, [20, 15, 12]),
     //i = 3 dek walls last dek
-        new level("9_11_walls", 5, 0 + 10 * (3 + i), true, [20, 15, 12]),
+        new level("9_11_cross", 5, 0 + 10 * (3 + i), true, [20, 15, 13]),
         new level("7_9", 7, 2 + 10 * (3 + i)),
     
         new level("11_11", 0, 3 + 10 * (3 + i)),
-        new level("9_13_last", 2, 5 + 10 * (3 + i), true, [25, 20, 17]),
+        new level("9_11_walls", 2, 5 + 10 * (3 + i), true, [20, 15, 12]),
     //i = 4 dek dek dek dek
         new level("11_11", 0, 3 + 10 * (4 + i)),
         new level("9_13", 2, 5 + 10 * (4 + i)),
     
-        new level("7_9", 5, 0 + 10 * (4 + i)),
         new level("7_9", 7, 2 + 10 * (4 + i)),
+        new level("9_13_last", 5, 0 + 10 * (4 + i), true, [25, 20, 17]),
     );
     
     i = 6;

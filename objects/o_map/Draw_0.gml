@@ -150,7 +150,7 @@ for (var i = 5; i >= -5; i--)
     
     var isInRange = true;
     
-    if (abs(scrollPositionFinal - -global.levels[buildingUIId].y) > 300)
+    if (abs(scrollPositionFinal - -global.levels[buildingUIId].y) > scrollRange)
     {
         isInRange = false;
     }

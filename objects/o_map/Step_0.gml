@@ -78,7 +78,7 @@ else
             }
         }
         
-        if (abs(scrollPosition - -global.levels[scrollSnap].y) < 300)
+        if (abs(scrollPosition - -global.levels[scrollSnap].y) < scrollRange)
         {
             isSnapping = true;
             scrollSpeed = 0;
