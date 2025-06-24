@@ -83,7 +83,10 @@ function createPaintUI(_type, _value, _paintId)
                     }
                     global.paints[string_digits(name)] = undefined;
                     moves--;
-                    checkForUselessness(false);
+                    if (checkForUselessness(false) and isPaintInventoryEmpty())
+                    {
+                        gameOverScreen();
+                    }
                     saveGame(moves);
                 }
                 
