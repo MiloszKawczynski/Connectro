@@ -1,7 +1,13 @@
 initialize();
 
-LootLockerInitialize("dev_4b98ea0634db46dc9241a22ca7cb012a", "0.0.0.1", "true", "31457")
-LootLockerTurnOffAutoRefresh();
+LootLockerInitialize("dev_4b98ea0634db46dc9241a22ca7cb012a", "0.0.0.1", "true", "31457");
+
+{
+	//LootLockerTurnOffAutoRefresh();
+	LootLockerTurnOnAutoRefresh();
+	
+	LootLockerSubmitScore("31457", "0");
+}
 
 if (!file_exists("playerId.ini"))
 {
@@ -67,6 +73,11 @@ rogueFunctionFade = function()
     global.isRoguelikeMode = true;
 	global.shouldLoadRoguelike = true;
     room_goto(r_game);
+}
+
+leaderboardFunctionFade = function()
+{
+	room_goto(r_leaderboard);
 }
 
 with(ui)
@@ -135,6 +146,12 @@ with(ui)
         o_init.fade = true;
         o_init.fadeFunction = o_init.rogueFunctionFade;
 	}
+	
+	var leaderboardFunction = function()
+	{
+		o_init.fade = true;
+		o_init.fadeFunction = o_init.leaderboardFunctionFade;
+	}
     
     var resetFunction = function()
 	{
@@ -177,6 +194,12 @@ with(ui)
     rogueScoreText.setColor(c_white);
     rogueScoreText.setScale(0.65, 0.65);
     
+	leaderboardButton = new Button(leaderboardFunction);
+    leaderboardButton.setSprites(s_button);
+    leaderboardButtonText = new Text("Leaderboard", f_menu);
+    leaderboardButtonText.setShift(0, 4);
+    leaderboardButtonText.setColor(c_black);
+	
     resetButton = new Button(resetFunction);
     resetButton.setSprites(s_buttonMini);
     resetButtonText = new Text("Reset", f_menu);
@@ -204,11 +227,13 @@ with(ui)
     mainLayer.addComponent(0, 0, vignetteL);
     mainLayer.addComponent(6, 0, vignetteR);
     mainLayer.addComponent(0, -5, logo);
-    mainLayer.addComponent(3, 9.75, paintButton);
-    mainLayer.addComponent(3, 11, rogueButton);
-    mainLayer.addComponent(3, 12, rogueScoreText);
-    mainLayer.addComponent(3, 9.75, paintButtonText);
-    mainLayer.addComponent(3, 11, rogueButtonText);
+    mainLayer.addComponent(3, 8.5, paintButton);
+    mainLayer.addComponent(3, 9.75, rogueButton);
+    mainLayer.addComponent(3, 10.75, rogueScoreText);
+    mainLayer.addComponent(3, 12, leaderboardButton);
+    mainLayer.addComponent(3, 8.5, paintButtonText);
+    mainLayer.addComponent(3, 9.75, rogueButtonText);
+	mainLayer.addComponent(3, 12, leaderboardButtonText);
 	
 	pushLayer(mainLayer);
 }

@@ -2,6 +2,8 @@ fade = false;
 fadeAlpha = 1;
 isDataSaved = false;
 
+LootLockerInitialize("dev_4b98ea0634db46dc9241a22ca7cb012a", "0.0.0.1", "true", "31457");
+
 fadeFunction = undefined;
 
 levelToPlay = global.levels[global.choosedLevel];
