@@ -157,7 +157,7 @@ function initialize()
     
     array_push(global.bioms, 
     new biom(904, 12, make_color_rgb(0, 74, 11)),
-    new biom(904 * 2, 24, make_color_rgb(83, 26, 22)),
+    new biom(904 * 2, 24, make_color_rgb(100, 126, 181)),
     )
     
     var i = 0;
@@ -203,19 +203,19 @@ function initialize()
         new level("11_11", 0, 3 + 10 * (0 + i)),
         new level("9_13", 2, 5 + 10 * (0 + i)),
     //-------------------------
-        new level("9_13_4_3_4_0_4_1_0_1795845498", 2, 5 + 10 * (1 + i), true, [30, 20, 18]),
+        new level("9_13_2_4_2_0_2_1_0_1104167832", 2, 5 + 10 * (1 + i), true, [30, 25, 20]),
         new level("7_9", 7, 2 + 10 * (1 + i)),
     
         new level("11_11", 0, 3 + 10 * (1 + i)),
         new level("9_13", 5, 0 + 10 * (1 + i)),
     //-------------------------
-        new level("9_13_4_3_4_0_4_1_0_2275901463", 5, 0 + 10 * (2 + i), true, [25, 22, 18]),//Solver zwrócił mi 25 18 18 podbiłem środkową gwiazdkę
+        new level("9_13_4_3_4_0_4_1_0_1795845498", 5, 0 + 10 * (2 + i), true, [30, 20, 18]),//Solver zwrócił mi 25 18 18 podbiłem środkową gwiazdkę
         new level("7_9", 7, 2 + 10 * (2 + i)),
     
         new level("11_11", 0, 3 + 10 * (2 + i)),
-        new level("9_13_4_3_1_1_4_1_0_1947235746", 2, 5 + 10 * (2 + i), true, [30, 25, 20]),//Solver zwrócił mi 20 20 30 podbiłem środkową gwiazdkę
+        new level("9_13_2_4_0_2_2_1_0_2168946829", 2, 5 + 10 * (2 + i), true, [35, 26, 29]),//Solver zwrócił mi 20 20 30 podbiłem środkową gwiazdkę
     //-------------------------
-        new level("9_13_4_3_1_1_4_1_0_2578357245", 5, 0 + 10 * (3 + i), true, [25, 19, 16]),
+        new level("9_13_4_3_1_1_4_1_0_1947235746", 5, 0 + 10 * (3 + i), true, [30, 25, 20]),//Solver zwrócił mi 20 20 30 podbiłem środkową gwiazdkę
         new level("7_9", 7, 2 + 10 * (3 + i)),
     
         new level("11_11", 0, 3 + 10 * (3 + i)),
