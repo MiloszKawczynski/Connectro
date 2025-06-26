@@ -5,8 +5,6 @@ LootLockerInitialize("dev_4b98ea0634db46dc9241a22ca7cb012a", "0.0.0.1", "true", 
 {
 	//LootLockerTurnOffAutoRefresh();
 	LootLockerTurnOnAutoRefresh();
-	
-	LootLockerSubmitScore("31457", "0");
 }
 
 if (!file_exists("playerId.ini"))
@@ -54,6 +52,10 @@ if (file_exists(global.savedRoguelikeBestFilename))
 else 
 {
     global.roguelikeBest = 0;
+}
+
+{
+	LootLockerSubmitScore("31457", string(global.roguelikeBest));
 }
 
 event_inherited();
