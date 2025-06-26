@@ -735,6 +735,7 @@ function gameOverScreen()
         if (global.roguelikeLevelNumber > global.roguelikeBest)
         {
             global.roguelikeBest = global.roguelikeLevelNumber;
+            saveBestScore();
             gameOverLayer.addComponent(3.5, 6.5, gameOverRecordText);
         }
         else 
@@ -754,4 +755,20 @@ function gameOverScreen()
     
     mouse_clear(mb_left);
     gameState = gameOver;
+}
+
+function saveBestScore()
+{
+    var buf = buffer_create(4, buffer_fixed, 1);
+    buffer_write(buf, buffer_u32, global.roguelikeBest);
+    buffer_save(buf, global.savedRoguelikeBestFilename);
+    
+    buffer_delete(buf);
+}
+
+function loadBestScore()
+{
+    var buf = buffer_load(global.savedRoguelikeBestFilename);
+    global.roguelikeBest = buffer_read(buf, buffer_u32);
+    buffer_delete(buf);
 }

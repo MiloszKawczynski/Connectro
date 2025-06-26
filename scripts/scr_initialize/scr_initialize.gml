@@ -8,6 +8,7 @@ function initialize()
 	
 	global.savedDataFilename = "SavedData.save";
 	global.savedRoguelikeFilename = "SavedRoguelike.save";
+	global.savedRoguelikeBestFilename = "SavedRoguelikeBest.save";
 	
 	#macro MAX_MAP_WIDTH_OR_HEIGHT 25
 

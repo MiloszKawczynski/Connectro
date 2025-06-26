@@ -22,7 +22,11 @@ else
     global.roguelikeLevelNumber = 0;
 }
 
-if (!variable_global_exists("roguelikeBest"))
+if (file_exists(global.savedRoguelikeBestFilename))
+{
+    loadBestScore();
+}
+else 
 {
     global.roguelikeBest = 0;
 }
@@ -126,6 +130,7 @@ with(ui)
 	{
 		deleteSavedData();
 		deleteSavedRoguelike();
+        deleteSavedRoguelikeBest();
 		global.roguelikeLevelNumber = 0;
 		global.paints = [undefined, undefined, undefined];
 	}

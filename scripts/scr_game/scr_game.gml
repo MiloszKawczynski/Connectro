@@ -1059,6 +1059,14 @@ function deleteSavedRoguelike()
 	}
 }
 
+function deleteSavedRoguelikeBest()
+{
+    if (file_exists(global.savedRoguelikeBestFilename))
+	{
+		file_delete(global.savedRoguelikeBestFilename);
+	}
+}
+
 function getPaintSaveString(paint)
 {
 	if (paint == undefined)
