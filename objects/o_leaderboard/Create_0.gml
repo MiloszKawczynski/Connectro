@@ -43,7 +43,13 @@ with(ui)
 	highscores = LLHighscoresTopFormatted();
 	highscoresArray = string_split(highscores, "\n");
 	
-	var playerScore = real(LLPlayerScore());
+	var playerScore = 0;
+	
+	if (LLPlayerScore() != "" and LLPlayerScore() != " ")
+	{
+		playerScore =  real(LLPlayerScore());
+	}
+	
 	var playerRank = 999;
 	
 	for (var s = 0; s < array_length(highscoresArray); ++s)
