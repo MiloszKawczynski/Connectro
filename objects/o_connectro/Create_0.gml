@@ -11,7 +11,16 @@ levelToPlay = global.levels[global.choosedLevel];
 if (global.isRoguelikeMode)
 {
     randomize();
-    levelToPlay = global.rogelikeLevels[random(array_length(global.rogelikeLevels))];
+	
+	var normalLevelsEndIndex = 46;
+	var maxLevelIndex = normalLevelsEndIndex + clamp(global.roguelikeLevelNumber - 10, 0, 5);
+	var roguelikeLevelIndex = floor(random(maxLevelIndex));
+	
+	// Just to be sure, clamp it.
+	roguelikeLevelIndex = clamp(roguelikeLevelIndex, 0, array_length(global.rogelikeLevels));
+	
+	levelToPlay = global.rogelikeLevels[roguelikeLevelIndex];
+	
     if (!variable_global_exists("paints"))
     {
         global.paints = [undefined, undefined, undefined];
